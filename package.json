@@ -1,0 +1,23 @@
+{
+  "name": "towk-modern",
+  "private": true,
+  "version": "0.1.0",
+  "description": "新加坡东安会馆网站现代化改造项目",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
