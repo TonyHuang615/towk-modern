@@ -3,8 +3,9 @@
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import { motion } from "framer-motion";
-import { Heart, Target, Eye, Shield } from "lucide-react";
+import { Heart, Target, Eye, Shield, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function AboutPage() {
   const [content, setContent] = useState<any>({});
@@ -146,6 +147,38 @@ export default function AboutPage() {
                 <p className="text-foreground/70">{value.description}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Links to sub-pages */}
+      <section className="py-12">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Link
+              href="/about/structure"
+              className="group flex items-center justify-between p-6 rounded-2xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors"
+            >
+              <div>
+                <h3 className="font-bold text-lg">组织架构</h3>
+                <p className="text-sm text-foreground/60 mt-1">
+                  了解会馆的组织架构与委员会设置
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+            </Link>
+            <Link
+              href="/about/board"
+              className="group flex items-center justify-between p-6 rounded-2xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors"
+            >
+              <div>
+                <h3 className="font-bold text-lg">历届董事会</h3>
+                <p className="text-sm text-foreground/60 mt-1">
+                  查看各届董事会领导名单
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+            </Link>
           </div>
         </div>
       </section>

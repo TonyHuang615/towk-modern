@@ -223,6 +223,72 @@ async function shot(page, name) {
     log("发送消息按钮存在", !!sendBtn);
   } catch (e) { log("发送按钮", false, e.message); }
 
+  // ─── 新闻详情页 ─────────────────────────────────────────
+  console.error("\n【新闻详情 /news/spring-banquet-2026】");
+  await page.goto(`${BASE_URL}/news/spring-banquet-2026`, { waitUntil: "networkidle2", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  await shot(page, "news-detail");
+  try {
+    const backLink = await page.$('a[href="/news"]');
+    log("新闻详情返回链接存在", !!backLink);
+    const articleH1 = await page.$('h1');
+    log("新闻详情 H1 存在", !!articleH1);
+  } catch (e) { log("新闻详情页", false, e.message); }
+
+  // ─── 活动详情页 ─────────────────────────────────────────
+  console.error("\n【活动详情 /activities/cantonese-opera】");
+  await page.goto(`${BASE_URL}/activities/cantonese-opera`, { waitUntil: "networkidle2", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  await shot(page, "activity-detail-opera");
+  try {
+    const actBackLink = await page.$('a[href="/activities"]');
+    log("活动详情返回链接存在", !!actBackLink);
+    const actH1 = await page.$('h1');
+    log("活动详情 H1 存在", !!actH1);
+    const contactBtn = await page.$('a[href="/contact"]');
+    log("活动详情联系按钮存在", !!contactBtn);
+  } catch (e) { log("活动详情页", false, e.message); }
+
+  // ─── 历史传承 ──────────────────────────────────────────
+  console.error("\n【历史传承 /history】");
+  await page.goto(`${BASE_URL}/history`, { waitUntil: "networkidle2", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  await shot(page, "history-page");
+  try {
+    const histH1 = await page.$('h1');
+    log("历史传承 H1 存在", !!histH1);
+  } catch (e) { log("历史传承页", false, e.message); }
+
+  // ─── 组织架构 ──────────────────────────────────────────
+  console.error("\n【组织架构 /about/structure】");
+  await page.goto(`${BASE_URL}/about/structure`, { waitUntil: "networkidle2", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  await shot(page, "about-structure");
+  try {
+    const structH1 = await page.$('h1');
+    log("组织架构 H1 存在", !!structH1);
+    const backToAbout = await page.$('a[href="/about"]');
+    log("组织架构返回链接存在", !!backToAbout);
+  } catch (e) { log("组织架构页", false, e.message); }
+
+  // ─── 历届董事会 ────────────────────────────────────────
+  console.error("\n【历届董事会 /about/board】");
+  await page.goto(`${BASE_URL}/about/board`, { waitUntil: "networkidle2", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  await shot(page, "about-board");
+  try {
+    const boardH1 = await page.$('h1');
+    log("董事会 H1 存在", !!boardH1);
+    // 展开第一个董事会
+    const expandBtn = await page.$('button');
+    if (expandBtn) {
+      await expandBtn.click();
+      await new Promise((r) => setTimeout(r, 500));
+      await shot(page, "about-board-expanded");
+      log("董事会展开功能", true);
+    }
+  } catch (e) { log("董事会页", false, e.message); }
+
   // ─── 移动端响应式 ─────────────────────────────────────
   console.error("\n【移动端视图 375px】");
   await page.setViewport({ width: 375, height: 812 });

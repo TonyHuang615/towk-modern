@@ -1,24 +1,28 @@
 "use client";
 
-import { use } from "react";
-import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { getActivityBySlug } from "../../../lib/activitiesData";
+import { useParams } from "next/navigation";
 
-export default function ActivityDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = use(params);
+export default function ActivityDetailPage() {
+  const { slug } = useParams<{ slug: string }>();
   const activity = getActivityBySlug(slug);
 
   if (!activity) {
-    notFound();
+    return (
+      <main className="min-h-screen">
+        <Navigation />
+        <div className="pt-32 pb-20 text-center">
+          <h1 className="text-3xl font-bold mb-4">活动不存在</h1>
+          <Link href="/activities" className="text-primary hover:underline">返回会馆活动</Link>
+        </div>
+        <Footer />
+      </main>
+    );
   }
 
   return (

@@ -1,24 +1,28 @@
 "use client";
 
-import { use } from "react";
-import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { Calendar, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
 import { getArticleBySlug, formatDate } from "../../../lib/newsData";
+import { useParams, redirect } from "next/navigation";
 
-export default function NewsArticlePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = use(params);
+export default function NewsArticlePage() {
+  const { slug } = useParams<{ slug: string }>();
   const article = getArticleBySlug(slug);
 
   if (!article) {
-    notFound();
+    return (
+      <main className="min-h-screen">
+        <Navigation />
+        <div className="pt-32 pb-20 text-center">
+          <h1 className="text-3xl font-bold mb-4">文章不存在</h1>
+          <Link href="/news" className="text-primary hover:underline">返回最新动态</Link>
+        </div>
+        <Footer />
+      </main>
+    );
   }
 
   return (
