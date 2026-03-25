@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function ActivitiesPage() {
   const [content, setContent] = useState<any>({});
@@ -29,29 +30,33 @@ export default function ActivitiesPage() {
   const defaultActivities = [
     {
       icon: Music,
+      slug: "cantonese-opera",
       title: "粤剧组",
-      description: "传承岭南戏曲文化，定期排练演出，弘扬传统艺术。",
+      description: "传承岭南戏曲文化，东安梨艺社成立于1947年，定期公演弘扬传统艺术。",
       image:
         "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
     },
     {
       icon: Briefcase,
+      slug: "business",
       title: "商务交流",
-      description: "促进乡亲商业合作，组织商务考察与交流活动。",
+      description: "促进乡亲商业合作，联结新加坡与东莞之间的贸易纽带。",
       image:
         "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
     },
     {
       icon: Users,
+      slug: "youth",
       title: "青年活动",
-      description: "培养青年接班人，组织各类青年联谊与学习活动。",
+      description: "培养青年接班人，组织祖籍地交流考察，传承东安精神。",
       image:
         "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
     },
     {
       icon: Sparkles,
-      title: "会庆活动",
-      description: "庆祝会庆及传统节日，凝聚乡情，共襄盛举。",
+      slug: "traditions",
+      title: "传统节庆",
+      description: "庆祝春节、中秋等传统节日与会馆周年庆典，凝聚乡情。",
       image:
         "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
     },
@@ -120,12 +125,12 @@ export default function ActivitiesPage() {
                   <p className="text-white/75 mb-4">
                     {activity.description}
                   </p>
-                  <a
-                    href="#"
+                  <Link
+                    href={`/activities/${activity.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:gap-3 transition-all"
                   >
                     了解更多 <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
             ))}
