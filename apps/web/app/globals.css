@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Brand Design Tokens ─────────────────────────────────── */
+:root {
+  /* 品牌色 */
+  --primary: #c0392b;
+  --primary-hover: #a93226;
+  --primary-foreground: #ffffff;
+  --accent: #d4a017;
+  --accent-foreground: #ffffff;
+  --link: #2c5f8a;
+
+  /* 页面底色 */
+  --background: #f8f6f0;
+  --foreground: #1a1a2e;
+
+  /* 组件色 */
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --muted: #ede9e0;
+  --muted-foreground: #6b6355;
+  --border: #d8d2c5;
+  --ring: #c0392b;
+
+  /* 圆角 */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --primary: #d64b5f;
+  --primary-hover: #c0392b;
+  --primary-foreground: #ffffff;
+  --accent: #e4c86f;
+  --accent-foreground: #1a1a2e;
+  --link: #6fa3d0;
+
+  --background: #0f0f1a;
+  --foreground: #f8f6f0;
+
+  --card: #1a1a2e;
+  --card-foreground: #f8f6f0;
+  --muted: #2a2a3e;
+  --muted-foreground: #9b9490;
+  --border: #2a2a3e;
+  --ring: #d64b5f;
+}
+
+/* ─── Base Reset ──────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  /* 中文正文：Noto Sans SC；英文正文：Inter */
+  font-family:
+    var(--font-noto-sans-sc),
+    var(--font-inter),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.7;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* ─── Typography ──────────────────────────────────────────── */
+
+/* 中文标题使用思源宋体 */
+h1,
+h2,
+h3 {
+  font-family:
+    var(--font-noto-serif-sc),
+    var(--font-playfair),
+    Georgia,
+    serif;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+h4,
+h5,
+h6 {
+  font-family:
+    var(--font-noto-sans-sc),
+    var(--font-inter),
+    sans-serif;
+  line-height: 1.4;
+}
+
+/* 英文展示标题使用 Playfair Display */
+.font-display {
+  font-family:
+    var(--font-playfair),
+    var(--font-noto-serif-sc),
+    Georgia,
+    serif;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* ─── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* ─── Selection ───────────────────────────────────────────── */
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ─── Safe Area ───────────────────────────────────────────── */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ─── Utilities ───────────────────────────────────────────── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .touch-feedback {
+    -webkit-tap-highlight-color: rgba(192, 57, 43, 0.1);
+  }
+}

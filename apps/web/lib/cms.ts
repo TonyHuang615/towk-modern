@@ -1,0 +1,165 @@
+import fs from "fs";
+import path from "path";
+
+const dataFilePath = path.join(process.cwd(), "data", "content.json");
+
+export function getContent(): any {
+  try {
+    if (!fs.existsSync(dataFilePath)) {
+      return getDefaultContent();
+    }
+    const data = fs.readFileSync(dataFilePath, "utf8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading content:", error);
+    return getDefaultContent();
+  }
+}
+
+export function saveContent(data: any): boolean {
+  try {
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), "utf8");
+    return true;
+  } catch (error) {
+    console.error("Error saving content:", error);
+    return false;
+  }
+}
+
+export function getDefaultContent() {
+  return {
+    site: {
+      title: "新加坡东安会馆",
+      subtitle: "Tung On Wui Kun · 1876",
+      description: "新加坡历史最悠久的华人宗乡社团之一",
+    },
+    hero: {
+      slides: [
+        {
+          id: 1,
+          title: "百年东安 · 乡情永续",
+          subtitle: "新加坡东安会馆 · 1876",
+          description: "传承百年历史，凝聚同乡情谊",
+          image: "https://towk.sg/wp-content/uploads/2019/03/banner-v2.jpg",
+        },
+        {
+          id: 2,
+          title: "世界东安恳亲大会",
+          subtitle: "第11届 · 2019",
+          description: "联结全球东莞宝安乡亲，共叙乡情",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/10/20191026_DAWC_Event_1-1024x682.jpeg",
+        },
+        {
+          id: 3,
+          title: "粤韵悠扬 · 文化传承",
+          subtitle: "会馆粤剧组",
+          description: "传承岭南文化，弘扬粤剧艺术",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/04/cantonese-group-01a-1024x766.jpg",
+        },
+      ],
+    },
+    about: {
+      title: "新加坡东安会馆",
+      subtitle: "Tung On Wui Kun · 1876",
+      content:
+        "新加坡东安会馆成立于1876年，是新加坡历史最悠久的华人宗乡社团之一。本会馆为祖籍中国广东东莞、宝安两县移民的地缘组织，致力于联络乡情、促进互助、传承文化。",
+      stats: [
+        { value: "3000+", label: "注册会员" },
+        { value: "149", label: "年历史" },
+        { value: "11", label: "届恳亲大会" },
+      ],
+    },
+    history: {
+      title: "历史传承",
+      milestones: [
+        {
+          year: "1876",
+          title: "会馆创立",
+          description: "新加坡东安会馆正式成立，成为东莞宝安同乡的精神家园。",
+        },
+        {
+          year: "1930s",
+          title: "会馆建设",
+          description: "筹建会馆大厦，为乡亲提供集会场所。",
+        },
+        {
+          year: "1970s",
+          title: "恳亲大会",
+          description: "开始主办世界东安恳亲大会，联结全球东安乡亲。",
+        },
+        {
+          year: "1990s",
+          title: "文化传承",
+          description: "成立粤剧组，积极推广岭南传统文化。",
+        },
+        {
+          year: "2020s",
+          title: "现代化转型",
+          description: "数字化转型，建设现代化会馆，服务新一代乡亲。",
+        },
+      ],
+    },
+    activities: {
+      title: "会馆活动",
+      items: [
+        {
+          icon: "Music",
+          title: "粤剧组",
+          description: "传承岭南戏曲文化，定期排练演出，弘扬传统艺术。",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/04/cantonese-group-08.jpg",
+        },
+        {
+          icon: "Briefcase",
+          title: "商务交流",
+          description: "促进乡亲商业合作，组织商务考察与交流活动。",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/04/business-exchange600x400-6a.jpg",
+        },
+        {
+          icon: "Users",
+          title: "青年活动",
+          description: "培养青年接班人，组织各类青年联谊与学习活动。",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/07/IMG_5297-1024x683.jpg",
+        },
+        {
+          icon: "Sparkles",
+          title: "会庆活动",
+          description: "庆祝会庆及传统节日，凝聚乡情，共襄盛举。",
+          image:
+            "https://towk.sg/wp-content/uploads/2019/06/Others19-1024x683.jpg",
+        },
+      ],
+    },
+    conference: {
+      title: "世界东安恳亲大会",
+      description:
+        "世界东安恳亲大会是东安会馆主办的国际性盛会，每两年举办一届，联结全球东莞宝安乡亲，共叙乡情，共谋发展。",
+      features: [
+        {
+          icon: "Globe",
+          title: "全球联结",
+          description: "联结世界各地东莞宝安乡亲",
+        },
+        {
+          icon: "Users",
+          title: "千人盛会",
+          description: "每届吸引逾千名乡亲参与",
+        },
+        {
+          icon: "Calendar",
+          title: "定期举办",
+          description: "每两年举办一届，传承至今",
+        },
+      ],
+      pastConferences: [
+        { year: "2019", location: "新加坡", theme: "第11届世界东安恳亲大会" },
+        { year: "2017", location: "香港", theme: "第10届世界东安恳亲大会" },
+        { year: "2015", location: "东莞", theme: "第9届世界东安恳亲大会" },
+      ],
+    },
+  };
+}
