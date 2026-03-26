@@ -169,8 +169,8 @@ towk-modern/
 - [x] 新闻/活动列表与详情页
 - [x] 影相库（瀑布流相册 + 灯箱预览）
 - [x] 联络我们（Google Maps 嵌入 + 联系表单）
-- [ ] Strapi CMS 搭建（文章、活动、相册管理）
-- [ ] 中英双语切换
+- [x] Strapi CMS 搭建（文章、活动、相册管理）— Docker 部署，5 个 Content Type
+- [x] 中英双语切换 — next-intl，导航栏语言切换按钮
 - [x] 响应式布局（移动端优先）
 - [x] SEO 基础配置（meta、sitemap、robots.txt）
 - [ ] 媒体迁移（将现有图片迁移至 Cloudflare R2）
