@@ -163,14 +163,17 @@ export default function ContactPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">会馆位置</h2>
           </div>
-          <div className="aspect-video rounded-2xl overflow-hidden bg-gray-200 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="w-12 h-12 mx-auto mb-4 text-primary" />
-              <p className="text-foreground/60">地图加载中...</p>
-              <p className="text-sm text-foreground/40 mt-2">
-                21 Bukit Pasoh Road, Singapore 089835
-              </p>
-            </div>
+          <div className="aspect-video rounded-2xl overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.825!2d103.8408!3d1.2795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a340000001%3A0x5398391ffbef7df6!2s21%20Bukit%20Pasoh%20Rd%2C%20Singapore%20089835!5e0!3m2!1sen!2ssg!4v1"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="东安会馆位置 - 21 Bukit Pasoh Road, Singapore 089835"
+            />
           </div>
         </div>
       </section>
