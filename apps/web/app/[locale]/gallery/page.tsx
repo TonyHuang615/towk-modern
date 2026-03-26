@@ -1,7 +1,7 @@
 "use client";
 
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../../components/Navigation";
+import Footer from "../../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
 import { useState } from "react";

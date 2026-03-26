@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于会馆",
+    "news": "最新动态",
+    "gallery": "影相库",
+    "conference": "恳亲大会",
+    "activities": "会馆活动",
+    "contact": "联系我们",
+    "history": "历史传承",
+    "admin": "管理后台",
+    "toggleTheme": "切换主题",
+    "more": "更多"
+  },
+  "hero": {
+    "explore": "探索会馆",
+    "prev": "上一张",
+    "next": "下一张"
+  },
+  "announcements": {
+    "title": "公告",
+    "important": "重要",
+    "more": "更多"
+  },
+  "about": {
+    "sectionLabel": "About Us",
+    "defaultTitle": "新加坡东安会馆",
+    "defaultSubtitle": "Tung On Wui Kun · 1876",
+    "defaultContent": "新加坡东安会馆成立于1876年，是新加坡历史最悠久的华人宗乡社团之一。本会馆为祖籍中国广东东莞、宝安两县移民的地缘组织，致力于联络乡情、促进互助、传承文化。",
+    "motto": "乡亲情谊 · 文化传承 · 社群服务",
+    "story": "一百多年来，东安会馆始终秉承「敦睦乡谊、弘扬文化、服务社群」的宗旨，为乡亲提供社交平台，为社区贡献力量，为中华文化在海外的传承做出积极贡献。",
+    "pageTitle": "关于会馆",
+    "ourStory": "我们的故事",
+    "ourValues": "我们的价值观",
+    "valuesSubtitle": "传承百年精神，凝聚同乡情谊",
+    "structure": "组织架构",
+    "structureDesc": "了解会馆的组织架构与委员会设置",
+    "board": "历届董事会",
+    "boardDesc": "查看各届董事会领导名单",
+    "milestones": "历史里程碑"
+  },
+  "news": {
+    "sectionLabel": "Latest News",
+    "title": "最新动态",
+    "viewAll": "查看全部动态",
+    "readMore": "阅读全文",
+    "all": "全部",
+    "search": "搜索新闻..."
+  },
+  "history": {
+    "sectionLabel": "Our Heritage",
+    "title": "历史传承",
+    "subtitle": "自1876年创立以来，东安会馆见证了几代华人的奋斗历程，承载着深厚的历史记忆。"
+  },
+  "conference": {
+    "sectionLabel": "World Conference",
+    "title": "世界东安恳亲大会"
+  },
+  "activities": {
+    "sectionLabel": "Our Activities",
+    "title": "会馆活动",
+    "subtitle": "东安会馆定期举办各类活动，丰富乡亲文化生活，传承中华文化。",
+    "learnMore": "了解更多"
+  },
+  "gallery": {
+    "title": "影相库",
+    "subtitle": "记录会馆百年风采",
+    "all": "全部"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "欢迎乡亲们与我们联系，我们期待听到您的声音",
+    "info": "联系信息",
+    "address": "地址",
+    "phone": "电话",
+    "hours": "开放时间",
+    "hoursValue": "以会馆通知为准",
+    "followUs": "关注我们",
+    "sendMessage": "发送消息",
+    "name": "姓名",
+    "namePlaceholder": "您的姓名",
+    "email": "邮箱",
+    "emailPlaceholder": "您的邮箱",
+    "subject": "主题",
+    "subjectPlaceholder": "消息主题",
+    "message": "消息内容",
+    "messagePlaceholder": "请输入您的消息...",
+    "send": "发送消息",
+    "location": "会馆位置"
+  },
+  "footer": {
+    "quickLinks": "快速链接",
+    "contactUs": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "backToAbout": "返回关于会馆",
+    "switchLang": "EN"
+  }
+}

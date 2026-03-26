@@ -1,7 +1,7 @@
 "use client";
 
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../../components/Navigation";
+import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Clock, Send } from "lucide-react";
 import { useState, useEffect } from "react";

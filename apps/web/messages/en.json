@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "news": "News",
+    "gallery": "Gallery",
+    "conference": "Conference",
+    "activities": "Activities",
+    "contact": "Contact",
+    "history": "History",
+    "admin": "Admin",
+    "toggleTheme": "Toggle theme",
+    "more": "More"
+  },
+  "hero": {
+    "explore": "Explore",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "announcements": {
+    "title": "Notice",
+    "important": "Important",
+    "more": "More"
+  },
+  "about": {
+    "sectionLabel": "About Us",
+    "defaultTitle": "Tung On Wui Kun",
+    "defaultSubtitle": "Singapore · Est. 1876",
+    "defaultContent": "Founded in 1876, Tung On Wui Kun is one of the oldest Chinese clan associations in Singapore. Established by immigrants from Dongguan and Bao'an counties in Guangdong, China, we are dedicated to fostering kinship, mutual aid, and cultural heritage.",
+    "motto": "Kinship · Culture · Community",
+    "story": "For over a century, Tung On Wui Kun has upheld the mission of strengthening communal bonds, promoting Chinese culture, and serving the community — providing a social platform for fellow clansmen and contributing to the preservation of Chinese heritage overseas.",
+    "pageTitle": "About Us",
+    "ourStory": "Our Story",
+    "ourValues": "Our Values",
+    "valuesSubtitle": "Inheriting a century of spirit, uniting kinship",
+    "structure": "Organization",
+    "structureDesc": "Learn about our organizational structure and committees",
+    "board": "Board of Directors",
+    "boardDesc": "View the leadership of each term",
+    "milestones": "Key Milestones"
+  },
+  "news": {
+    "sectionLabel": "Latest News",
+    "title": "Latest News",
+    "viewAll": "View all news",
+    "readMore": "Read more",
+    "all": "All",
+    "search": "Search news..."
+  },
+  "history": {
+    "sectionLabel": "Our Heritage",
+    "title": "Our Heritage",
+    "subtitle": "Since its founding in 1876, Tung On Wui Kun has witnessed the struggles of generations of Chinese immigrants, carrying deep historical memories."
+  },
+  "conference": {
+    "sectionLabel": "World Conference",
+    "title": "World Tung On Convention"
+  },
+  "activities": {
+    "sectionLabel": "Our Activities",
+    "title": "Activities",
+    "subtitle": "Tung On Wui Kun regularly organizes cultural events, community services, and social gatherings for members.",
+    "learnMore": "Learn more"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Capturing our heritage through the lens",
+    "all": "All"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We look forward to hearing from you",
+    "info": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "hours": "Opening Hours",
+    "hoursValue": "Please check with the association",
+    "followUs": "Follow Us",
+    "sendMessage": "Send a Message",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "Your email",
+    "subject": "Subject",
+    "subjectPlaceholder": "Message subject",
+    "message": "Message",
+    "messagePlaceholder": "Enter your message...",
+    "send": "Send Message",
+    "location": "Our Location"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "backToAbout": "Back to About",
+    "switchLang": "中文"
+  }
+}

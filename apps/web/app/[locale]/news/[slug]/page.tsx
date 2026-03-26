@@ -1,11 +1,11 @@
 "use client";
 
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import Navigation from "../../../components/Navigation";
+import Footer from "../../../components/Footer";
 import { motion } from "framer-motion";
 import { Calendar, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
-import { getArticleBySlug, formatDate } from "../../../lib/newsData";
+import { getArticleBySlug, formatDate } from "../../../../lib/newsData";
 import { useParams, redirect } from "next/navigation";
 
 export default function NewsArticlePage() {

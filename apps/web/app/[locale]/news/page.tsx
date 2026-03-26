@@ -1,11 +1,11 @@
 "use client";
 
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../../components/Navigation";
+import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Search } from "lucide-react";
 import { useState } from "react";
-import { allNews, formatDate } from "../../lib/newsData";
+import { allNews, formatDate } from "../../../lib/newsData";
 
 const categories = ["全部", "会馆公告", "文化活动", "青年活动", "社群服务"];
 

@@ -1,11 +1,11 @@
 "use client";
 
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import Navigation from "../../../components/Navigation";
+import Footer from "../../../components/Footer";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { getActivityBySlug } from "../../../lib/activitiesData";
+import { getActivityBySlug } from "../../../../lib/activitiesData";
 import { useParams } from "next/navigation";
 
 export default function ActivityDetailPage() {

@@ -5,21 +5,24 @@ import { motion } from "framer-motion";
 import { Moon, Sun, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const navItems = [
-  { name: "首页", href: "/" },
-  { name: "关于会馆", href: "/about" },
-  { name: "最新动态", href: "/news" },
-  { name: "影相库", href: "/gallery" },
-  { name: "恳亲大会", href: "/conference" },
-  { name: "会馆活动", href: "/activities" },
-  { name: "联系我们", href: "/contact" },
-];
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navigation() {
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("nav");
+
+  const navItems = [
+    { name: t("home"), href: "/" },
+    { name: t("about"), href: "/about" },
+    { name: t("news"), href: "/news" },
+    { name: t("gallery"), href: "/gallery" },
+    { name: t("conference"), href: "/conference" },
+    { name: t("activities"), href: "/activities" },
+    { name: t("contact"), href: "/contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -118,7 +121,7 @@ export default function Navigation() {
                   ? "text-foreground/60"
                   : "text-white/70"
               }`}
-              aria-label="切换主题"
+              aria-label={t("toggleTheme")}
             >
               {isDark ? (
                 <Sun className="w-4 h-4 lg:w-5 lg:h-5" />
@@ -126,6 +129,14 @@ export default function Navigation() {
                 <Moon className="w-4 h-4 lg:w-5 lg:h-5" />
               )}
             </button>
+
+            <LanguageSwitcher
+              className={
+                isScrolled
+                  ? "border-border text-foreground/60"
+                  : "border-white/30 text-white/70"
+              }
+            />
           </div>
         </div>
       </nav>
