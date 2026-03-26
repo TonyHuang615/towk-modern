@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_configs",
+  "info": {
+    "singularName": "site-config",
+    "pluralName": "site-configs",
+    "displayName": "网站配置",
+    "description": "网站全局配置：名称、联系方式、社交媒体等"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "default": "新加坡东安会馆"
+    },
+    "siteNameEn": {
+      "type": "string",
+      "default": "Tung On Wui Kun"
+    },
+    "address": {
+      "type": "string",
+      "default": "21 Bukit Pasoh Road, Singapore 089835"
+    },
+    "phone": {
+      "type": "string",
+      "default": "+65 6223 4416"
+    },
+    "email": {
+      "type": "email"
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "wechat": {
+      "type": "string"
+    }
+  }
+}

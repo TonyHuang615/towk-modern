@@ -18,6 +18,36 @@ services:
       retries: 5
       start_period: 30s
 
+  cms:
+    build:
+      context: ./apps/cms
+      dockerfile: Dockerfile.dev
+    container_name: towk-cms
+    ports:
+      - "1337:1337"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=1337
+      - PUBLIC_URL=http://localhost:1337
+      - APP_KEYS=towk-dev-key-1,towk-dev-key-2,towk-dev-key-3,towk-dev-key-4
+      - ADMIN_JWT_SECRET=towk-admin-jwt-dev-secret
+      - API_TOKEN_SALT=towk-api-token-dev-salt
+      - TRANSFER_TOKEN_SALT=towk-transfer-token-dev-salt
+      - JWT_SECRET=towk-jwt-dev-secret
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=towk
+      - DATABASE_USERNAME=towk
+      - DATABASE_PASSWORD=towk123
+      - DATABASE_SSL=false
+    volumes:
+      - ./apps/cms:/opt/app
+      - cms_node_modules:/opt/app/node_modules
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
   postgres:
     image: postgres:15-alpine
     container_name: towk-postgres
@@ -52,3 +82,4 @@ services:
 volumes:
   postgres_data:
   minio_data:
+  cms_node_modules:

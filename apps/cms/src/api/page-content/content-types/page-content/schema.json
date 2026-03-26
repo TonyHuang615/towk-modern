@@ -1,0 +1,59 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_contents",
+  "info": {
+    "singularName": "page-content",
+    "pluralName": "page-contents",
+    "displayName": "页面内容",
+    "description": "首页、关于等静态页面的可编辑内容"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "heroSlides": {
+      "type": "json",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "aboutTitle": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "aboutContent": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "aboutStats": {
+      "type": "json"
+    },
+    "historyMilestones": {
+      "type": "json",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "conferenceIntro": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "values": {
+      "type": "json",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    }
+  }
+}
