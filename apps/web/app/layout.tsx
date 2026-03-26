@@ -6,6 +6,7 @@ import {
   Playfair_Display,
 } from "next/font/google";
 import "./globals.css";
+import MobileNav from "./components/MobileNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -60,7 +61,10 @@ export default function RootLayout({
       lang="zh-CN"
       className={`scroll-smooth ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable} ${playfairDisplay.variable}`}
     >
-      <body className="antialiased font-sans">{children}</body>
+      <body className="antialiased font-sans">
+        {children}
+        <MobileNav />
+      </body>
     </html>
   );
 }

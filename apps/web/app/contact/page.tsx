@@ -26,7 +26,7 @@ export default function ContactPage() {
     <main className="min-h-screen">
       <Navigation />
 
-      <section className="pt-32 pb-16 bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -36,7 +36,7 @@ export default function ContactPage() {
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
               Contact Us
             </span>
-            <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold">
+            <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
               联系我们
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-3xl mx-auto">

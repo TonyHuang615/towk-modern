@@ -179,7 +179,7 @@ export default function Hero({ data }: HeroProps) {
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-16 sm:bottom-10 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3">
+      <div className="absolute bottom-20 md:bottom-10 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -194,12 +194,12 @@ export default function Hero({ data }: HeroProps) {
         ))}
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator — hidden on mobile (bottom nav covers it) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="absolute bottom-6 sm:bottom-24 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 sm:bottom-24 left-1/2 -translate-x-1/2 hidden md:block"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}

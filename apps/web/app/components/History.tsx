@@ -42,7 +42,7 @@ export default function History({ data }: HistoryProps) {
   const milestones = data?.milestones || defaultMilestones;
 
   return (
-    <section id="history" className="py-24 lg:py-32">
+    <section id="history" className="py-12 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

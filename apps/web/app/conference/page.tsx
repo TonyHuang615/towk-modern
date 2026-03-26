@@ -41,7 +41,7 @@ export default function ConferencePage() {
     <main className="min-h-screen">
       <Navigation />
 
-      <section className="pt-32 pb-16 bg-gradient-to-b from-accent/10 to-transparent">
+      <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-accent/10 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -51,7 +51,7 @@ export default function ConferencePage() {
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
               Global Gathering
             </span>
-            <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold">
+            <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
               {conference?.title || "世界东安恳亲大会"}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-3xl mx-auto">

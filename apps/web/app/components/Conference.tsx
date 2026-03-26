@@ -39,7 +39,7 @@ export default function Conference({ data }: ConferenceProps) {
   const pastConferences = data?.pastConferences || defaultPastConferences;
 
   return (
-    <section id="conference" className="py-24 lg:py-32 bg-foreground/5">
+    <section id="conference" className="py-12 md:py-24 lg:py-32 bg-foreground/5">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

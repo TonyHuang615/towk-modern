@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, Moon, Sun, Settings } from "lucide-react";
+import { Moon, Sun, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +17,6 @@ const navItems = [
 ];
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
@@ -56,26 +55,30 @@ export default function Navigation() {
           : "bg-gradient-to-b from-black/40 to-transparent"
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">东</span>
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 lg:h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 lg:gap-3">
+            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-sm lg:text-lg">
+                东
+              </span>
             </div>
-            <div className="hidden sm:block">
+            <div>
               <span
-                className={`font-bold text-lg tracking-tight transition-colors duration-300 ${isScrolled ? "text-foreground" : "text-white"}`}
+                className={`font-bold text-sm lg:text-lg tracking-tight transition-colors duration-300 ${isScrolled ? "text-foreground" : "text-white"}`}
               >
                 新加坡东安会馆
               </span>
               <span
-                className={`block text-xs -mt-1 transition-colors duration-300 ${isScrolled ? "text-muted-foreground" : "text-white/60"}`}
+                className={`hidden sm:block text-xs -mt-1 transition-colors duration-300 ${isScrolled ? "text-muted-foreground" : "text-white/60"}`}
               >
                 Tung On Wui Kun · 1876
               </span>
             </div>
           </Link>
 
+          {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
@@ -94,67 +97,37 @@ export default function Navigation() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Right side actions */}
+          <div className="flex items-center gap-2 lg:gap-4">
             <Link
               href="/admin"
-              className="p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200"
+              className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
+                isScrolled
+                  ? "text-foreground/60"
+                  : "text-white/70"
+              }`}
               aria-label="管理后台"
             >
-              <Settings className="w-5 h-5" />
+              <Settings className="w-4 h-4 lg:w-5 lg:h-5" />
             </Link>
 
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200"
+              className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
+                isScrolled
+                  ? "text-foreground/60"
+                  : "text-white/70"
+              }`}
               aria-label="切换主题"
             >
               {isDark ? (
-                <Sun className="w-5 h-5" />
+                <Sun className="w-4 h-4 lg:w-5 lg:h-5" />
               ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200"
-              aria-label="菜单"
-            >
-              {isOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
+                <Moon className="w-4 h-4 lg:w-5 lg:h-5" />
               )}
             </button>
           </div>
         </div>
-
-        <motion.div
-          initial={false}
-          animate={{
-            height: isOpen ? "auto" : 0,
-            opacity: isOpen ? 1 : 0,
-          }}
-          transition={{ duration: 0.3 }}
-          className="lg:hidden overflow-hidden"
-        >
-          <div className="py-4 space-y-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 ${
-                  isActive(item.href)
-                    ? "text-primary bg-red-50"
-                    : "text-foreground/80 hover:text-primary hover:bg-foreground/5"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </motion.div>
       </nav>
     </motion.header>
   );

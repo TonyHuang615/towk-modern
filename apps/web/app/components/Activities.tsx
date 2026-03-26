@@ -53,7 +53,7 @@ export default function Activities({ data }: ActivitiesProps) {
   const items = data?.items || defaultActivities;
 
   return (
-    <section id="activities" className="py-24 lg:py-32">
+    <section id="activities" className="py-12 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,8 @@ export default function Activities({ data }: ActivitiesProps) {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Mobile: horizontal scroll; Desktop: grid */}
+        <div className="md:grid md:grid-cols-2 md:gap-8 max-md:flex max-md:gap-4 max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:-mx-4 max-md:px-4 max-md:pb-4 scrollbar-hide">
           {items.map((activity: any, index: number) => {
             const IconComponent = iconMap[activity.icon] || Music;
             return (
@@ -83,7 +84,7 @@ export default function Activities({ data }: ActivitiesProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl bg-foreground/5 hover:bg-foreground/10 transition-colors duration-300"
+                className="group relative overflow-hidden rounded-2xl bg-foreground/5 hover:bg-foreground/10 transition-colors duration-300 max-md:min-w-[280px] max-md:w-[85vw] max-md:flex-shrink-0 max-md:snap-start"
               >
                 <div className="aspect-[16/10] overflow-hidden">
                   <img
@@ -93,14 +94,14 @@ export default function Activities({ data }: ActivitiesProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                      <IconComponent className="w-5 h-5 text-accent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
+                  <div className="flex items-center gap-3 mb-2 md:mb-3">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center">
+                      <IconComponent className="w-4 h-4 md:w-5 md:h-5 text-accent" />
                     </div>
-                    <h3 className="text-xl font-bold text-white">{activity.title}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-white">{activity.title}</h3>
                   </div>
-                  <p className="text-white/70 mb-4">
+                  <p className="text-white/70 mb-3 md:mb-4 text-sm md:text-base line-clamp-2">
                     {activity.description}
                   </p>
                   <a

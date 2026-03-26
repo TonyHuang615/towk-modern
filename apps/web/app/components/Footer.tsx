@@ -36,17 +36,17 @@ export default function Footer({ data }: FooterProps) {
   return (
     <footer id="contact" className="bg-foreground text-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="py-16 lg:py-20 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="py-10 md:py-16 lg:py-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-1"
+            className="col-span-2 lg:col-span-1"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">东</span>
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg md:text-xl">东</span>
               </div>
               <div>
                 <span className="font-bold text-lg">{siteTitle}</span>
@@ -66,13 +66,13 @@ export default function Footer({ data }: FooterProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h4 className="font-bold mb-6">快速链接</h4>
-            <ul className="space-y-3">
+            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">快速链接</h4>
+            <ul className="space-y-2 md:space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-background/70 hover:text-primary transition-colors duration-200"
+                    className="text-background/70 hover:text-primary transition-colors duration-200 text-sm"
                   >
                     {link.name}
                   </a>
@@ -86,9 +86,9 @@ export default function Footer({ data }: FooterProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2"
+            className="col-span-2 lg:col-span-2"
           >
-            <h4 className="font-bold mb-6">联系我们</h4>
+            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">联系我们</h4>
             <div className="grid sm:grid-cols-2 gap-4">
               {contactInfo.map((item) => (
                 <div key={item.label} className="flex items-start gap-3">

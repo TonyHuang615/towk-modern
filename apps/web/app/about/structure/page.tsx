@@ -57,7 +57,7 @@ export default function StructurePage() {
     <main className="min-h-screen">
       <Navigation />
 
-      <section className="pt-32 pb-16 bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

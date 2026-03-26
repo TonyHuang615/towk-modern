@@ -27,7 +27,7 @@ export default function About({ data }: AboutProps) {
   const stats = data?.stats || defaultStats;
 
   return (
-    <section id="about" className="py-24 lg:py-32">
+    <section id="about" className="py-12 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <motion.div

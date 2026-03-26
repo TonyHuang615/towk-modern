@@ -50,7 +50,7 @@ function formatDate(dateStr: string) {
 
 export default function News() {
   return (
-    <section id="news" className="py-24 lg:py-32 bg-muted/40">
+    <section id="news" className="py-12 md:py-24 lg:py-32 bg-muted/40">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -75,7 +75,8 @@ export default function News() {
           </a>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Mobile: horizontal scroll; Desktop: grid */}
+        <div className="md:grid md:grid-cols-3 md:gap-8 max-md:flex max-md:gap-4 max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:-mx-4 max-md:px-4 max-md:pb-4 scrollbar-hide">
           {defaultNews.map((article, index) => (
             <motion.article
               key={article.id}
@@ -83,7 +84,7 @@ export default function News() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300"
+              className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300 max-md:min-w-[280px] max-md:w-[80vw] max-md:flex-shrink-0 max-md:snap-start"
             >
               <div className="aspect-[16/10] overflow-hidden">
                 <img
@@ -92,7 +93,7 @@ export default function News() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-6">
+              <div className="p-4 md:p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary">
                     {article.category}
@@ -102,15 +103,15 @@ export default function News() {
                     {formatDate(article.date)}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors duration-200 line-clamp-2">
+                <h3 className="text-base md:text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors duration-200 line-clamp-2">
                   {article.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 md:line-clamp-3">
                   {article.excerpt}
                 </p>
                 <a
                   href={article.href}
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:gap-2.5 transition-all"
+                  className="mt-3 md:mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:gap-2.5 transition-all"
                 >
                   阅读全文 <ArrowRight className="w-3.5 h-3.5" />
                 </a>

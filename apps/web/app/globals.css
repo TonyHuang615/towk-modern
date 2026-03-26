@@ -123,6 +123,13 @@ a:hover {
 }
 
 /* ─── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  /* Add bottom padding for mobile bottom nav bar */
+  body {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 @media (max-width: 768px) {
   html {
     font-size: 15px;
@@ -195,5 +202,14 @@ a:hover {
 
   .touch-feedback {
     -webkit-tap-highlight-color: rgba(192, 57, 43, 0.1);
+  }
+
+  /* Hide scrollbar but allow scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
