@@ -193,7 +193,7 @@ export default function GalleryPage() {
               src={lightbox}
               alt="大图预览"
               className="max-w-full max-h-[85vh] rounded-lg object-contain"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             />
           </motion.div>
         )}
