@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface BoardTerm {
   term: string;
@@ -64,6 +65,7 @@ const boardTerms: BoardTerm[] = [
 
 function BoardTermCard({ term }: { term: BoardTerm }) {
   const [expanded, setExpanded] = useState(false);
+  const t = useTranslations("board");
 
   return (
     <motion.div
@@ -78,9 +80,9 @@ function BoardTermCard({ term }: { term: BoardTerm }) {
         className="w-full flex items-center justify-between p-6 hover:bg-foreground/5 transition-colors text-left"
       >
         <div>
-          <h3 className="text-xl font-bold">{term.term}董事会</h3>
+          <h3 className="text-xl font-bold">{term.term}{t("boardSuffix")}</h3>
           <p className="text-sm text-foreground/60 mt-1">
-            {term.years} · 会长：{term.president}
+            {term.years} · {t("president")}：{term.president}
           </p>
         </div>
         <ChevronDown
@@ -111,6 +113,9 @@ function BoardTermCard({ term }: { term: BoardTerm }) {
 }
 
 export default function BoardPage() {
+  const t = useTranslations("board");
+  const tCommon = useTranslations("common");
+
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -123,13 +128,13 @@ export default function BoardPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Board of Directors
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold">
-              历届董事会
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-2xl mx-auto">
-              感谢历届董事会领导班子对会馆的奉献与付出
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -142,7 +147,7 @@ export default function BoardPage() {
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-10"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回关于会馆
+            {tCommon("backToAbout")}
           </Link>
 
           <div className="space-y-4">
@@ -152,7 +157,7 @@ export default function BoardPage() {
           </div>
 
           <p className="mt-10 text-center text-sm text-foreground/50">
-            如需查询更早期的董事会名单，请联系会馆办公室。
+            {t("note")}
           </p>
         </div>
       </section>

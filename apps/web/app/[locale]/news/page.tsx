@@ -6,16 +6,24 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Search } from "lucide-react";
 import { useState } from "react";
 import { allNews, formatDate } from "../../../lib/newsData";
+import { useTranslations } from "next-intl";
 
-const categories = ["全部", "会馆公告", "文化活动", "青年活动", "社群服务"];
+const categoryMap = [
+  { key: "all", dataValue: "" },
+  { key: "catAnnouncement", dataValue: "会馆公告" },
+  { key: "catCulture", dataValue: "文化活动" },
+  { key: "catYouth", dataValue: "青年活动" },
+  { key: "catService", dataValue: "社群服务" },
+];
 
 export default function NewsPage() {
-  const [activeCategory, setActiveCategory] = useState("全部");
+  const t = useTranslations("news");
+  const [activeCategoryKey, setActiveCategoryKey] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = allNews.filter((item) => {
-    const matchCat =
-      activeCategory === "全部" || item.category === activeCategory;
+    const catEntry = categoryMap.find((c) => c.key === activeCategoryKey);
+    const matchCat = activeCategoryKey === "all" || item.category === catEntry?.dataValue;
     const matchSearch =
       !searchQuery ||
       item.title.includes(searchQuery) ||
@@ -35,13 +43,13 @@ export default function NewsPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              News & Updates
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              最新动态
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-2xl mx-auto">
-              掌握东安会馆最新消息与活动资讯
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -49,13 +57,12 @@ export default function NewsPage() {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* 搜索与分类筛选 */}
           <div className="flex flex-col md:flex-row gap-4 mb-10">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="搜索动态..."
+                placeholder={t("search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 data-testid="news-search"
@@ -63,24 +70,23 @@ export default function NewsPage() {
               />
             </div>
             <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
+              {categoryMap.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  data-testid={`filter-${cat}`}
+                  key={cat.key}
+                  onClick={() => setActiveCategoryKey(cat.key)}
+                  data-testid={`filter-${cat.key}`}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat
+                    activeCategoryKey === cat.key
                       ? "bg-primary text-white"
                       : "bg-muted text-foreground/70 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  {cat}
+                  {cat.key === "all" ? t("all") : t(cat.key)}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 新闻列表 */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((article, index) => (
               <motion.article
@@ -118,7 +124,7 @@ export default function NewsPage() {
                     data-testid={`read-more-${article.id}`}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:gap-3 transition-all"
                   >
-                    阅读全文 <ArrowRight className="w-3.5 h-3.5" />
+                    {t("readMore")} <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </motion.article>
@@ -127,15 +133,15 @@ export default function NewsPage() {
 
           {filtered.length === 0 && (
             <div className="text-center py-20 text-muted-foreground">
-              <p className="text-lg">未找到相关动态</p>
+              <p className="text-lg">{t("noResults")}</p>
               <button
                 onClick={() => {
-                  setActiveCategory("全部");
+                  setActiveCategoryKey("all");
                   setSearchQuery("");
                 }}
                 className="mt-4 text-sm text-primary hover:underline"
               >
-                清除筛选
+                {t("clearFilter")}
               </button>
             </div>
           )}

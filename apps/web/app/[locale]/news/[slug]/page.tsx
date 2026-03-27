@@ -6,19 +6,22 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
 import { getArticleBySlug, formatDate } from "../../../../lib/newsData";
-import { useParams, redirect } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import ShareButtons from "../../../components/ShareButtons";
 
 export default function NewsArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const article = getArticleBySlug(slug);
+  const t = useTranslations("news");
 
   if (!article) {
     return (
       <main className="min-h-screen">
         <Navigation />
         <div className="pt-32 pb-20 text-center">
-          <h1 className="text-3xl font-bold mb-4">文章不存在</h1>
-          <Link href="/news" className="text-primary hover:underline">返回最新动态</Link>
+          <h1 className="text-3xl font-bold mb-4">{t("notFound")}</h1>
+          <Link href="/news" className="text-primary hover:underline">{t("backToNews")}</Link>
         </div>
         <Footer />
       </main>
@@ -31,7 +34,6 @@ export default function NewsArticlePage() {
 
       <article className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          {/* Back link */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -43,11 +45,10 @@ export default function NewsArticlePage() {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              返回最新动态
+              {t("backToNews")}
             </Link>
           </motion.div>
 
-          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -69,7 +70,6 @@ export default function NewsArticlePage() {
             </h1>
           </motion.div>
 
-          {/* Cover image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -83,7 +83,6 @@ export default function NewsArticlePage() {
             />
           </motion.div>
 
-          {/* Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -95,20 +94,20 @@ export default function NewsArticlePage() {
             ))}
           </motion.div>
 
-          {/* Footer nav */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.4 }}
-            className="mt-12 pt-8 border-t border-border"
+            className="mt-12 pt-8 border-t border-border flex items-center justify-between flex-wrap gap-4"
           >
             <Link
               href="/news"
               className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
-              查看更多动态
+              {t("viewMore")}
             </Link>
+            <ShareButtons title={article.title} />
           </motion.div>
         </div>
       </article>

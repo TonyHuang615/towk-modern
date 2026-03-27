@@ -2,17 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sun, Settings } from "lucide-react";
+import { Moon, Sun, Settings, User, Search } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import SearchModal from "./SearchModal";
 
 export default function Navigation() {
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("nav");
+  const { data: session } = useSession();
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const navItems = [
     { name: t("home"), href: "/" },
@@ -48,6 +52,7 @@ export default function Navigation() {
   };
 
   return (
+    <>
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -64,19 +69,19 @@ export default function Navigation() {
           <Link href="/" className="flex items-center gap-2 lg:gap-3">
             <div className="w-8 h-8 lg:w-10 lg:h-10 bg-primary rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm lg:text-lg">
-                东
+                {t("logoChar")}
               </span>
             </div>
             <div>
               <span
                 className={`font-bold text-sm lg:text-lg tracking-tight transition-colors duration-300 ${isScrolled ? "text-foreground" : "text-white"}`}
               >
-                新加坡东安会馆
+                {t("siteName")}
               </span>
               <span
                 className={`hidden sm:block text-xs -mt-1 transition-colors duration-300 ${isScrolled ? "text-muted-foreground" : "text-white/60"}`}
               >
-                Tung On Wui Kun · 1876
+                {t("siteNameEn")}
               </span>
             </div>
           </Link>
@@ -102,14 +107,40 @@ export default function Navigation() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2 lg:gap-4">
-            <Link
-              href="/admin"
+            <button
+              onClick={() => setSearchOpen(true)}
               className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
                 isScrolled
                   ? "text-foreground/60"
                   : "text-white/70"
               }`}
-              aria-label="管理后台"
+            >
+              <Search className="w-4 h-4 lg:w-5 lg:h-5" />
+            </button>
+
+            <Link
+              href="/member"
+              className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
+                isScrolled
+                  ? "text-foreground/60"
+                  : "text-white/70"
+              }`}
+            >
+              {session?.user?.image ? (
+                <img src={session.user.image} alt="" className="w-5 h-5 lg:w-6 lg:h-6 rounded-full" />
+              ) : (
+                <User className="w-4 h-4 lg:w-5 lg:h-5" />
+              )}
+            </Link>
+
+            <Link
+              href="/admin"
+              className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 hidden lg:block ${
+                isScrolled
+                  ? "text-foreground/60"
+                  : "text-white/70"
+              }`}
+              aria-label={t("admin")}
             >
               <Settings className="w-4 h-4 lg:w-5 lg:h-5" />
             </Link>
@@ -141,5 +172,8 @@ export default function Navigation() {
         </div>
       </nav>
     </motion.header>
+
+    <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   );
 }

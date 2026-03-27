@@ -3,82 +3,29 @@
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
-
-const milestones = [
-  {
-    year: "1876",
-    title: "会馆创立",
-    description:
-      "新加坡东安会馆正式成立，为来自广东东莞、宝安两县的乡亲提供互助平台，初期会员多为从事家务、建筑及橡胶业的劳工。",
-  },
-  {
-    year: "1923",
-    title: "创办东安义学",
-    description:
-      "创办东安义学，为会员子弟提供免费中文教育，传承母语文化，直至1964年因政府推行英语教育政策而停办。",
-  },
-  {
-    year: "1943",
-    title: "成立粤剧组",
-    description:
-      "东安会馆成立粤剧组，以传统粤剧粤曲凝聚乡情、慰藉在外乡亲。1947年正式成立「东安梨艺社」，并持续参与各类慈善义演。",
-  },
-  {
-    year: "1946",
-    title: "成立互助部",
-    description:
-      "为照顾年长乡亲的身后事宜，成立互助部，为会员提供殡葬互助服务，体现同乡之间的守望相助精神。",
-  },
-  {
-    year: "1972",
-    title: "设立奖学金",
-    description:
-      "设立奖学金制度，定期资助优秀会员子弟升学深造，持续至今，鼓励后代积极进取。",
-  },
-  {
-    year: "1992",
-    title: "第1届世界东安恳亲大会",
-    description:
-      "联合全球各地东安会馆，于马来西亚吉隆坡举办第1届世界东安恳亲大会，开创全球东安乡亲定期聚首的传统。",
-  },
-  {
-    year: "2003",
-    title: "创办新加坡东莞工商总会",
-    description:
-      "创办新加坡东莞工商总会，搭建新加坡与东莞之间的商贸桥梁，推动双边经贸往来与商业合作。",
-  },
-  {
-    year: "2019",
-    title: "主办第11届恳亲大会",
-    description:
-      "新加坡东安会馆主办第11届世界东安恳亲大会，以「五湖乡情连心，四海和谐聚缘」为主题，吸引来自全球东安乡亲齐聚狮城。",
-  },
-];
-
-const eras = [
-  {
-    period: "1876–1920",
-    title: "筚路蓝缕",
-    description: "初创互助，安顿乡亲",
-  },
-  {
-    period: "1920–1960",
-    title: "兴学育才",
-    description: "创校培才，文化传承",
-  },
-  {
-    period: "1960–2000",
-    title: "文化薪传",
-    description: "粤剧传承，联谊发展",
-  },
-  {
-    period: "2000–今",
-    title: "迈向现代",
-    description: "商贸拓展，数字转型",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function HistoryPage() {
+  const t = useTranslations("history");
+
+  const milestones = [
+    { year: "1876", title: t("milestone1876Title"), description: t("milestone1876Desc") },
+    { year: "1923", title: t("milestone1923Title"), description: t("milestone1923Desc") },
+    { year: "1943", title: t("milestone1943Title"), description: t("milestone1943Desc") },
+    { year: "1946", title: t("milestone1946Title"), description: t("milestone1946Desc") },
+    { year: "1972", title: t("milestone1972Title"), description: t("milestone1972Desc") },
+    { year: "1992", title: t("milestone1992Title"), description: t("milestone1992Desc") },
+    { year: "2003", title: t("milestone2003Title"), description: t("milestone2003Desc") },
+    { year: "2019", title: t("milestone2019Title"), description: t("milestone2019Desc") },
+  ];
+
+  const eras = [
+    { period: t("era1Period"), title: t("era1Title"), description: t("era1Desc") },
+    { period: t("era2Period"), title: t("era2Title"), description: t("era2Desc") },
+    { period: t("era3Period"), title: t("era3Title"), description: t("era3Desc") },
+    { period: t("era4Period"), title: t("era4Title"), description: t("era4Desc") },
+  ];
+
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -91,13 +38,13 @@ export default function HistoryPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Our Heritage
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              历史传承
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-3xl mx-auto">
-              自1876年创立以来，东安会馆见证了几代华人的奋斗历程，承载着深厚的历史记忆
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -149,7 +96,7 @@ export default function HistoryPage() {
       <section className="py-16 bg-foreground/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">历史时期</h2>
+            <h2 className="text-3xl font-bold">{t("historicalPeriods")}</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {eras.map((era, index) => (

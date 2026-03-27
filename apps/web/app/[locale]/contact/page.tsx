@@ -5,9 +5,11 @@ import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Clock, Send } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function ContactPage() {
   const [content, setContent] = useState<any>({});
+  const t = useTranslations("contact");
 
   useEffect(() => {
     fetch("/api/cms")
@@ -17,9 +19,9 @@ export default function ContactPage() {
   }, []);
 
   const contactInfo = [
-    { icon: MapPin, label: "地址", value: "21 Bukit Pasoh Road, Singapore 089835" },
-    { icon: Phone, label: "电话", value: "+65 6223 4416" },
-    { icon: Clock, label: "开放时间", value: "以会馆通知为准" },
+    { icon: MapPin, label: t("address"), value: "21 Bukit Pasoh Road, Singapore 089835" },
+    { icon: Phone, label: t("phone"), value: "+65 6223 4416" },
+    { icon: Clock, label: t("hours"), value: t("hoursValue") },
   ];
 
   return (
@@ -34,13 +36,13 @@ export default function ContactPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Contact Us
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              联系我们
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-3xl mx-auto">
-              欢迎乡亲们与我们联系，我们期待听到您的声音
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -55,7 +57,7 @@ export default function ContactPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold mb-8">联系信息</h2>
+              <h2 className="text-3xl font-bold mb-8">{t("info")}</h2>
               <div className="space-y-6">
                 {contactInfo.map((item, index) => (
                   <motion.div
@@ -80,7 +82,7 @@ export default function ContactPage() {
               </div>
 
               <div className="mt-12 p-6 rounded-2xl bg-foreground/5">
-                <h3 className="text-xl font-bold mb-4">关注我们</h3>
+                <h3 className="text-xl font-bold mb-4">{t("followUs")}</h3>
                 <div className="flex gap-4">
                   {["Facebook", "Instagram", "WeChat"].map((social) => (
                     <a
@@ -101,48 +103,48 @@ export default function ContactPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold mb-8">发送消息</h2>
+              <h2 className="text-3xl font-bold mb-8">{t("sendMessage")}</h2>
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground/70 mb-1">
-                      姓名
+                      {t("name")}
                     </label>
                     <input
                       type="text"
                       className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                      placeholder="您的姓名"
+                      placeholder={t("namePlaceholder")}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground/70 mb-1">
-                      邮箱
+                      {t("email")}
                     </label>
                     <input
                       type="email"
                       className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                      placeholder="您的邮箱"
+                      placeholder={t("emailPlaceholder")}
                     />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground/70 mb-1">
-                    主题
+                    {t("subject")}
                   </label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                    placeholder="消息主题"
+                    placeholder={t("subjectPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground/70 mb-1">
-                    消息内容
+                    {t("message")}
                   </label>
                   <textarea
                     rows={5}
                     className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                    placeholder="请输入您的消息..."
+                    placeholder={t("messagePlaceholder")}
                   />
                 </div>
                 <button
@@ -150,7 +152,7 @@ export default function ContactPage() {
                   className="w-full px-8 py-4 bg-primary text-white rounded-full font-medium hover:bg-primary-dark transition-colors flex items-center justify-center gap-2"
                 >
                   <Send className="w-5 h-5" />
-                  发送消息
+                  {t("send")}
                 </button>
               </form>
             </motion.div>
@@ -161,7 +163,7 @@ export default function ContactPage() {
       <section className="py-16 bg-foreground/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">会馆位置</h2>
+            <h2 className="text-3xl font-bold">{t("location")}</h2>
           </div>
           <div className="aspect-video rounded-2xl overflow-hidden">
             <iframe
@@ -172,7 +174,7 @@ export default function ContactPage() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="东安会馆位置 - 21 Bukit Pasoh Road, Singapore 089835"
+              title={t("mapTitle")}
             />
           </div>
         </div>

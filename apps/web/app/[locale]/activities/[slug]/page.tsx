@@ -7,18 +7,20 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { getActivityBySlug } from "../../../../lib/activitiesData";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function ActivityDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const activity = getActivityBySlug(slug);
+  const t = useTranslations("activities");
 
   if (!activity) {
     return (
       <main className="min-h-screen">
         <Navigation />
         <div className="pt-32 pb-20 text-center">
-          <h1 className="text-3xl font-bold mb-4">活动不存在</h1>
-          <Link href="/activities" className="text-primary hover:underline">返回会馆活动</Link>
+          <h1 className="text-3xl font-bold mb-4">{t("notFound")}</h1>
+          <Link href="/activities" className="text-primary hover:underline">{t("backToActivities")}</Link>
         </div>
         <Footer />
       </main>
@@ -31,7 +33,6 @@ export default function ActivityDetailPage() {
 
       <article className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          {/* Back */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -43,11 +44,10 @@ export default function ActivityDetailPage() {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              返回会馆活动
+              {t("backToActivities")}
             </Link>
           </motion.div>
 
-          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,6 @@ export default function ActivityDetailPage() {
             </p>
           </motion.div>
 
-          {/* Cover image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -80,7 +79,6 @@ export default function ActivityDetailPage() {
           </motion.div>
 
           <div className="grid lg:grid-cols-3 gap-10">
-            {/* Main content */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -92,7 +90,6 @@ export default function ActivityDetailPage() {
               ))}
             </motion.div>
 
-            {/* Highlights sidebar */}
             <motion.aside
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -100,7 +97,7 @@ export default function ActivityDetailPage() {
               className="lg:col-span-1"
             >
               <div className="sticky top-28 p-6 rounded-2xl bg-foreground/5 border border-border">
-                <h3 className="font-bold text-lg mb-4">活动亮点</h3>
+                <h3 className="font-bold text-lg mb-4">{t("highlights")}</h3>
                 <ul className="space-y-3">
                   {activity.highlights.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm">
@@ -115,14 +112,13 @@ export default function ActivityDetailPage() {
                     href="/contact"
                     className="block w-full text-center px-4 py-3 bg-primary text-white rounded-full text-sm font-medium hover:bg-primary/90 transition-colors"
                   >
-                    联系我们了解更多
+                    {t("contactMore")}
                   </Link>
                 </div>
               </div>
             </motion.aside>
           </div>
 
-          {/* Back */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -134,7 +130,7 @@ export default function ActivityDetailPage() {
               className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
-              查看所有活动
+              {t("viewAll")}
             </Link>
           </motion.div>
         </div>

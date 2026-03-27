@@ -6,9 +6,11 @@ import { motion } from "framer-motion";
 import { Heart, Target, Eye, Shield, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function AboutPage() {
   const [content, setContent] = useState<any>({});
+  const t = useTranslations("about");
 
   useEffect(() => {
     fetch("/api/cms")
@@ -20,10 +22,20 @@ export default function AboutPage() {
   const about = content.about || {};
 
   const values = [
-    { icon: Heart, title: "乡亲情谊", description: "联络乡情，增进友谊" },
-    { icon: Target, title: "互助合作", description: "促进乡亲商业合作" },
-    { icon: Eye, title: "文化传承", description: "弘扬中华文化传统" },
-    { icon: Shield, title: "社群服务", description: "服务社区，回馈社会" },
+    { icon: Heart, title: t("value1Title"), description: t("value1Desc") },
+    { icon: Target, title: t("value2Title"), description: t("value2Desc") },
+    { icon: Eye, title: t("value3Title"), description: t("value3Desc") },
+    { icon: Shield, title: t("value4Title"), description: t("value4Desc") },
+  ];
+
+  const milestones = [
+    { year: "1876", event: t("milestone1876") },
+    { year: "1923", event: t("milestone1923") },
+    { year: "1943", event: t("milestone1943") },
+    { year: "1946", event: t("milestone1946") },
+    { year: "1972", event: t("milestone1972") },
+    { year: "1992", event: t("milestone1992") },
+    { year: "2003", event: t("milestone2003") },
   ];
 
   return (
@@ -39,13 +51,13 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              About Us
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              {about?.title || "关于会馆"}
+              {about?.title || t("pageTitle")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70">
-              {about?.subtitle || "Tung On Wui Kun · 1876"}
+              {about?.subtitle || t("defaultSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -60,19 +72,16 @@ export default function AboutPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold mb-6">我们的故事</h2>
+              <h2 className="text-3xl font-bold mb-6">{t("ourStory")}</h2>
               <div className="space-y-4 text-lg text-foreground/80">
                 <p>
-                  {about?.content ||
-                    "新加坡东安会馆成立于1876年，是新加坡历史最悠久的华人宗乡社团之一。"}
+                  {about?.content || t("storyP1")}
                 </p>
                 <p>
-                  一百多年来，东安会馆始终秉承"敦睦乡谊、弘扬文化、服务社群"的宗旨，
-                  为乡亲提供社交平台，为社区贡献力量，为中华文化在海外的传承做出积极贡献。
+                  {t("storyP2")}
                 </p>
                 <p>
-                  东安会馆不仅是东莞宝安同乡的精神家园，更是新加坡华人宗乡会馆的重要组成部分。
-                  我们致力于团结乡亲，促进交流，传承文化，服务社会。
+                  {t("storyP3")}
                 </p>
               </div>
             </motion.div>
@@ -86,7 +95,7 @@ export default function AboutPage() {
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-card-hover">
                 <img
                   src="https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=900&q=80"
-                  alt="东安会馆"
+                  alt={t("altImage")}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -95,9 +104,9 @@ export default function AboutPage() {
               <div className="grid grid-cols-3 gap-4">
                 {(
                   about?.stats || [
-                    { value: "3000+", label: "注册会员" },
-                    { value: "150", label: "年历史" },
-                    { value: "11", label: "届恳亲大会" },
+                    { value: t("stat1Value"), label: t("stat1Label") },
+                    { value: t("stat2Value"), label: t("stat2Label") },
+                    { value: t("stat3Value"), label: t("stat3Label") },
                   ]
                 ).map((stat: any, index: number) => (
                   <motion.div
@@ -125,9 +134,9 @@ export default function AboutPage() {
       <section className="py-16 bg-foreground/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">我们的价值观</h2>
+            <h2 className="text-3xl font-bold">{t("ourValues")}</h2>
             <p className="mt-4 text-foreground/70">
-              传承百年精神，凝聚同乡情谊
+              {t("valuesSubtitle")}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -160,9 +169,9 @@ export default function AboutPage() {
               className="group flex items-center justify-between p-6 rounded-2xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors"
             >
               <div>
-                <h3 className="font-bold text-lg">组织架构</h3>
+                <h3 className="font-bold text-lg">{t("structure")}</h3>
                 <p className="text-sm text-foreground/60 mt-1">
-                  了解会馆的组织架构与委员会设置
+                  {t("structureDesc")}
                 </p>
               </div>
               <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
@@ -172,9 +181,9 @@ export default function AboutPage() {
               className="group flex items-center justify-between p-6 rounded-2xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors"
             >
               <div>
-                <h3 className="font-bold text-lg">历届董事会</h3>
+                <h3 className="font-bold text-lg">{t("board")}</h3>
                 <p className="text-sm text-foreground/60 mt-1">
-                  查看各届董事会领导名单
+                  {t("boardDesc")}
                 </p>
               </div>
               <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
@@ -187,18 +196,10 @@ export default function AboutPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">历史里程碑</h2>
+            <h2 className="text-3xl font-bold">{t("milestones")}</h2>
           </div>
           <div className="space-y-4">
-            {[
-              { year: "1876", event: "东安会馆于新加坡正式创立，为来自广东东莞、宝安两县的乡亲提供互助平台" },
-              { year: "1923", event: "创办东安义学，为会员子弟提供免费中文教育" },
-              { year: "1943", event: "成立粤剧组，传承粤剧文化" },
-              { year: "1946", event: "成立互助部，协助处理年长乡亲的身后事宜" },
-              { year: "1972", event: "设立奖学金制度，资助会员子弟升学" },
-              { year: "2003", event: "创办新加坡东莞工商总会，促进新加坡与东莞之间的贸易往来" },
-              { year: "1992", event: "联合各地东安会馆创办「世界东安恳亲大会」，至今已历11届" },
-            ].sort((a, b) => parseInt(a.year) - parseInt(b.year)).map((item, index) => (
+            {milestones.sort((a, b) => parseInt(a.year) - parseInt(b.year)).map((item, index) => (
               <motion.div
                 key={item.year}
                 initial={{ opacity: 0, x: -20 }}

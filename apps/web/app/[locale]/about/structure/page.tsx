@@ -5,54 +5,58 @@ import Footer from "../../../components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-
-const orgStructure = [
-  {
-    level: "最高领导",
-    roles: [
-      { title: "永远名誉会长", description: "对会馆有卓越贡献的资深领袖" },
-      { title: "名誉会长", description: "历任会长及对会馆有重大贡献者" },
-      { title: "名誉主席", description: "历任主席" },
-    ],
-  },
-  {
-    level: "执行领导",
-    roles: [
-      { title: "会长", description: "会馆最高负责人，统筹全馆事务" },
-      { title: "副会长", description: "协助会长处理日常事务" },
-      { title: "信托人", description: "监督会馆财产及重大事项" },
-    ],
-  },
-  {
-    level: "行政管理",
-    roles: [
-      { title: "总务", description: "负责日常行政与会务运作" },
-      { title: "副总务", description: "协助总务处理行政事务" },
-      { title: "财政", description: "负责会馆财务管理" },
-      { title: "副财政", description: "协助财政处理账务" },
-      { title: "查账", description: "审计会馆财务报告" },
-    ],
-  },
-  {
-    level: "专责委员会",
-    roles: [
-      { title: "交际组", description: "负责对外联络、公共关系" },
-      { title: "粤剧组", description: "统筹粤剧文化活动" },
-      { title: "妇女组", description: "组织女性会员活动" },
-      { title: "青年团", description: "凝聚青年会员，培养接班人" },
-    ],
-  },
-  {
-    level: "顾问",
-    roles: [
-      { title: "商务顾问", description: "提供商业发展建议" },
-      { title: "法律顾问", description: "处理法律事务" },
-      { title: "医药顾问", description: "提供健康与医疗咨询" },
-    ],
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function StructurePage() {
+  const t = useTranslations("structure");
+  const tCommon = useTranslations("common");
+
+  const orgStructure = [
+    {
+      level: t("level1"),
+      roles: [
+        { title: t("role_honoraryLifePresident"), description: t("role_honoraryLifePresidentDesc") },
+        { title: t("role_honoraryPresident"), description: t("role_honoraryPresidentDesc") },
+        { title: t("role_honoraryChairman"), description: t("role_honoraryChairmanDesc") },
+      ],
+    },
+    {
+      level: t("level2"),
+      roles: [
+        { title: t("role_president"), description: t("role_presidentDesc") },
+        { title: t("role_vicePresident"), description: t("role_vicePresidentDesc") },
+        { title: t("role_trustee"), description: t("role_trusteeDesc") },
+      ],
+    },
+    {
+      level: t("level3"),
+      roles: [
+        { title: t("role_secretary"), description: t("role_secretaryDesc") },
+        { title: t("role_deputySecretary"), description: t("role_deputySecretaryDesc") },
+        { title: t("role_treasurer"), description: t("role_treasurerDesc") },
+        { title: t("role_deputyTreasurer"), description: t("role_deputyTreasurerDesc") },
+        { title: t("role_auditor"), description: t("role_auditorDesc") },
+      ],
+    },
+    {
+      level: t("level4"),
+      roles: [
+        { title: t("role_socialCommittee"), description: t("role_socialCommitteeDesc") },
+        { title: t("role_operaGroup"), description: t("role_operaGroupDesc") },
+        { title: t("role_womenGroup"), description: t("role_womenGroupDesc") },
+        { title: t("role_youthGroup"), description: t("role_youthGroupDesc") },
+      ],
+    },
+    {
+      level: t("level5"),
+      roles: [
+        { title: t("role_businessAdvisor"), description: t("role_businessAdvisorDesc") },
+        { title: t("role_legalAdvisor"), description: t("role_legalAdvisorDesc") },
+        { title: t("role_medicalAdvisor"), description: t("role_medicalAdvisorDesc") },
+      ],
+    },
+  ];
+
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -65,13 +69,13 @@ export default function StructurePage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Organization
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold">
-              组织架构
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-2xl mx-auto">
-              东安会馆组织架构清晰，分工明确，各委员会协同合作
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -84,13 +88,13 @@ export default function StructurePage() {
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-10"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回关于会馆
+            {tCommon("backToAbout")}
           </Link>
 
           <div className="space-y-10">
             {orgStructure.map((group, gIdx) => (
               <motion.div
-                key={group.level}
+                key={gIdx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -103,9 +107,9 @@ export default function StructurePage() {
                   {group.level}
                 </h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {group.roles.map((role) => (
+                  {group.roles.map((role, rIdx) => (
                     <div
-                      key={role.title}
+                      key={rIdx}
                       className="p-4 rounded-xl bg-foreground/5 hover:bg-foreground/8 transition-colors"
                     >
                       <h3 className="font-bold text-primary">{role.title}</h3>

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface HistoryProps {
   data?: {
@@ -9,36 +10,38 @@ interface HistoryProps {
   };
 }
 
-const defaultMilestones = [
-  {
-    year: "1876",
-    title: "会馆创立",
-    description: "新加坡东安会馆正式成立，为来自广东东莞、宝安两县的乡亲提供互助平台。",
-  },
-  {
-    year: "1923",
-    title: "兴学育才",
-    description: "创办东安义学，为会员子弟提供免费中文教育，传承母语文化。",
-  },
-  {
-    year: "1943",
-    title: "粤剧传承",
-    description: "成立粤剧组，1947年正式成立「东安梨艺社」，传承岭南文化至今。",
-  },
-  {
-    year: "1992",
-    title: "恳亲大会",
-    description: "联合全球各地东安会馆，于吉隆坡举办第1届世界东安恳亲大会。",
-  },
-  {
-    year: "2003",
-    title: "商贸拓展",
-    description: "创办新加坡东莞工商总会，搭建新加坡与东莞之间的商贸桥梁。",
-  },
-];
-
 export default function History({ data }: HistoryProps) {
-  const title = data?.title || "历史传承";
+  const t = useTranslations("history");
+
+  const defaultMilestones = [
+    {
+      year: "1876",
+      title: t("compMilestone1Title"),
+      description: t("compMilestone1Desc"),
+    },
+    {
+      year: "1923",
+      title: t("compMilestone2Title"),
+      description: t("compMilestone2Desc"),
+    },
+    {
+      year: "1943",
+      title: t("compMilestone3Title"),
+      description: t("compMilestone3Desc"),
+    },
+    {
+      year: "1992",
+      title: t("compMilestone4Title"),
+      description: t("compMilestone4Desc"),
+    },
+    {
+      year: "2003",
+      title: t("compMilestone5Title"),
+      description: t("compMilestone5Desc"),
+    },
+  ];
+
+  const title = data?.title || t("title");
   const milestones = data?.milestones || defaultMilestones;
 
   return (
@@ -52,13 +55,13 @@ export default function History({ data }: HistoryProps) {
           className="text-center mb-16"
         >
           <span className="text-accent text-sm tracking-[0.3em] uppercase">
-            Our Heritage
+            {t("sectionLabel")}
           </span>
           <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
             {title}
           </h2>
           <p className="mt-4 text-lg text-foreground/70 max-w-2xl mx-auto">
-            自1876年创立以来，东安会馆见证了几代华人的奋斗历程，承载着深厚的历史记忆。
+            {t("subtitle")}
           </p>
         </motion.div>
 

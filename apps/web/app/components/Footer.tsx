@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface FooterProps {
   data?: {
@@ -11,27 +12,28 @@ interface FooterProps {
   };
 }
 
-const contactInfo = [
-  { icon: MapPin, label: "地址", value: "21 Bukit Pasoh Road, Singapore 089835" },
-  { icon: Phone, label: "电话", value: "+65 6223 4416" },
-];
-
-const quickLinks = [
-  { name: "关于会馆", href: "/about" },
-  { name: "历史传承", href: "/history" },
-  { name: "最新动态", href: "/news" },
-  { name: "影相库", href: "/gallery" },
-  { name: "恳亲大会", href: "/conference" },
-  { name: "会馆活动", href: "/activities" },
-  { name: "联系我们", href: "/contact" },
-];
-
 export default function Footer({ data }: FooterProps) {
-  const siteTitle = data?.title || "新加坡东安会馆";
-  const siteSubtitle = data?.subtitle || "Tung On Wui Kun";
-  const siteDescription =
-    data?.description ||
-    "成立于1876年，新加坡历史最悠久的华人宗乡社团之一，致力于联络乡情、传承文化、服务社群。";
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
+
+  const contactInfo = [
+    { icon: MapPin, label: t("address"), value: "21 Bukit Pasoh Road, Singapore 089835" },
+    { icon: Phone, label: t("phone"), value: "+65 6223 4416" },
+  ];
+
+  const quickLinks = [
+    { name: tNav("about"), href: "/about" },
+    { name: tNav("history"), href: "/history" },
+    { name: tNav("news"), href: "/news" },
+    { name: tNav("gallery"), href: "/gallery" },
+    { name: tNav("conference"), href: "/conference" },
+    { name: tNav("activities"), href: "/activities" },
+    { name: tNav("contact"), href: "/contact" },
+  ];
+
+  const siteTitle = data?.title || t("siteName");
+  const siteSubtitle = data?.subtitle || t("siteNameEn");
+  const siteDescription = data?.description || t("siteDesc");
 
   return (
     <footer id="contact" className="bg-foreground text-background">
@@ -46,7 +48,7 @@ export default function Footer({ data }: FooterProps) {
           >
             <div className="flex items-center gap-3 mb-4 md:mb-6">
               <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg md:text-xl">东</span>
+                <span className="text-white font-bold text-lg md:text-xl">{t("logoChar")}</span>
               </div>
               <div>
                 <span className="font-bold text-lg">{siteTitle}</span>
@@ -66,10 +68,10 @@ export default function Footer({ data }: FooterProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">快速链接</h4>
+            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">{t("quickLinks")}</h4>
             <ul className="space-y-2 md:space-y-3">
               {quickLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.href}>
                   <a
                     href={link.href}
                     className="text-background/70 hover:text-primary transition-colors duration-200 text-sm"
@@ -88,7 +90,7 @@ export default function Footer({ data }: FooterProps) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="col-span-2 lg:col-span-2"
           >
-            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">联系我们</h4>
+            <h4 className="font-bold mb-3 md:mb-6 text-sm md:text-base">{t("contactUs")}</h4>
             <div className="grid sm:grid-cols-2 gap-4">
               {contactInfo.map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
@@ -111,10 +113,10 @@ export default function Footer({ data }: FooterProps) {
           <p>© 2026 {siteTitle}. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-background transition-colors">
-              隐私政策
+              {t("privacy")}
             </a>
             <a href="#" className="hover:text-background transition-colors">
-              使用条款
+              {t("terms")}
             </a>
           </div>
         </div>

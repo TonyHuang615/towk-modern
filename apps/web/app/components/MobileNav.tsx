@@ -16,25 +16,27 @@ import {
   History,
   Users,
 } from "lucide-react";
-
-const mainTabs = [
-  { name: "首页", href: "/", icon: Home },
-  { name: "关于", href: "/about", icon: Info },
-  { name: "动态", href: "/news", icon: Newspaper },
-  { name: "影相", href: "/gallery", icon: Camera },
-  { name: "更多", href: "#more", icon: MoreHorizontal },
-];
-
-const moreLinks = [
-  { name: "会馆活动", href: "/activities", icon: Calendar },
-  { name: "恳亲大会", href: "/conference", icon: Users },
-  { name: "历史传承", href: "/history", icon: History },
-  { name: "联系我们", href: "/contact", icon: MapPin },
-];
+import { useTranslations } from "next-intl";
 
 export default function MobileNav() {
   const pathname = usePathname();
   const [showMore, setShowMore] = useState(false);
+  const t = useTranslations("mobileNav");
+
+  const mainTabs = [
+    { name: t("home"), href: "/", icon: Home },
+    { name: t("about"), href: "/about", icon: Info },
+    { name: t("news"), href: "/news", icon: Newspaper },
+    { name: t("gallery"), href: "/gallery", icon: Camera },
+    { name: t("more"), href: "#more", icon: MoreHorizontal },
+  ];
+
+  const moreLinks = [
+    { name: t("activities"), href: "/activities", icon: Calendar },
+    { name: t("conference"), href: "/conference", icon: Users },
+    { name: t("history"), href: "/history", icon: History },
+    { name: t("contact"), href: "/contact", icon: MapPin },
+  ];
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -73,7 +75,7 @@ export default function MobileNav() {
               <div className="bg-background rounded-2xl shadow-xl border border-border overflow-hidden">
                 <div className="flex items-center justify-between px-5 py-3 border-b border-border">
                   <span className="text-sm font-medium text-foreground/60">
-                    更多页面
+                    {t("morePages")}
                   </span>
                   <button
                     onClick={() => setShowMore(false)}

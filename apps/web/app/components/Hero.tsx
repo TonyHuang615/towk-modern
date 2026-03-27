@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Slide {
   id: number;
@@ -18,34 +19,36 @@ interface HeroProps {
   };
 }
 
-const defaultSlides: Slide[] = [
-  {
-    id: 1,
-    image:
-      "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80",
-    title: "百年东安 · 乡情永续",
-    subtitle: "新加坡东安会馆 · 1876",
-    description: "传承百年历史，凝聚同乡情谊",
-  },
-  {
-    id: 2,
-    image:
-      "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=1600&q=80",
-    title: "世界东安恳亲大会",
-    subtitle: "第11届 · 2019",
-    description: "联结全球东莞宝安乡亲，共叙乡情",
-  },
-  {
-    id: 3,
-    image:
-      "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=1600&q=80",
-    title: "粤韵悠扬 · 文化传承",
-    subtitle: "会馆粤剧组",
-    description: "传承岭南文化，弘扬粤剧艺术",
-  },
-];
-
 export default function Hero({ data }: HeroProps) {
+  const t = useTranslations("hero");
+
+  const defaultSlides: Slide[] = [
+    {
+      id: 1,
+      image:
+        "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80",
+      title: t("slide1Title"),
+      subtitle: t("slide1Subtitle"),
+      description: t("slide1Desc"),
+    },
+    {
+      id: 2,
+      image:
+        "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=1600&q=80",
+      title: t("slide2Title"),
+      subtitle: t("slide2Subtitle"),
+      description: t("slide2Desc"),
+    },
+    {
+      id: 3,
+      image:
+        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=1600&q=80",
+      title: t("slide3Title"),
+      subtitle: t("slide3Subtitle"),
+      description: t("slide3Desc"),
+    },
+  ];
+
   const slides = data?.slides || defaultSlides;
   const [current, setCurrent] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -154,7 +157,7 @@ export default function Hero({ data }: HeroProps) {
               href="#about"
               className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white rounded-full font-medium text-sm sm:text-base hover:bg-primary-dark transition-colors duration-300"
             >
-              探索会馆
+              {t("explore")}
             </a>
           </motion.div>
         </div>
@@ -165,14 +168,14 @@ export default function Hero({ data }: HeroProps) {
         <button
           onClick={prev}
           className="pointer-events-auto p-2 sm:p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white transition-colors duration-200"
-          aria-label="上一张"
+          aria-label={t("prev")}
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
         <button
           onClick={next}
           className="pointer-events-auto p-2 sm:p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white transition-colors duration-200"
-          aria-label="下一张"
+          aria-label={t("next")}
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -189,7 +192,7 @@ export default function Hero({ data }: HeroProps) {
                 ? "w-6 sm:w-8 bg-primary"
                 : "w-1.5 sm:w-2 bg-foreground/30 hover:bg-foreground/50"
             }`}
-            aria-label={`切换到第${index + 1}张`}
+            aria-label={t("switchSlide", { number: index + 1 })}
           />
         ))}
       </div>

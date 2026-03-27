@@ -2,42 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
-
-const defaultNews = [
-  {
-    id: 1,
-    date: "2026-03-15",
-    category: "会馆公告",
-    title: "新加坡东安会馆2026年春茗晚宴圆满举行",
-    excerpt:
-      "2026年春茗晚宴于本月圆满举行，逾三百名乡亲出席，共叙乡情，展望新一年的发展蓝图。",
-    image:
-      "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=600&q=80",
-    href: "/news/spring-banquet-2026",
-  },
-  {
-    id: 2,
-    date: "2026-02-28",
-    category: "文化活动",
-    title: "粤剧组新春贺岁演出获得热烈反响",
-    excerpt:
-      "会馆粤剧组于农历新年期间在牛车水文化广场呈献精彩粤剧折子戏，吸引大批观众，广受好评。",
-    image:
-      "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80",
-    href: "/news/cantonese-opera-cny-2026",
-  },
-  {
-    id: 3,
-    date: "2026-01-20",
-    category: "青年活动",
-    title: "青年团赴广东东莞交流考察活动顺利完成",
-    excerpt:
-      "会馆青年团一行二十人赴祖籍地广东东莞进行文化交流考察，深入了解家乡发展，增强归属感与认同感。",
-    image:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
-    href: "/news/youth-dongguan-visit-2026",
-  },
-];
+import { useTranslations } from "next-intl";
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
@@ -49,6 +14,41 @@ function formatDate(dateStr: string) {
 }
 
 export default function News() {
+  const t = useTranslations("news");
+
+  const defaultNews = [
+    {
+      id: 1,
+      date: "2026-03-15",
+      category: t("catAnnouncement"),
+      title: t("article1Title"),
+      excerpt: t("article1Excerpt"),
+      image:
+        "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=600&q=80",
+      href: "/news/spring-banquet-2026",
+    },
+    {
+      id: 2,
+      date: "2026-02-28",
+      category: t("catCulture"),
+      title: t("article2Title"),
+      excerpt: t("article2Excerpt"),
+      image:
+        "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80",
+      href: "/news/cantonese-opera-cny-2026",
+    },
+    {
+      id: 3,
+      date: "2026-01-20",
+      category: t("catYouth"),
+      title: t("article3Title"),
+      excerpt: t("article3Excerpt"),
+      image:
+        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
+      href: "/news/youth-dongguan-visit-2026",
+    },
+  ];
+
   return (
     <section id="news" className="py-12 md:py-24 lg:py-32 bg-muted/40">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -61,17 +61,17 @@ export default function News() {
         >
           <div>
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Latest News
+              {t("sectionLabel")}
             </span>
             <h2 className="mt-3 text-3xl md:text-4xl lg:text-5xl font-bold">
-              最新动态
+              {t("title")}
             </h2>
           </div>
           <a
             href="/news"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all self-start md:self-auto"
           >
-            查看全部动态 <ArrowRight className="w-4 h-4" />
+            {t("viewAll")} <ArrowRight className="w-4 h-4" />
           </a>
         </motion.div>
 
@@ -113,7 +113,7 @@ export default function News() {
                   href={article.href}
                   className="mt-3 md:mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:gap-2.5 transition-all"
                 >
-                  阅读全文 <ArrowRight className="w-3.5 h-3.5" />
+                  {t("readMore")} <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             </motion.article>

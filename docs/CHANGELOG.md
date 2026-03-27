@@ -239,8 +239,93 @@ towk-modern/
 1. **Node 版本**：本地 Node v25.8.0，Strapi 5 要求 <=24。Strapi 必须通过 Docker 运行（Dockerfile.dev 使用 Node 22）
 2. **Strapi i18n 插件**：Strapi 5 内置 i18n，不需要单独安装 `@strapi/plugin-i18n`（npm 上只有 beta 版会导致安装失败）
 3. **所有页面组件都是 `"use client"`**：因为使用了 framer-motion 动画和 useEffect 获取 CMS 数据。SEO metadata 通过 layout.tsx 注入
-4. **翻译覆盖度**：目前只有导航栏和部分标题使用了 `useTranslations`，页面正文内容仍是硬编码中文。切换到英文时正文不会变化
+4. **翻译覆盖度**：✅ 已完成！所有 21 个文件（10 组件 + 11 页面）均已接入 `useTranslations()`，中英文完整翻译
 5. **图片资源**：全部使用 Unsplash 占位图，需要替换为会馆真实照片
+
+---
+
+## 2026-03-27 第二阶段更新
+
+### P0: 全站翻译集成
+
+**所有页面和组件已接入 `useTranslations()`**，实现完整中英双语切换。
+
+**更新的组件（10个）：**
+- `Hero.tsx` — 轮播图标题/描述/按钮
+- `About.tsx` — 简介/统计数字/格言
+- `News.tsx` — 分类/标题/阅读全文
+- `History.tsx` — 里程碑标题/描述
+- `Conference.tsx` — 大会特点/历届信息
+- `Activities.tsx` — 活动标题/描述/了解更多
+- `Footer.tsx` — 链接/联系信息/版权
+- `Announcements.tsx` — 公告内容/标签
+- `MobileNav.tsx` — 底部导航标签
+- `Navigation.tsx` — Logo/站名/管理员标签
+
+**更新的页面（11个）：**
+- `about/page.tsx`, `about/board/page.tsx`, `about/structure/page.tsx`
+- `news/page.tsx`, `news/[slug]/page.tsx`
+- `activities/page.tsx`, `activities/[slug]/page.tsx`
+- `gallery/page.tsx`, `history/page.tsx`, `conference/page.tsx`, `contact/page.tsx`
+
+**翻译文件：** `messages/zh.json`（~300 keys）和 `messages/en.json`
+
+**架构决策：**
+- MobileNav 从根 layout 移至 `[locale]/layout.tsx`，避免 admin/login 页面缺少 NextIntlClientProvider 导致的构建错误
+- Gallery/News 分类筛选使用 key-based 方式（`categoryKey`），而非直接比对翻译字符串
+
+### P0: Strapi 数据录入
+
+**`apps/cms/src/index.ts` bootstrap 脚本：**
+- 首次启动自动创建管理员账户：`admin@towk.sg` / `TowkAdmin2026!`
+- 自动填充 site-config（站名/地址/电话/社交链接）
+- 自动填充 3 篇新闻文章（春茗晚宴/粤剧演出/青年交流）
+- 自动填充 4 项活动（粤剧组/商务交流/青年活动/传统节庆）
+- 自动填充 4 个相册
+- 所有种子数据仅在对应表为空时执行
+
+### P1: 会员系统（Google OAuth）
+
+**技术栈：** NextAuth.js v4 + JWT session
+
+**新增文件：**
+- `lib/auth.ts` — NextAuth 配置（Google + Credentials providers）
+- `app/api/auth/[...nextauth]/route.ts` — NextAuth API 路由
+- `app/components/AuthProvider.tsx` — SessionProvider 包装组件
+- `app/[locale]/member/login/page.tsx` — 会员登录页（Google OAuth + 邮箱登录）
+- `app/[locale]/member/page.tsx` — 会员个人中心（头像/信息/状态/活动记录）
+- `app/[locale]/member/layout.tsx` — SEO metadata
+
+**集成：**
+- Navigation 导航栏新增会员头像/登录入口
+- `[locale]/layout.tsx` 包裹 `<AuthProvider>` 提供全局 session
+- 环境变量：`NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+
+### P2: 社交分享 + 站内搜索 + 数据分析
+
+**社交分享 `ShareButtons.tsx`：**
+- Facebook / WhatsApp / Telegram 分享按钮
+- 复制链接功能
+- 已集成到新闻文章详情页底部
+
+**站内搜索 `SearchModal.tsx`：**
+- 全局搜索弹窗，点击导航栏搜索图标打开
+- 搜索范围：新闻文章 + 活动 + 静态页面
+- 即时匹配，最多显示 8 条结果
+- ESC 键关闭
+
+**Google Analytics `Analytics.tsx`：**
+- 基于 `next/script` 的 gtag.js 集成
+- 通过 `NEXT_PUBLIC_GA_ID` 环境变量配置
+- 仅在设置了 GA ID 时加载
+
+### 待完成事项
+
+1. **媒体迁移** — 所有图片仍是 Unsplash 占位图，需替换为会馆真实照片
+2. **Google OAuth 配置** — 需要在 Google Cloud Console 创建 OAuth 凭据
+3. **GA 跟踪 ID** — 需要创建 Google Analytics 4 property
+4. **Strapi 启动** — 需要 Docker 运行 PostgreSQL 和 Strapi（`docker-compose up postgres cms`）
+5. **会员数据持久化** — 当前使用 JWT session，生产环境需接入数据库存储会员信息
 
 ### 开发环境启动
 

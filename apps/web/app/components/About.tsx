@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Users, Award, Heart } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface AboutProps {
   data?: {
@@ -12,18 +13,19 @@ interface AboutProps {
   };
 }
 
-const defaultStats = [
-  { value: "3000+", label: "注册会员" },
-  { value: "150", label: "年历史" },
-  { value: "11", label: "届恳亲大会" },
-];
-
 export default function About({ data }: AboutProps) {
-  const title = data?.title || "新加坡东安会馆";
-  const subtitle = data?.subtitle || "Tung On Wui Kun · 1876";
+  const t = useTranslations("about");
+
+  const defaultStats = [
+    { value: t("stat1Value"), label: t("stat1Label") },
+    { value: t("stat2Value"), label: t("stat2Label") },
+    { value: t("stat3Value"), label: t("stat3Label") },
+  ];
+
+  const title = data?.title || t("defaultTitle");
+  const subtitle = data?.subtitle || t("defaultSubtitle");
   const content =
-    data?.content ||
-    "新加坡东安会馆成立于1876年，是新加坡历史最悠久的华人宗乡社团之一。本会馆为祖籍中国广东东莞、宝安两县移民的地缘组织，致力于联络乡情、促进互助、传承文化。";
+    data?.content || t("defaultContent");
   const stats = data?.stats || defaultStats;
 
   return (

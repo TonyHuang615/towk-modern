@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Globe, Users, Calendar, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ConferenceProps {
   data?: {
@@ -12,29 +13,29 @@ interface ConferenceProps {
   };
 }
 
-const defaultFeatures = [
-  { icon: "Globe", title: "全球联结", description: "联结世界各地东莞宝安乡亲" },
-  { icon: "Users", title: "千人盛会", description: "每届吸引逾千名乡亲参与" },
-  {
-    icon: "Calendar",
-    title: "定期举办",
-    description: "每两年举办一届，传承至今",
-  },
-];
-
-const defaultPastConferences = [
-  { year: "2019", location: "新加坡", theme: "第11届世界东安恳亲大会" },
-  { year: "2017", location: "香港", theme: "第10届世界东安恳亲大会" },
-  { year: "2015", location: "东莞", theme: "第9届世界东安恳亲大会" },
-];
-
 const iconMap: any = { Globe, Users, Calendar };
 
 export default function Conference({ data }: ConferenceProps) {
-  const title = data?.title || "世界东安恳亲大会";
-  const description =
-    data?.description ||
-    "世界东安恳亲大会是东安会馆主办的国际性盛会，每两年举办一届，联结全球东莞宝安乡亲，共叙乡情，共谋发展。";
+  const t = useTranslations("conference");
+
+  const defaultFeatures = [
+    { icon: "Globe", title: t("feature1Title"), description: t("feature1Desc") },
+    { icon: "Users", title: t("feature2Title"), description: t("feature2Desc") },
+    {
+      icon: "Calendar",
+      title: t("feature3Title"),
+      description: t("feature3Desc"),
+    },
+  ];
+
+  const defaultPastConferences = [
+    { year: "2019", location: t("locSingapore"), theme: t("conf11") },
+    { year: "2017", location: t("locHongKong"), theme: t("conf10") },
+    { year: "2015", location: t("locDongguan"), theme: t("conf9") },
+  ];
+
+  const title = data?.title || t("title");
+  const description = data?.description || t("description");
   const features = data?.features || defaultFeatures;
   const pastConferences = data?.pastConferences || defaultPastConferences;
 
@@ -49,7 +50,7 @@ export default function Conference({ data }: ConferenceProps) {
           className="text-center mb-16"
         >
           <span className="text-accent text-sm tracking-[0.3em] uppercase">
-            Global Gathering
+            {t("sectionLabel")}
           </span>
           <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
             {title}
@@ -88,7 +89,7 @@ export default function Conference({ data }: ConferenceProps) {
           transition={{ duration: 0.6 }}
           className="bg-background rounded-2xl p-8 lg:p-12"
         >
-          <h3 className="text-2xl font-bold mb-8 text-center">历届大会</h3>
+          <h3 className="text-2xl font-bold mb-8 text-center">{t("pastConferences")}</h3>
           <div className="space-y-4">
             {pastConferences.map((conf: any, index: number) => (
               <motion.div
@@ -119,7 +120,7 @@ export default function Conference({ data }: ConferenceProps) {
               href="#"
               className="inline-flex items-center gap-2 text-primary hover:text-primary-dark transition-colors"
             >
-              查看全部历届大会
+              {t("viewAllConferences")}
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

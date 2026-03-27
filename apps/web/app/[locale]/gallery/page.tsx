@@ -5,88 +5,75 @@ import Footer from "../../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
 import { useState } from "react";
-
-const albums = [
-  {
-    id: 1,
-    category: "恳亲大会",
-    title: "第11届世界东安恳亲大会",
-    date: "2019",
-    cover:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-      "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80",
-      "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80",
-    ],
-  },
-  {
-    id: 2,
-    category: "文化活动",
-    title: "粤剧组年度公演",
-    date: "2025",
-    cover:
-      "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
-    ],
-  },
-  {
-    id: 3,
-    category: "青年活动",
-    title: "青年团东莞交流之旅",
-    date: "2026",
-    cover:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
-    ],
-  },
-  {
-    id: 4,
-    category: "节庆活动",
-    title: "中秋联欢晚会",
-    date: "2025",
-    cover:
-      "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
-    ],
-  },
-  {
-    id: 5,
-    category: "商务活动",
-    title: "商务交流晚宴",
-    date: "2025",
-    cover:
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
-    ],
-  },
-  {
-    id: 6,
-    category: "会馆",
-    title: "会馆建筑留影",
-    date: "2024",
-    cover:
-      "https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=600&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=800&q=80",
-    ],
-  },
-];
-
-const categories = ["全部", "恳亲大会", "文化活动", "青年活动", "节庆活动", "商务活动", "会馆"];
+import { useTranslations } from "next-intl";
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState("全部");
+  const t = useTranslations("gallery");
+
+  const categoryKeys = ["all", "catConference", "catCulture", "catYouth", "catFestival", "catBusiness", "catHall"] as const;
+
+  const albums = [
+    {
+      id: 1,
+      categoryKey: "catConference" as const,
+      title: t("album1Title"),
+      date: "2019",
+      cover: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80",
+      images: [
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80",
+        "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80",
+      ],
+    },
+    {
+      id: 2,
+      categoryKey: "catCulture" as const,
+      title: t("album2Title"),
+      date: "2025",
+      cover: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80",
+      images: ["https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80"],
+    },
+    {
+      id: 3,
+      categoryKey: "catYouth" as const,
+      title: t("album3Title"),
+      date: "2026",
+      cover: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
+      images: ["https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"],
+    },
+    {
+      id: 4,
+      categoryKey: "catFestival" as const,
+      title: t("album4Title"),
+      date: "2025",
+      cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80",
+      images: ["https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80"],
+    },
+    {
+      id: 5,
+      categoryKey: "catBusiness" as const,
+      title: t("album5Title"),
+      date: "2025",
+      cover: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80",
+      images: ["https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80"],
+    },
+    {
+      id: 6,
+      categoryKey: "catHall" as const,
+      title: t("album6Title"),
+      date: "2024",
+      cover: "https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=600&q=80",
+      images: ["https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=800&q=80"],
+    },
+  ];
+
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   const filtered =
-    activeCategory === "全部"
+    activeCategory === "all"
       ? albums
-      : albums.filter((a) => a.category === activeCategory);
+      : albums.filter((a) => a.categoryKey === activeCategory);
 
   return (
     <main className="min-h-screen">
@@ -100,13 +87,13 @@ export default function GalleryPage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Photo Gallery
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              影相库
+              {t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-2xl mx-auto">
-              记录东安会馆精彩时刻，珍藏共同记忆
+              {t("subtitle")}
             </p>
           </motion.div>
         </div>
@@ -114,25 +101,23 @@ export default function GalleryPage() {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* 分类筛选 */}
           <div className="flex gap-2 flex-wrap mb-10">
-            {categories.map((cat) => (
+            {categoryKeys.map((catKey) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                data-testid={`gallery-filter-${cat}`}
+                key={catKey}
+                onClick={() => setActiveCategory(catKey)}
+                data-testid={`gallery-filter-${catKey}`}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeCategory === cat
+                  activeCategory === catKey
                     ? "bg-primary text-white"
                     : "bg-muted text-foreground/70 hover:bg-primary/10 hover:text-primary"
                 }`}
               >
-                {cat}
+                {catKey === "all" ? t("all") : t(catKey)}
               </button>
             ))}
           </div>
 
-          {/* 相册网格 */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((album, index) => (
               <motion.div
@@ -158,7 +143,7 @@ export default function GalleryPage() {
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <span className="text-xs text-accent font-medium">
-                    {album.category} · {album.date}
+                    {t(album.categoryKey)} · {album.date}
                   </span>
                   <h3 className="text-white font-bold mt-1">{album.title}</h3>
                 </div>
@@ -168,7 +153,6 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Lightbox */}
       <AnimatePresence>
         {lightbox && (
           <motion.div
@@ -191,7 +175,7 @@ export default function GalleryPage() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               src={lightbox}
-              alt="大图预览"
+              alt={t("lightboxAlt")}
               className="max-w-full max-h-[85vh] rounded-lg object-contain"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             />

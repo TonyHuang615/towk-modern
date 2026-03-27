@@ -5,9 +5,11 @@ import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { Globe, Users, Calendar, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function ConferencePage() {
   const [content, setContent] = useState<any>({});
+  const t = useTranslations("conference");
 
   useEffect(() => {
     fetch("/api/cms")
@@ -19,22 +21,22 @@ export default function ConferencePage() {
   const conference = content.conference || {};
 
   const features = conference?.features || [
-    { icon: Globe, title: "全球联结", description: "联结世界各地东莞宝安乡亲" },
-    { icon: Users, title: "千人盛会", description: "每届吸引逾千名乡亲参与" },
+    { icon: Globe, title: t("feature1Title"), description: t("feature1Desc") },
+    { icon: Users, title: t("feature2Title"), description: t("feature2Desc") },
     {
       icon: Calendar,
-      title: "定期举办",
-      description: "定期举办，传承至今",
+      title: t("feature3Title"),
+      description: t("feature3Desc"),
     },
   ];
 
   const pastConferences = conference?.pastConferences || [
-    { year: "2019", location: "新加坡", theme: "第11届世界东安恳亲大会" },
-    { year: "2017", location: "香港", theme: "第10届世界东安恳亲大会" },
-    { year: "2015", location: "马来西亚", theme: "第9届世界东安恳亲大会" },
-    { year: "2012", location: "香港", theme: "第8届世界东安恳亲大会" },
-    { year: "2008", location: "马来西亚古晋", theme: "第7届世界东安恳亲大会" },
-    { year: "2005", location: "新加坡", theme: "第6届世界东安恳亲大会" },
+    { year: "2019", location: t("locSingapore"), theme: t("conf11") },
+    { year: "2017", location: t("locHongKong"), theme: t("conf10") },
+    { year: "2015", location: t("locMalaysia"), theme: t("conf9") },
+    { year: "2012", location: t("locHongKong"), theme: t("conf8") },
+    { year: "2008", location: t("locKuching"), theme: t("conf7") },
+    { year: "2005", location: t("locSingapore"), theme: t("conf6") },
   ];
 
   return (
@@ -49,14 +51,13 @@ export default function ConferencePage() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent text-sm tracking-[0.3em] uppercase">
-              Global Gathering
+              {t("sectionLabel")}
             </span>
             <h1 className="mt-3 md:mt-4 text-3xl md:text-5xl lg:text-6xl font-bold">
-              {conference?.title || "世界东安恳亲大会"}
+              {conference?.title || t("title")}
             </h1>
             <p className="mt-4 text-xl text-foreground/70 max-w-3xl mx-auto">
-              {conference?.description ||
-                "世界东安恳亲大会是东安会馆主办的国际性盛会"}
+              {conference?.description || t("description")}
             </p>
           </motion.div>
         </div>
@@ -94,19 +95,16 @@ export default function ConferencePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold mb-6">关于恳亲大会</h2>
+              <h2 className="text-3xl font-bold mb-6">{t("aboutTitle")}</h2>
               <div className="space-y-4 text-foreground/80">
                 <p>
-                  世界东安恳亲大会是东安会馆主办的国际性盛会，定期举办，
-                  联结全球东莞宝安乡亲，共叙乡情，共谋发展。
+                  {t("aboutP1")}
                 </p>
                 <p>
-                  恳亲大会自1992年第1届起举办，至今已届11届。
-                  每届大会吸引来自世界各地的东安乡亲齐聚一堂，进行文化交流、商务洽谈和联谊活动。
+                  {t("aboutP2")}
                 </p>
                 <p>
-                  大会期间举办各类活动，包括：开幕典礼、文化表演、商务论坛、青年交流、
-                  敬老晚宴等，是东安会馆最重要的年度盛事之一。
+                  {t("aboutP3")}
                 </p>
               </div>
             </motion.div>
@@ -120,7 +118,7 @@ export default function ConferencePage() {
             >
               <img
                 src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=80"
-                alt="恳亲大会"
+                alt={t("altConference")}
                 className="w-full h-full object-cover"
               />
             </motion.div>
@@ -130,7 +128,7 @@ export default function ConferencePage() {
 
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">历届大会</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">{t("pastConferences")}</h2>
           <div className="bg-background rounded-2xl p-8 shadow-sm">
             <div className="space-y-4">
               {pastConferences.map((conf: any, index: number) => (
@@ -163,13 +161,13 @@ export default function ConferencePage() {
 
       <section className="py-16 bg-primary text-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">下一届恳亲大会</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("nextConference")}</h2>
           <p className="text-xl opacity-90 mb-8">
-            第12届世界东安恳亲大会 · 2026
+            {t("nextConferenceInfo")}
           </p>
-          <p className="mb-8 opacity-80">地点待定 | 敬请期待</p>
+          <p className="mb-8 opacity-80">{t("nextConferenceLocation")}</p>
           <button className="px-8 py-3 bg-white text-primary rounded-full font-medium hover:bg-white/90 transition-colors">
-            获取最新信息
+            {t("getUpdates")}
           </button>
         </div>
       </section>

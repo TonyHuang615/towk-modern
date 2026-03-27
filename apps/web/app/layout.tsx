@@ -6,7 +6,7 @@ import {
   Playfair_Display,
 } from "next/font/google";
 import "./globals.css";
-import MobileNav from "./components/MobileNav";
+import Analytics from "./components/Analytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,7 +63,7 @@ export default function RootLayout({
     >
       <body className="antialiased font-sans">
         {children}
-        <MobileNav />
+        <Analytics />
       </body>
     </html>
   );
