@@ -3,7 +3,7 @@ import path from "path";
 
 const dataFilePath = path.join(process.cwd(), "data", "content.json");
 
-export function getContent(): any {
+export function getContent(): Record<string, unknown> {
   try {
     if (!fs.existsSync(dataFilePath)) {
       return getDefaultContent();
@@ -16,7 +16,7 @@ export function getContent(): any {
   }
 }
 
-export function saveContent(data: any): boolean {
+export function saveContent(data: Record<string, unknown>): boolean {
   try {
     fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), "utf8");
     return true;

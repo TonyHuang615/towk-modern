@@ -23,7 +23,7 @@ interface StrapiResponse<T> {
 interface StrapiItem {
   id: number;
   documentId: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 async function strapiRequest<T>(
