@@ -1,5 +1,12 @@
-import NextAuth from "next-auth";
-import { authOptions } from "../../../../lib/auth";
+import { NextRequest } from "next/server";
 
-const handler = NextAuth(authOptions);
+export const dynamic = "force-dynamic";
+
+async function handler(req: NextRequest) {
+  const { default: NextAuth } = await import("next-auth");
+  const { authOptions } = await import("../../../../lib/auth");
+  // @ts-expect-error NextAuth handler types
+  return NextAuth(req, authOptions);
+}
+
 export { handler as GET, handler as POST };

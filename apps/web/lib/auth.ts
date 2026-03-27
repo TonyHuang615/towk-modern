@@ -2,13 +2,19 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions: NextAuthOptions = {
-  providers: [
+const providers: NextAuthOptions["providers"] = [];
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    CredentialsProvider({
+  );
+}
+
+providers.push(
+  CredentialsProvider({
       name: "Email",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -26,15 +32,18 @@ export const authOptions: NextAuthOptions = {
           name: credentials.email.split("@")[0],
         };
       },
-    }),
-  ],
+  }),
+);
+
+export const authOptions: NextAuthOptions = {
+  providers,
   pages: {
     signIn: "/member/login",
   },
   callbacks: {
     async session({ session, token }) {
       if (session.user && token.sub) {
-        (session.user as any).id = token.sub;
+        (session.user as { id?: string }).id = token.sub;
       }
       return session;
     },
@@ -49,5 +58,5 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.NEXTAUTH_SECRET || "towk-dev-secret-change-in-production",
+  secret: process.env.NEXTAUTH_SECRET,
 };

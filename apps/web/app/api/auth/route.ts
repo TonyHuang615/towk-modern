@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const ADMIN_USER = {
-  username: "admin",
-  password: "admin123",
-};
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
 
-    if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       const cookieStore = cookies();
       cookieStore.set("auth", "true", {
         httpOnly: true,
