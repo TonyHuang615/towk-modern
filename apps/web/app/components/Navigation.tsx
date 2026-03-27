@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Moon, Sun, Settings, User, Search, Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
-import SearchModal from "./SearchModal";
+
+const SearchModal = dynamic(() => import("./SearchModal"), { ssr: false });
 
 export default function Navigation() {
   const [isDark, setIsDark] = useState(false);
@@ -128,7 +131,7 @@ export default function Navigation() {
               }`}
             >
               {session?.user?.image ? (
-                <img src={session.user.image} alt="" className="w-5 h-5 lg:w-6 lg:h-6 rounded-full" />
+                <Image src={session.user.image} alt="" width={24} height={24} className="w-5 h-5 lg:w-6 lg:h-6 rounded-full" />
               ) : (
                 <User className="w-4 h-4 lg:w-5 lg:h-5" />
               )}

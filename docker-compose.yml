@@ -1,3 +1,6 @@
+# ⚠️  DEV ONLY — All secrets below are for local development.
+# For production, override with real values via .env file or deploy platform secrets.
+
 services:
   web:
     build:

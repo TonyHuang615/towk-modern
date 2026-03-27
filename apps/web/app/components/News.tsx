@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 function formatDate(dateStr: string) {
@@ -86,11 +87,13 @@ export default function News() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300 max-md:min-w-[280px] max-md:w-[80vw] max-md:flex-shrink-0 max-md:snap-start"
             >
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <Image
                   src={article.image}
                   alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 80vw, 33vw"
                 />
               </div>
               <div className="p-4 md:p-6">

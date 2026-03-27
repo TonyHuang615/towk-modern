@@ -15,6 +15,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.singaporeccc.org.sg",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 interface AboutProps {
@@ -70,10 +71,12 @@ export default function About({ data }: AboutProps) {
             className="space-y-8"
           >
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-card-hover">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=900&q=80"
                 alt="东安会馆"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             </div>

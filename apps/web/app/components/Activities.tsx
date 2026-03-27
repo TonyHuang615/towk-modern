@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Music, Users, Briefcase, Sparkles, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 interface ActivitiesProps {
@@ -89,11 +90,13 @@ export default function Activities({ data }: ActivitiesProps) {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group relative overflow-hidden rounded-2xl bg-foreground/5 hover:bg-foreground/10 transition-colors duration-300 max-md:min-w-[280px] max-md:w-[85vw] max-md:flex-shrink-0 max-md:snap-start"
               >
-                <div className="aspect-[16/10] overflow-hidden">
-                  <img
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
                     src={activity.image}
                     alt={activity.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 85vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 </div>
