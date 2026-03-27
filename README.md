@@ -1,75 +1,125 @@
 # TOWK-Modern
 
-> 新加坡东安会馆网站现代化改造项目
+> Modern website for **Tung On Wui Kun** (新加坡东安会馆), one of Singapore's oldest Chinese clan associations, founded in 1876.
 
-现代化、功能完善的数字化平台，为百年会馆打造全新网络形象。
+A bilingual (Chinese/English) web application built with Next.js 14, featuring i18n support, member authentication, and a headless CMS architecture.
 
-## 🎯 项目目标
+## Tech Stack
 
-- 🎨 **视觉升级** — 现代化设计，提升品牌形象
-- 📱 **移动优先** — 完美适配手机、平板、桌面
-- 🔐 **会员系统** — 在线注册、活动报名
-- 📝 **CMS后台** — 可视化内容管理
-- 🌐 **多语言** — 中文、英文双语支持
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14 (App Router) + TypeScript |
+| Styling | Tailwind CSS + Framer Motion |
+| i18n | next-intl (Chinese / English) |
+| Auth | NextAuth.js (Google OAuth + Credentials) |
+| CMS | Strapi 5 (headless) + file-based fallback |
+| Monorepo | Turborepo + npm workspaces |
+| Deploy | Vercel (frontend) + Docker (CMS) |
 
-## 🏗️ 技术栈
-
-| 层级 | 技术 |
-|-----|------|
-| 前端 | Next.js 14 + React 18 + Tailwind CSS |
-| 后端 | Strapi 5 (Headless CMS) |
-| 数据库 | PostgreSQL |
-| 部署 | Vercel + Railway |
-
-## 📁 项目结构
+## Project Structure
 
 ```
 towk-modern/
 ├── apps/
-│   ├── web/              # Next.js 前端
-│   └── cms/              # Strapi 后端
-├── packages/
-│   ├── ui/               # 共享UI组件
-│   ├── config/           # 共享配置
-│   └── utils/            # 共享工具
-├── docs/                 # 项目文档
-└── infra/                # 基础设施配置
+│   ├── web/           # Next.js frontend
+│   │   ├── app/
+│   │   │   ├── [locale]/    # i18n routes (zh/en)
+│   │   │   ├── components/  # Shared UI components
+│   │   │   ├── api/         # API routes (CMS, auth, upload)
+│   │   │   └── admin/       # Admin CMS panel
+│   │   ├── lib/             # Utilities (auth, CMS, Strapi client)
+│   │   ├── messages/        # Translation files (zh.json, en.json)
+│   │   └── data/            # Content store (content.json)
+│   └── cms/           # Strapi 5 backend
+├── docs/              # Project documentation (Chinese)
+└── wordpress/         # Legacy WordPress theme (reference)
 ```
 
-## 🚀 快速开始
+## Getting Started
 
-### 环境要求
+### Prerequisites
+
 - Node.js 18+
-- PostgreSQL 15+
+- npm 9+
 
-### 安装
+### Install & Run
 
 ```bash
-# 克隆项目
+# Clone
 git clone https://github.com/TonyHuang615/towk-modern.git
 cd towk-modern
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发环境
-docker-compose up -d
+# Start development server
 npm run dev
 ```
 
-## 📚 项目文档
+The web app runs at `http://localhost:3000`.
 
-- [项目概述](./docs/01-overview.md)
-- [现状分析](./docs/02-analysis.md)
-- [设计方案](./docs/03-design.md)
-- [技术架构](./docs/04-architecture.md)
-- [功能规划](./docs/05-features.md)
-- [实施计划](./docs/06-roadmap.md)
+### Environment Variables
 
-## 📄 License
+Copy the example and fill in your values:
 
-MIT License
+```bash
+cp apps/web/.env.example apps/web/.env.local
+```
+
+See [`apps/web/.env.example`](apps/web/.env.example) for all available variables.
+
+### Running Strapi CMS (optional)
+
+Strapi requires Node.js <= 24. Use Docker for local development:
+
+```bash
+cd apps/cms
+docker-compose up -d
+```
+
+Default admin: `admin@towk.sg` / `TowkAdmin2026!`
+
+## Features
+
+- **Bilingual**: Full Chinese/English support with `next-intl`, locale-aware routing
+- **Modern UI**: Responsive design with Framer Motion animations, mobile-first
+- **Member System**: Google OAuth + email login via NextAuth.js
+- **Content Management**: Admin panel with file-based CMS, Strapi 5 integration ready
+- **Search**: Global search across pages, news, and activities
+- **Social Sharing**: Facebook, WhatsApp, Telegram share buttons
+- **Analytics**: Google Analytics integration
+
+## Pages
+
+| Route | Description |
+|-------|------------|
+| `/` | Home (hero, about, news, history, conference, activities) |
+| `/about` | About the association + sub-pages (board, structure) |
+| `/news` | News & announcements with detail pages |
+| `/activities` | Events & activities with detail pages |
+| `/gallery` | Photo albums by category |
+| `/conference` | World Tung On Convention history |
+| `/history` | Timeline of milestones since 1876 |
+| `/contact` | Contact information & map |
+| `/member` | Member login & profile |
+
+## Scripts
+
+```bash
+npm run dev       # Start dev server (Turborepo)
+npm run build     # Production build
+npm run lint      # ESLint
+npm run format    # Prettier
+```
+
+## Documentation
+
+Detailed project documentation (in Chinese) is available in the [`docs/`](docs/) directory.
+
+## License
+
+MIT
 
 ---
 
-*Copyright © 2026 新加坡东安会馆*
+*Copyright 2026 Tung On Wui Kun (新加坡东安会馆)*
