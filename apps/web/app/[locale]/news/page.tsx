@@ -74,7 +74,7 @@ export default function NewsPage() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategoryKey(cat.key)}
-                  data-testid={`filter-${cat.key}`}
+                  data-testid={`filter-${cat.key === "all" ? "all" : cat.dataValue || cat.key}`}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     activeCategoryKey === cat.key
                       ? "bg-primary text-white"

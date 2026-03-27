@@ -8,8 +8,6 @@ import {
   Briefcase,
   Users,
   Sparkles,
-  Calendar,
-  MapPin,
   ArrowRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -18,7 +16,8 @@ import { useTranslations } from "next-intl";
 
 export default function ActivitiesPage() {
   const t = useTranslations("activities");
-  const [content, setContent] = useState<any>({});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [content, setContent] = useState<Record<string, any>>({});
 
   useEffect(() => {
     fetch("/api/cms")
@@ -62,13 +61,6 @@ export default function ActivitiesPage() {
 
   const items = activities?.items || defaultActivities;
 
-  const upcomingEvents = [
-    { title: t("event1Title"), date: t("event1Date"), location: t("event1Location") },
-    { title: t("event2Title"), date: t("event2Date"), location: t("event2Location") },
-    { title: t("event3Title"), date: t("event3Date"), location: t("event3Location") },
-    { title: t("event4Title"), date: t("event4Date"), location: t("event4Location") },
-  ];
-
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -96,6 +88,7 @@ export default function ActivitiesPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {items.map((activity: any, index: number) => (
               <motion.div
                 key={activity.slug || activity.title}
@@ -133,46 +126,6 @@ export default function ActivitiesPage() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-foreground/5">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">{t("upcomingEvents")}</h2>
-            <p className="mt-4 text-foreground/70">{t("upcomingSubtitle")}</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {upcomingEvents.map((event, index) => (
-              <motion.div
-                key={event.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="p-6 rounded-xl bg-background text-center"
-              >
-                <Calendar className="w-8 h-8 mx-auto mb-4 text-primary" />
-                <h3 className="font-bold mb-2">{event.title}</h3>
-                <p className="text-sm text-foreground/60 mb-1">{event.date}</p>
-                <p className="text-sm text-foreground/60 flex items-center justify-center gap-1">
-                  <MapPin className="w-4 h-4" /> {event.location}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">{t("joinTitle")}</h2>
-          <p className="text-foreground/70 mb-8">
-            {t("joinDesc")}
-          </p>
-          <button className="px-8 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary-dark transition-colors">
-            {t("viewCalendar")}
-          </button>
         </div>
       </section>
 

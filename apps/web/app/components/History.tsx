@@ -69,7 +69,7 @@ export default function History({ data }: HistoryProps) {
           <div className="absolute left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
 
           <div className="space-y-16 lg:space-y-24">
-            {milestones.map((milestone: any, index: number) => (
+            {milestones.map((milestone: { year: string; title: string; description: string }, index: number) => (
               <motion.div
                 key={milestone.year}
                 initial={{ opacity: 0, y: 30 }}

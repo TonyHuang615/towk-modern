@@ -13,7 +13,7 @@ interface ConferenceProps {
   };
 }
 
-const iconMap: any = { Globe, Users, Calendar };
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Globe, Users, Calendar };
 
 export default function Conference({ data }: ConferenceProps) {
   const t = useTranslations("conference");
@@ -61,7 +61,7 @@ export default function Conference({ data }: ConferenceProps) {
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {features.map((feature: any, index: number) => {
+          {features.map((feature: { icon: string; title: string; description: string }, index: number) => {
             const IconComponent = iconMap[feature.icon] || Globe;
             return (
               <motion.div
@@ -91,7 +91,7 @@ export default function Conference({ data }: ConferenceProps) {
         >
           <h3 className="text-2xl font-bold mb-8 text-center">{t("pastConferences")}</h3>
           <div className="space-y-4">
-            {pastConferences.map((conf: any, index: number) => (
+            {pastConferences.map((conf: { year: string; location: string; theme: string }, index: number) => (
               <motion.div
                 key={conf.year}
                 initial={{ opacity: 0, x: -20 }}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sun, Settings, User, Search } from "lucide-react";
+import { Moon, Sun, Settings, User, Search, Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ export default function Navigation() {
   const t = useTranslations("nav");
   const { data: session } = useSession();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
     { name: t("home"), href: "/" },
@@ -168,10 +169,60 @@ export default function Navigation() {
                   : "border-white/30 text-white/70"
               }
             />
+
+            {/* Mobile hamburger menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`lg:hidden p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
+                isScrolled
+                  ? "text-foreground/60"
+                  : "text-white/70"
+              }`}
+              aria-label="菜单"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
           </div>
         </div>
       </nav>
     </motion.header>
+
+    {/* Mobile menu panel */}
+    {mobileMenuOpen && (
+      <div className="fixed inset-0 z-40 lg:hidden">
+        <div
+          className="fixed inset-0 bg-black/40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="fixed top-0 right-0 bottom-0 w-64 bg-background shadow-xl pt-20 px-6"
+        >
+          <nav className="space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  isActive(item.href)
+                    ? "bg-primary/10 text-primary"
+                    : "text-foreground/70 hover:bg-foreground/5"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </motion.div>
+      </div>
+    )}
 
     <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Users, Award, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface AboutProps {
@@ -79,7 +79,7 @@ export default function About({ data }: AboutProps) {
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat: any, index: number) => (
+              {stats.map((stat: { value: string; label: string }, index: number) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}

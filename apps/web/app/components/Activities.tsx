@@ -16,7 +16,7 @@ interface ActivitiesProps {
   };
 }
 
-const iconMap: any = { Music, Users, Briefcase, Sparkles };
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Music, Users, Briefcase, Sparkles };
 
 export default function Activities({ data }: ActivitiesProps) {
   const t = useTranslations("activities");
@@ -78,7 +78,7 @@ export default function Activities({ data }: ActivitiesProps) {
 
         {/* Mobile: horizontal scroll; Desktop: grid */}
         <div className="md:grid md:grid-cols-2 md:gap-8 max-md:flex max-md:gap-4 max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:-mx-4 max-md:px-4 max-md:pb-4 scrollbar-hide">
-          {items.map((activity: any, index: number) => {
+          {items.map((activity: { icon: string; title: string; description: string; image: string }, index: number) => {
             const IconComponent = iconMap[activity.icon] || Music;
             return (
               <motion.div

@@ -9,7 +9,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 export default function AboutPage() {
-  const [content, setContent] = useState<any>({});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [content, setContent] = useState<Record<string, any>>({});
   const t = useTranslations("about");
 
   useEffect(() => {
@@ -108,7 +109,7 @@ export default function AboutPage() {
                     { value: t("stat2Value"), label: t("stat2Label") },
                     { value: t("stat3Value"), label: t("stat3Label") },
                   ]
-                ).map((stat: any, index: number) => (
+                ).map((stat: { value: string; label: string }, index: number) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}

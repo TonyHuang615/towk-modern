@@ -8,7 +8,8 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 export default function ConferencePage() {
-  const [content, setContent] = useState<any>({});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [content, setContent] = useState<Record<string, any>>({});
   const t = useTranslations("conference");
 
   useEffect(() => {
@@ -66,7 +67,8 @@ export default function ConferencePage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {features.map((feature: any, index: number) => (
+            {features.map(/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+            (feature: any, index: number) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
@@ -131,7 +133,7 @@ export default function ConferencePage() {
           <h2 className="text-3xl font-bold mb-8 text-center">{t("pastConferences")}</h2>
           <div className="bg-background rounded-2xl p-8 shadow-sm">
             <div className="space-y-4">
-              {pastConferences.map((conf: any, index: number) => (
+              {pastConferences.map((conf: { year: string; location: string; theme: string }, index: number) => (
                 <motion.div
                   key={conf.year}
                   initial={{ opacity: 0, x: -20 }}
