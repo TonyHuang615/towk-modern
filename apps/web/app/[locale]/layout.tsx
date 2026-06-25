@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { locales } from "../../i18n/config";
 import MobileNav from "../components/MobileNav";
 import AuthProvider from "../components/AuthProvider";
+import FeedbackWidget from "../components/FeedbackWidget";
 
 export default async function LocaleLayout({
   children,
@@ -25,6 +26,7 @@ export default async function LocaleLayout({
       <AuthProvider>
         {children}
         <MobileNav />
+        <FeedbackWidget />
       </AuthProvider>
     </NextIntlClientProvider>
   );

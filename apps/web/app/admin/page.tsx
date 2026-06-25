@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, LogOut, ImageIcon } from "lucide-react";
+import {
+  Upload,
+  LogOut,
+  ImageIcon,
+  Trash2,
+  X,
+  ExternalLink,
+  Inbox,
+  Monitor,
+  MessageSquare,
+} from "lucide-react";
 
 export default function AdminPage() {
   const [content, setContent] = useState<any>(null);
@@ -11,11 +21,63 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("site");
   const [message, setMessage] = useState("");
   const [uploading, setUploading] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<any[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [preview, setPreview] = useState<any | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  const fetchFeedback = useCallback(async () => {
+    setFeedbackLoading(true);
+    try {
+      const res = await fetch("/api/feedback");
+      if (res.ok) {
+        const data = await res.json();
+        setFeedback(data.feedback || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch feedback:", error);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "feedback") fetchFeedback();
+  }, [activeTab, fetchFeedback]);
+
+  const deleteFeedback = async (id: string) => {
+    if (!confirm("确定删除这条反馈吗？")) return;
+    try {
+      const res = await fetch(`/api/feedback?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setFeedback((prev) => prev.filter((f) => f.id !== id));
+        setPreview((p: any) => (p?.id === id ? null : p));
+      }
+    } catch (error) {
+      console.error("Failed to delete feedback:", error);
+    }
+  };
+
+  const markRead = async (id: string) => {
+    try {
+      await fetch("/api/feedback", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: "read" }),
+      });
+      setFeedback((prev) =>
+        prev.map((f) => (f.id === id ? { ...f, status: "read" } : f)),
+      );
+    } catch (error) {
+      console.error("Failed to mark read:", error);
+    }
+  };
 
   const checkAuth = async () => {
     try {
@@ -25,6 +87,7 @@ export default function AdminPage() {
         return;
       }
       fetchContent();
+      fetchFeedback();
     } catch {
       router.push("/login");
     }
@@ -118,6 +181,8 @@ export default function AdminPage() {
   if (loading) return <div className="p-8">加载中...</div>;
   if (!content) return <div className="p-8">加载失败</div>;
 
+  const newFeedbackCount = feedback.filter((f) => f.status === "new").length;
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm border-b">
@@ -139,13 +204,15 @@ export default function AdminPage() {
             >
               <LogOut className="w-4 h-4" /> 退出
             </button>
-            <button
-              onClick={saveContent}
-              disabled={saving}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
-            >
-              {saving ? "保存中..." : "保存更改"}
-            </button>
+            {activeTab !== "feedback" && (
+              <button
+                onClick={saveContent}
+                disabled={saving}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+              >
+                {saving ? "保存中..." : "保存更改"}
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -170,6 +237,7 @@ export default function AdminPage() {
               { id: "history", label: "历史传承", icon: "📜" },
               { id: "activities", label: "会馆活动", icon: "🎭" },
               { id: "conference", label: "恳亲大会", icon: "🌍" },
+              { id: "feedback", label: "用户反馈", icon: "💬" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -177,7 +245,12 @@ export default function AdminPage() {
                 className={`w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-gray-50 ${activeTab === tab.id ? "bg-red-50 text-red-600 border-r-2 border-red-600" : ""}`}
               >
                 <span>{tab.icon}</span>
-                <span>{tab.label}</span>
+                <span className="flex-1">{tab.label}</span>
+                {tab.id === "feedback" && newFeedbackCount > 0 && (
+                  <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-medium text-white">
+                    {newFeedbackCount}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -423,8 +496,215 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {activeTab === "feedback" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="flex items-center gap-2 text-xl font-bold">
+                  <MessageSquare className="h-5 w-5 text-red-600" />
+                  用户反馈
+                </h2>
+                <button
+                  onClick={fetchFeedback}
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  刷新
+                </button>
+              </div>
+
+              {feedbackLoading ? (
+                <div className="py-12 text-center text-gray-400">加载中...</div>
+              ) : feedback.length === 0 ? (
+                <div className="flex flex-col items-center gap-3 py-16 text-gray-400">
+                  <Inbox className="h-12 w-12" />
+                  <p>暂无用户反馈</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {feedback.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`flex flex-col gap-4 rounded-lg border p-4 sm:flex-row ${
+                        item.status === "new"
+                          ? "border-red-200 bg-red-50/40"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <button
+                        onClick={() => {
+                          setPreview(item);
+                          if (item.status === "new") markRead(item.id);
+                        }}
+                        className="group relative h-32 w-full flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-gray-100 sm:h-28 sm:w-44"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={item.screenshot}
+                          alt="反馈截图"
+                          className="h-full w-full object-cover object-top"
+                        />
+                        <span className="absolute inset-0 hidden items-center justify-center bg-black/40 text-xs text-white group-hover:flex">
+                          查看大图
+                        </span>
+                      </button>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-1 flex items-center gap-2">
+                          {item.status === "new" && (
+                            <span className="rounded-full bg-red-600 px-2 py-0.5 text-xs text-white">
+                              新
+                            </span>
+                          )}
+                          <span
+                            className="truncate text-sm font-medium text-gray-700"
+                            title={item.url}
+                          >
+                            {item.path || "/"}
+                          </span>
+                        </div>
+                        <p className="mb-2 whitespace-pre-wrap break-words text-sm text-gray-800">
+                          {item.message || (
+                            <span className="text-gray-400">（无留言）</span>
+                          )}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                          <span>
+                            {new Date(item.createdAt).toLocaleString("zh-CN")}
+                          </span>
+                          <span className="inline-flex items-center gap-1">
+                            <Monitor className="h-3 w-3" />
+                            {item.viewport?.w}×{item.viewport?.h}
+                          </span>
+                          <span>{item.strokes?.length || 0} 处圈选</span>
+                        </div>
+                        <div className="mt-2 flex items-center gap-3">
+                          <button
+                            onClick={() => setPreview(item)}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            查看大图
+                          </button>
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            打开页面
+                          </a>
+                          <button
+                            onClick={() => deleteFeedback(item.id)}
+                            className="inline-flex items-center gap-1 text-xs text-red-600 hover:underline"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            删除
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
+
+      {preview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setPreview(null)}
+        >
+          <div
+            className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-white shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b px-4 py-3">
+              <div className="min-w-0">
+                <p className="truncate font-medium text-gray-800">
+                  {preview.path || "/"}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {new Date(preview.createdAt).toLocaleString("zh-CN")}
+                </p>
+              </div>
+              <button
+                onClick={() => setPreview(null)}
+                className="rounded-full p-1.5 text-gray-500 hover:bg-gray-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="flex flex-1 flex-col overflow-auto md:flex-row">
+              <div className="flex-1 overflow-auto bg-gray-50 p-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={preview.screenshot}
+                  alt="反馈截图"
+                  className="mx-auto max-w-full rounded border border-gray-200"
+                />
+              </div>
+              <div className="w-full shrink-0 space-y-4 border-t p-4 text-sm md:w-72 md:border-l md:border-t-0">
+                <div>
+                  <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+                    留言
+                  </p>
+                  <p className="whitespace-pre-wrap break-words text-gray-800">
+                    {preview.message || (
+                      <span className="text-gray-400">（无留言）</span>
+                    )}
+                  </p>
+                </div>
+                <div>
+                  <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+                    页面地址
+                  </p>
+                  <a
+                    href={preview.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-start gap-1 break-all text-blue-600 hover:underline"
+                  >
+                    <ExternalLink className="mt-0.5 h-3 w-3 shrink-0" />
+                    {preview.url}
+                  </a>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs text-gray-600">
+                  <div>
+                    <p className="text-gray-400">视口</p>
+                    <p>
+                      {preview.viewport?.w}×{preview.viewport?.h} @
+                      {preview.viewport?.dpr}x
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">圈选</p>
+                    <p>{preview.strokes?.length || 0} 处</p>
+                  </div>
+                </div>
+                {preview.userAgent && (
+                  <div>
+                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+                      设备信息
+                    </p>
+                    <p className="break-words text-xs text-gray-500">
+                      {preview.userAgent}
+                    </p>
+                  </div>
+                )}
+                <button
+                  onClick={() => deleteFeedback(preview.id)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4" /> 删除此反馈
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
