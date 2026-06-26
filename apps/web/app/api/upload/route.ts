@@ -25,7 +25,8 @@ export async function POST(request: Request) {
 
     await writeFile(filepath, buffer);
 
-    const url = `/uploads/${filename}`;
+    // 经 /api/uploads 读盘伺服，确保 next start / standalone 生产环境也能访问
+    const url = `/api/uploads/${filename}`;
 
     return NextResponse.json({
       success: true,
