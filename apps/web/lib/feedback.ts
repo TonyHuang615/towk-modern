@@ -16,7 +16,7 @@ export interface FeedbackRecord {
   url: string;
   path: string;
   title: string;
-  screenshot: string; // 已合成圈选标注的截图，public 路径，如 /uploads/feedback/xxx.jpg
+  screenshot: string; // 已合成圈选标注的截图，经 API 伺服，如 /api/uploads/feedback/xxx.jpg
   viewport: { w: number; h: number; dpr: number };
   strokes: FeedbackStroke[];
   userAgent: string;
@@ -87,7 +87,7 @@ export function saveScreenshotFile(id: string, dataUrl: string): string | null {
     if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir, { recursive: true });
     const filename = `${id}.${ext}`;
     fs.writeFileSync(path.join(imgDir, filename), buffer);
-    return `/uploads/feedback/${filename}`;
+    return `/api/uploads/feedback/${filename}`;
   } catch (error) {
     console.error("Error saving screenshot:", error);
     return null;
@@ -95,9 +95,11 @@ export function saveScreenshotFile(id: string, dataUrl: string): string | null {
 }
 
 function deleteScreenshotFile(publicPath: string): void {
-  if (!publicPath || !publicPath.startsWith("/uploads/feedback/")) return;
+  if (!publicPath || !publicPath.startsWith("/api/uploads/feedback/")) return;
   try {
-    const filePath = path.join(process.cwd(), "public", publicPath);
+    // /api/uploads/feedback/x.jpg -> <cwd>/public/uploads/feedback/x.jpg
+    const rel = publicPath.replace(/^\/api/, "");
+    const filePath = path.join(process.cwd(), "public", rel);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
   } catch (error) {
     console.error("Error deleting screenshot:", error);
