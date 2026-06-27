@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { isAuthed } from "@/lib/admin-auth";
 
 const dataFilePath = path.join(process.cwd(), "data", "content.json");
 
@@ -27,6 +28,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isAuthed()) {
+    return NextResponse.json({ error: "未授权" }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const currentData = readData();

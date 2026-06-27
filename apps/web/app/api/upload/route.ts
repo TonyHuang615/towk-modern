@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
+import { isAuthed } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
+  if (!isAuthed()) {
+    return NextResponse.json({ error: "未授权" }, { status: 401 });
+  }
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;

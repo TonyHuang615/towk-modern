@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
+import { isAuthed } from "@/lib/admin-auth";
 import {
   getFeedback,
   addFeedback,
@@ -17,10 +17,6 @@ export const dynamic = "force-dynamic";
 const MAX_SCREENSHOT_CHARS = 12_000_000; // base64 dataURL 上限，约 9MB
 const MAX_MESSAGE_CHARS = 5000;
 const MAX_STROKES = 500;
-
-function isAuthed(): boolean {
-  return cookies().get("auth")?.value === "true";
-}
 
 function sanitizeStrokes(input: unknown): FeedbackStroke[] {
   if (!Array.isArray(input)) return [];
