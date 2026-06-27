@@ -28,6 +28,13 @@ if ! echo "$LAST_MSG" | grep -qiE '(apps/web|component|page\.tsx|layout\.tsx|glo
   exit 0
 fi
 
+# ── Skip gracefully when Docker is unavailable (ephemeral sandbox / CI) ──
+# Keeps full behavior on a real machine with Docker; no-ops where Docker can't run.
+if ! command -v docker >/dev/null 2>&1 || ! docker info >/dev/null 2>&1; then
+  echo "⚠️  Docker 不可用，跳过构建与部署（本环境无 Docker；请在持久化机器上运行）" >&2
+  exit 0
+fi
+
 echo "──────────────────────────────────────" >&2
 echo " TOWK Harness: 检测到前端变更" >&2
 echo "──────────────────────────────────────" >&2
