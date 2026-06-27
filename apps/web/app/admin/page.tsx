@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Upload,
@@ -182,6 +182,10 @@ export default function AdminPage() {
   const [messagesSection, setMessagesSection] = useState<string>("");
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesSaving, setMessagesSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const savedContentRef = useRef<string>("");
+  const savedMessagesRef = useRef<string>("");
+  const dirtyRef = useRef(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -210,6 +214,7 @@ export default function AdminPage() {
       if (res.ok) {
         const data = await res.json();
         setMessages(data);
+        savedMessagesRef.current = JSON.stringify(data);
         setMessagesSection((s) => s || Object.keys(data.zh || {})[0] || "");
       }
     } catch (error) {
@@ -226,6 +231,28 @@ export default function AdminPage() {
   useEffect(() => {
     if (activeTab === "messages" && !messages) fetchMessages();
   }, [activeTab, messages, fetchMessages]);
+
+  // 追踪未保存改动
+  useEffect(() => {
+    const cd = content && savedContentRef.current !== JSON.stringify(content);
+    const md =
+      messages && savedMessagesRef.current !== JSON.stringify(messages);
+    const d = !!(cd || md);
+    dirtyRef.current = d;
+    setDirty(d);
+  }, [content, messages]);
+
+  // 离开页面前拦截未保存改动
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (dirtyRef.current) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, []);
 
   const deleteFeedback = async (id: string) => {
     if (!confirm("确定删除这条反馈吗？")) return;
@@ -275,7 +302,13 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(messages),
       });
-      setMessage(res.ok ? "双语内容已保存！" : "保存失败，请重试");
+      if (res.ok) {
+        savedMessagesRef.current = JSON.stringify(messages);
+        setDirty(false);
+        setMessage("双语内容已保存！");
+      } else {
+        setMessage("保存失败，请重试");
+      }
     } catch {
       setMessage("保存失败，请重试");
     } finally {
@@ -303,6 +336,7 @@ export default function AdminPage() {
       const res = await fetch("/api/cms");
       const data = await res.json();
       setContent(data);
+      savedContentRef.current = JSON.stringify(data);
     } catch (error) {
       console.error("Failed to fetch content:", error);
     } finally {
@@ -324,6 +358,8 @@ export default function AdminPage() {
         body: JSON.stringify(content),
       });
       if (res.ok) {
+        savedContentRef.current = JSON.stringify(content);
+        setDirty(false);
         setMessage("保存成功！");
         setTimeout(() => setMessage(""), 3000);
       }
@@ -450,6 +486,12 @@ export default function AdminPage() {
             >
               查看网站
             </a>
+            {dirty && (
+              <span className="flex items-center gap-1.5 text-sm text-amber-600">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                未保存
+              </span>
+            )}
             <button
               onClick={logout}
               className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 transition-colors"
