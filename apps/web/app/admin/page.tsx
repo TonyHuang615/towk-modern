@@ -12,7 +12,68 @@ import {
   Inbox,
   Monitor,
   MessageSquare,
+  ChevronUp,
+  ChevronDown,
+  Plus,
 } from "lucide-react";
+
+/** 列表条目卡片：统一的标题 + 上移/下移/删除控件 */
+function ItemCard({
+  title,
+  index,
+  total,
+  onUp,
+  onDown,
+  onRemove,
+  children,
+}: {
+  title: string;
+  index: number;
+  total: number;
+  onUp: () => void;
+  onDown: () => void;
+  onRemove: () => void;
+  children: React.ReactNode;
+}) {
+  const ctrlBtn =
+    "p-1.5 rounded hover:bg-gray-100 text-gray-500 disabled:opacity-30 disabled:hover:bg-transparent";
+  return (
+    <div className="border rounded-lg p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="font-medium">{title}</h3>
+        <div className="flex items-center gap-0.5">
+          <button
+            type="button"
+            onClick={onUp}
+            disabled={index === 0}
+            title="上移"
+            className={ctrlBtn}
+          >
+            <ChevronUp className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onDown}
+            disabled={index === total - 1}
+            title="下移"
+            className={ctrlBtn}
+          >
+            <ChevronDown className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            title="删除"
+            className="p-1.5 rounded hover:bg-red-50 text-red-500"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
 
 export default function AdminPage() {
   const [content, setContent] = useState<any>(null);
@@ -178,6 +239,53 @@ export default function AdminPage() {
     [],
   );
 
+  // ── 数组型内容的增 / 删 / 改 / 排序 ──
+  const updateItem = useCallback(
+    (section: string, field: string, index: number, patch: any) => {
+      setContent((prev: any) => {
+        const arr = [...(prev[section]?.[field] || [])];
+        arr[index] = { ...arr[index], ...patch };
+        return { ...prev, [section]: { ...prev[section], [field]: arr } };
+      });
+    },
+    [],
+  );
+
+  const addItem = useCallback(
+    (section: string, field: string, template: any) => {
+      setContent((prev: any) => {
+        const arr = [...(prev[section]?.[field] || []), template];
+        return { ...prev, [section]: { ...prev[section], [field]: arr } };
+      });
+    },
+    [],
+  );
+
+  const removeItem = useCallback(
+    (section: string, field: string, index: number) => {
+      setContent((prev: any) => {
+        const arr = (prev[section]?.[field] || []).filter(
+          (_: any, i: number) => i !== index,
+        );
+        return { ...prev, [section]: { ...prev[section], [field]: arr } };
+      });
+    },
+    [],
+  );
+
+  const moveItem = useCallback(
+    (section: string, field: string, index: number, dir: -1 | 1) => {
+      setContent((prev: any) => {
+        const arr = [...(prev[section]?.[field] || [])];
+        const j = index + dir;
+        if (j < 0 || j >= arr.length) return prev;
+        [arr[index], arr[j]] = [arr[j], arr[index]];
+        return { ...prev, [section]: { ...prev[section], [field]: arr } };
+      });
+    },
+    [],
+  );
+
   if (loading) return <div className="p-8">加载中...</div>;
   if (!content) return <div className="p-8">加载失败</div>;
 
@@ -302,22 +410,79 @@ export default function AdminPage() {
 
           {activeTab === "hero" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold mb-4">首页轮播图</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">首页轮播图</h2>
+                <button
+                  type="button"
+                  onClick={() =>
+                    addItem("hero", "slides", {
+                      id: Date.now(),
+                      title: "",
+                      subtitle: "",
+                      description: "",
+                      image: "",
+                    })
+                  }
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <Plus className="w-4 h-4" /> 添加轮播图
+                </button>
+              </div>
+              {(content.hero?.slides?.length ?? 0) === 0 && (
+                <p className="text-sm text-gray-400">暂无轮播图，点右上角添加。</p>
+              )}
               {content.hero?.slides?.map((slide: any, index: number) => (
-                <div key={slide.id} className="border rounded-lg p-4 space-y-3">
-                  <h3 className="font-medium">轮播图 {index + 1}</h3>
+                <ItemCard
+                  key={slide.id ?? index}
+                  title={`轮播图 ${index + 1}`}
+                  index={index}
+                  total={content.hero.slides.length}
+                  onUp={() => moveItem("hero", "slides", index, -1)}
+                  onDown={() => moveItem("hero", "slides", index, 1)}
+                  onRemove={() => removeItem("hero", "slides", index)}
+                >
                   <div>
                     <label className="block text-sm text-gray-600 mb-1">
                       标题
                     </label>
                     <input
                       type="text"
-                      value={slide.title}
-                      onChange={(e) => {
-                        const newSlides = [...content.hero.slides];
-                        newSlides[index] = { ...slide, title: e.target.value };
-                        updateField("hero", "slides", newSlides);
-                      }}
+                      value={slide.title || ""}
+                      onChange={(e) =>
+                        updateItem("hero", "slides", index, {
+                          title: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">
+                      副标题
+                    </label>
+                    <input
+                      type="text"
+                      value={slide.subtitle || ""}
+                      onChange={(e) =>
+                        updateItem("hero", "slides", index, {
+                          subtitle: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">
+                      描述
+                    </label>
+                    <textarea
+                      value={slide.description || ""}
+                      onChange={(e) =>
+                        updateItem("hero", "slides", index, {
+                          description: e.target.value,
+                        })
+                      }
+                      rows={2}
                       className="w-full px-3 py-2 border rounded-lg"
                     />
                   </div>
@@ -328,15 +493,12 @@ export default function AdminPage() {
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        value={slide.image}
-                        onChange={(e) => {
-                          const newSlides = [...content.hero.slides];
-                          newSlides[index] = {
-                            ...slide,
+                        value={slide.image || ""}
+                        onChange={(e) =>
+                          updateItem("hero", "slides", index, {
                             image: e.target.value,
-                          };
-                          updateField("hero", "slides", newSlides);
-                        }}
+                          })
+                        }
                         className="flex-1 px-3 py-2 border rounded-lg"
                       />
                       <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
@@ -362,7 +524,7 @@ export default function AdminPage() {
                       />
                     )}
                   </div>
-                </div>
+                </ItemCard>
               ))}
             </div>
           )}
@@ -385,6 +547,19 @@ export default function AdminPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  副标题
+                </label>
+                <input
+                  type="text"
+                  value={content.about?.subtitle || ""}
+                  onChange={(e) =>
+                    updateField("about", "subtitle", e.target.value)
+                  }
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   内容
                 </label>
                 <textarea
@@ -396,27 +571,247 @@ export default function AdminPage() {
                   className="w-full px-3 py-2 border rounded-lg"
                 />
               </div>
+
+              <div className="pt-2">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    数据统计
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addItem("about", "stats", { value: "", label: "" })
+                    }
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  >
+                    <Plus className="w-4 h-4" /> 添加
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {content.about?.stats?.map((stat: any, index: number) => (
+                    <ItemCard
+                      key={index}
+                      title={`统计 ${index + 1}`}
+                      index={index}
+                      total={content.about.stats.length}
+                      onUp={() => moveItem("about", "stats", index, -1)}
+                      onDown={() => moveItem("about", "stats", index, 1)}
+                      onRemove={() => removeItem("about", "stats", index)}
+                    >
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">
+                            数值
+                          </label>
+                          <input
+                            type="text"
+                            value={stat.value || ""}
+                            onChange={(e) =>
+                              updateItem("about", "stats", index, {
+                                value: e.target.value,
+                              })
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">
+                            说明
+                          </label>
+                          <input
+                            type="text"
+                            value={stat.label || ""}
+                            onChange={(e) =>
+                              updateItem("about", "stats", index, {
+                                label: e.target.value,
+                              })
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </ItemCard>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "history" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">历史传承</h2>
+                <button
+                  type="button"
+                  onClick={() =>
+                    addItem("history", "milestones", {
+                      year: "",
+                      title: "",
+                      description: "",
+                    })
+                  }
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <Plus className="w-4 h-4" /> 添加里程碑
+                </button>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  栏目标题
+                </label>
+                <input
+                  type="text"
+                  value={content.history?.title || ""}
+                  onChange={(e) =>
+                    updateField("history", "title", e.target.value)
+                  }
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+              {(content.history?.milestones?.length ?? 0) === 0 && (
+                <p className="text-sm text-gray-400">
+                  暂无里程碑，点右上角添加。
+                </p>
+              )}
+              {content.history?.milestones?.map((m: any, index: number) => (
+                <ItemCard
+                  key={index}
+                  title={`里程碑 ${index + 1}`}
+                  index={index}
+                  total={content.history.milestones.length}
+                  onUp={() => moveItem("history", "milestones", index, -1)}
+                  onDown={() => moveItem("history", "milestones", index, 1)}
+                  onRemove={() => removeItem("history", "milestones", index)}
+                >
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">
+                        年份
+                      </label>
+                      <input
+                        type="text"
+                        value={m.year || ""}
+                        onChange={(e) =>
+                          updateItem("history", "milestones", index, {
+                            year: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-xs text-gray-500 mb-1">
+                        标题
+                      </label>
+                      <input
+                        type="text"
+                        value={m.title || ""}
+                        onChange={(e) =>
+                          updateItem("history", "milestones", index, {
+                            title: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      描述
+                    </label>
+                    <textarea
+                      value={m.description || ""}
+                      onChange={(e) =>
+                        updateItem("history", "milestones", index, {
+                          description: e.target.value,
+                        })
+                      }
+                      rows={2}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                </ItemCard>
+              ))}
             </div>
           )}
 
           {activeTab === "activities" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold mb-4">会馆活动</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">会馆活动</h2>
+                <button
+                  type="button"
+                  onClick={() =>
+                    addItem("activities", "items", {
+                      icon: "Sparkles",
+                      title: "",
+                      description: "",
+                      image: "",
+                    })
+                  }
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <Plus className="w-4 h-4" /> 添加活动
+                </button>
+              </div>
+              {(content.activities?.items?.length ?? 0) === 0 && (
+                <p className="text-sm text-gray-400">暂无活动，点右上角添加。</p>
+              )}
               {content.activities?.items?.map((item: any, index: number) => (
-                <div key={index} className="border rounded-lg p-4 space-y-3">
-                  <h3 className="font-medium">活动 {index + 1}</h3>
+                <ItemCard
+                  key={index}
+                  title={`活动 ${index + 1}`}
+                  index={index}
+                  total={content.activities.items.length}
+                  onUp={() => moveItem("activities", "items", index, -1)}
+                  onDown={() => moveItem("activities", "items", index, 1)}
+                  onRemove={() => removeItem("activities", "items", index)}
+                >
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm text-gray-600 mb-1">
+                        图标
+                      </label>
+                      <input
+                        type="text"
+                        value={item.icon || ""}
+                        onChange={(e) =>
+                          updateItem("activities", "items", index, {
+                            icon: e.target.value,
+                          })
+                        }
+                        placeholder="Music / Users…"
+                        className="w-full px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-sm text-gray-600 mb-1">
+                        标题
+                      </label>
+                      <input
+                        type="text"
+                        value={item.title || ""}
+                        onChange={(e) =>
+                          updateItem("activities", "items", index, {
+                            title: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <label className="block text-sm text-gray-600 mb-1">
-                      标题
+                      描述
                     </label>
-                    <input
-                      type="text"
-                      value={item.title}
-                      onChange={(e) => {
-                        const newItems = [...content.activities.items];
-                        newItems[index] = { ...item, title: e.target.value };
-                        updateField("activities", "items", newItems);
-                      }}
+                    <textarea
+                      value={item.description || ""}
+                      onChange={(e) =>
+                        updateItem("activities", "items", index, {
+                          description: e.target.value,
+                        })
+                      }
+                      rows={2}
                       className="w-full px-3 py-2 border rounded-lg"
                     />
                   </div>
@@ -427,12 +822,12 @@ export default function AdminPage() {
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        value={item.image}
-                        onChange={(e) => {
-                          const newItems = [...content.activities.items];
-                          newItems[index] = { ...item, image: e.target.value };
-                          updateField("activities", "items", newItems);
-                        }}
+                        value={item.image || ""}
+                        onChange={(e) =>
+                          updateItem("activities", "items", index, {
+                            image: e.target.value,
+                          })
+                        }
                         className="flex-1 px-3 py-2 border rounded-lg"
                       />
                       <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
@@ -460,7 +855,7 @@ export default function AdminPage() {
                       />
                     )}
                   </div>
-                </div>
+                </ItemCard>
               ))}
             </div>
           )}
