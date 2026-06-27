@@ -181,7 +181,7 @@ export default function Navigation() {
                   ? "text-foreground/60"
                   : "text-white/70"
               }`}
-              aria-label="菜单"
+              aria-label={t("menu")}
             >
               {mobileMenuOpen ? (
                 <X className="w-5 h-5" />

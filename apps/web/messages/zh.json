@@ -13,7 +13,8 @@
     "more": "更多",
     "siteName": "新加坡东安会馆",
     "siteNameEn": "Tung On Wui Kun · 1876",
-    "logoChar": "东"
+    "logoChar": "东",
+    "menu": "菜单"
   },
   "mobileNav": {
     "home": "首页",
@@ -90,7 +91,10 @@
     "milestone1946": "成立互助部，协助处理年长乡亲的身后事宜",
     "milestone1972": "设立奖学金制度，资助会员子弟升学",
     "milestone1992": "联合各地东安会馆创办「世界东安恳亲大会」，至今已历11届",
-    "milestone2003": "创办新加坡东莞工商总会，促进新加坡与东莞之间的贸易往来"
+    "milestone2003": "创办新加坡东莞工商总会，促进新加坡与东莞之间的贸易往来",
+    "intro2": "一百多年来，东安会馆始终秉承“敦睦乡谊、弘扬文化、服务社群”的宗旨，为乡亲提供社交平台，为社区贡献力量，为中华文化在海外的传承做出积极贡献。",
+    "tagline": "乡亲情谊 · 文化传承 · 社群服务",
+    "imageAlt": "东安会馆"
   },
   "news": {
     "sectionLabel": "Latest News",
@@ -392,5 +396,43 @@
   "common": {
     "backToAbout": "返回���于会馆",
     "switchLang": "EN"
+  },
+  "search": {
+    "placeholder": "搜索页面、动态、活动...",
+    "noResults": "未找到相关内容",
+    "hint": "输入关键词搜索",
+    "typeNews": "动态",
+    "typeActivity": "活动",
+    "typePage": "页面",
+    "pages": {
+      "about": {
+        "title": "关于会馆",
+        "excerpt": "新加坡东安会馆简介与历史"
+      },
+      "history": {
+        "title": "历史传承",
+        "excerpt": "自1876年以来的发展历程"
+      },
+      "conference": {
+        "title": "世界东安恳亲大会",
+        "excerpt": "联结全球东莞宝安乡亲"
+      },
+      "gallery": {
+        "title": "影相库",
+        "excerpt": "会馆活动照片集锦"
+      },
+      "contact": {
+        "title": "联系我们",
+        "excerpt": "会馆地址与联系方式"
+      },
+      "structure": {
+        "title": "组织架构",
+        "excerpt": "会馆组织结构与委员会"
+      },
+      "board": {
+        "title": "历届董事会",
+        "excerpt": "各届董事会领导名单"
+      }
+    }
   }
 }

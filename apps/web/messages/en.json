@@ -13,7 +13,8 @@
     "more": "More",
     "siteName": "Tung On Wui Kun",
     "siteNameEn": "Singapore · Est. 1876",
-    "logoChar": "T"
+    "logoChar": "T",
+    "menu": "Menu"
   },
   "mobileNav": {
     "home": "Home",
@@ -90,7 +91,10 @@
     "milestone1946": "Established the Mutual Aid Department to assist elderly members",
     "milestone1972": "Set up scholarship program to support members' children's education",
     "milestone1992": "Co-founded the World Tung On Convention with clan associations worldwide, now in its 11th edition",
-    "milestone2003": "Founded the Singapore Dongguan Chamber of Commerce to promote trade between Singapore and Dongguan"
+    "milestone2003": "Founded the Singapore Dongguan Chamber of Commerce to promote trade between Singapore and Dongguan",
+    "intro2": "For over a century, Tung On Wui Kun has upheld its mission of fostering kinship, championing culture and serving the community — providing a social platform for fellow members, contributing to society, and helping carry Chinese culture forward overseas.",
+    "tagline": "Kinship · Cultural Heritage · Community Service",
+    "imageAlt": "Tung On Wui Kun"
   },
   "news": {
     "sectionLabel": "Latest News",
@@ -392,5 +396,43 @@
   "common": {
     "backToAbout": "Back to About",
     "switchLang": "中文"
+  },
+  "search": {
+    "placeholder": "Search pages, news, activities...",
+    "noResults": "No results found",
+    "hint": "Type a keyword to search",
+    "typeNews": "News",
+    "typeActivity": "Activity",
+    "typePage": "Page",
+    "pages": {
+      "about": {
+        "title": "About Us",
+        "excerpt": "Introduction and history of Tung On Wui Kun"
+      },
+      "history": {
+        "title": "Our History",
+        "excerpt": "Development since 1876"
+      },
+      "conference": {
+        "title": "World Tung On Convention",
+        "excerpt": "Connecting Dongguan & Bao'an kin worldwide"
+      },
+      "gallery": {
+        "title": "Gallery",
+        "excerpt": "Photo collection of association events"
+      },
+      "contact": {
+        "title": "Contact Us",
+        "excerpt": "Address and contact details"
+      },
+      "structure": {
+        "title": "Organisation",
+        "excerpt": "Structure and committees"
+      },
+      "board": {
+        "title": "Past Boards",
+        "excerpt": "Leadership of each board term"
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -14,14 +15,14 @@ interface SearchResult {
   href: string;
 }
 
-const staticPages: SearchResult[] = [
-  { type: "page", title: "关于会馆", excerpt: "新加坡东安会馆简介与历史", href: "/about" },
-  { type: "page", title: "历史传承", excerpt: "自1876年以来的发展历程", href: "/history" },
-  { type: "page", title: "世界东安恳亲大会", excerpt: "联结全球东莞宝安乡亲", href: "/conference" },
-  { type: "page", title: "影相库", excerpt: "会馆活动照片集锦", href: "/gallery" },
-  { type: "page", title: "联系我们", excerpt: "会馆地址与联系方式", href: "/contact" },
-  { type: "page", title: "组织架构", excerpt: "会馆组织结构与委员会", href: "/about/structure" },
-  { type: "page", title: "历届董事会", excerpt: "各届董事会领导名单", href: "/about/board" },
+const staticPageDefs: { key: string; href: string }[] = [
+  { key: "about", href: "/about" },
+  { key: "history", href: "/history" },
+  { key: "conference", href: "/conference" },
+  { key: "gallery", href: "/gallery" },
+  { key: "contact", href: "/contact" },
+  { key: "structure", href: "/about/structure" },
+  { key: "board", href: "/about/board" },
 ];
 
 export default function SearchModal({
@@ -34,6 +35,17 @@ export default function SearchModal({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("search");
+  const staticPages = useMemo<SearchResult[]>(
+    () =>
+      staticPageDefs.map((p) => ({
+        type: "page" as const,
+        title: t(`pages.${p.key}.title`),
+        excerpt: t(`pages.${p.key}.excerpt`),
+        href: p.href,
+      })),
+    [t],
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -94,7 +106,7 @@ export default function SearchModal({
     }
 
     setResults(matched.slice(0, 8));
-  }, [query]);
+  }, [query, staticPages]);
 
   // Close on Escape
   useEffect(() => {
@@ -106,9 +118,9 @@ export default function SearchModal({
   }, [onClose]);
 
   const typeLabels = {
-    news: "动态",
-    activity: "活动",
-    page: "页面",
+    news: t("typeNews"),
+    activity: t("typeActivity"),
+    page: t("typePage"),
   };
 
   return (
@@ -138,7 +150,7 @@ export default function SearchModal({
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="搜索页面、动态、活动..."
+                  placeholder={t("placeholder")}
                   className="flex-1 bg-transparent outline-none text-sm"
                 />
                 <button
@@ -178,13 +190,13 @@ export default function SearchModal({
 
               {query && results.length === 0 && (
                 <div className="p-8 text-center text-foreground/40 text-sm">
-                  未找到相关内容
+                  {t("noResults")}
                 </div>
               )}
 
               {!query && (
                 <div className="p-4 text-center text-foreground/30 text-xs">
-                  输入关键词搜索
+                  {t("hint")}
                 </div>
               )}
             </div>

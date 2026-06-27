@@ -49,17 +49,12 @@ export default function About({ data }: AboutProps) {
 
             <div className="mt-8 space-y-4 text-foreground/80">
               <p>{content}</p>
-              <p>
-                一百多年来，东安会馆始终秉承"敦睦乡谊、弘扬文化、服务社群"的宗旨，
-                为乡亲提供社交平台，为社区贡献力量，为中华文化在海外的传承做出积极贡献。
-              </p>
+              <p>{t("intro2")}</p>
             </div>
 
             <div className="mt-8 flex items-center gap-4">
               <Heart className="w-5 h-5 text-primary" />
-              <span className="text-foreground/70">
-                乡亲情谊 · 文化传承 · 社群服务
-              </span>
+              <span className="text-foreground/70">{t("tagline")}</span>
             </div>
           </motion.div>
 
@@ -73,7 +68,7 @@ export default function About({ data }: AboutProps) {
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-card-hover">
               <Image
                 src="https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=900&q=80"
-                alt="东安会馆"
+                alt={t("imageAlt")}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
