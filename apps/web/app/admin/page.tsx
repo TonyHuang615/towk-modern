@@ -178,6 +178,10 @@ export default function AdminPage() {
   const [feedback, setFeedback] = useState<any[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [preview, setPreview] = useState<any | null>(null);
+  const [feedbackSearch, setFeedbackSearch] = useState("");
+  const [feedbackFilter, setFeedbackFilter] = useState<"all" | "new" | "read">(
+    "all",
+  );
   const [messages, setMessages] = useState<any>(null);
   const [messagesSection, setMessagesSection] = useState<string>("");
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -365,6 +369,45 @@ export default function AdminPage() {
     }
   };
 
+  const exportFeedbackCsv = () => {
+    const header = [
+      "时间",
+      "状态",
+      "页面",
+      "链接",
+      "留言",
+      "视口",
+      "圈选数",
+      "截图",
+    ];
+    const rows = [header];
+    for (const f of feedback) {
+      rows.push([
+        new Date(f.createdAt).toLocaleString("zh-CN"),
+        f.status === "new" ? "未读" : "已读",
+        f.path || "",
+        f.url || "",
+        (f.message || "").replace(/\s+/g, " "),
+        `${f.viewport?.w ?? ""}x${f.viewport?.h ?? ""}`,
+        String(f.strokes?.length || 0),
+        f.screenshot || "",
+      ]);
+    }
+    const csv = rows
+      .map((r) =>
+        r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","),
+      )
+      .join("\n");
+    const blob = new Blob(["﻿" + csv], {
+      type: "text/csv;charset=utf-8",
+    });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `feedback-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   const checkAuth = async () => {
     try {
       const res = await fetch("/api/auth/check");
@@ -518,6 +561,14 @@ export default function AdminPage() {
   if (!content) return <div className="p-8">加载失败</div>;
 
   const newFeedbackCount = feedback.filter((f) => f.status === "new").length;
+  const filteredFeedback = feedback.filter((f) => {
+    if (feedbackFilter !== "all" && f.status !== feedbackFilter) return false;
+    const q = feedbackSearch.trim().toLowerCase();
+    if (!q) return true;
+    return `${f.message || ""} ${f.path || ""} ${f.url || ""}`
+      .toLowerCase()
+      .includes(q);
+  });
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -1250,13 +1301,52 @@ export default function AdminPage() {
                 <h2 className="flex items-center gap-2 text-xl font-bold">
                   <MessageSquare className="h-5 w-5 text-red-600" />
                   用户反馈
+                  <span className="text-sm font-normal text-gray-400">
+                    （{feedback.length}）
+                  </span>
                 </h2>
-                <button
-                  onClick={fetchFeedback}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  刷新
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={exportFeedbackCsv}
+                    disabled={feedback.length === 0}
+                    className="text-sm text-blue-600 hover:underline disabled:text-gray-300"
+                  >
+                    导出 CSV
+                  </button>
+                  <button
+                    onClick={fetchFeedback}
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    刷新
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  type="text"
+                  value={feedbackSearch}
+                  onChange={(e) => setFeedbackSearch(e.target.value)}
+                  placeholder="搜索留言 / 页面 / 链接…"
+                  className="flex-1 min-w-[200px] px-3 py-1.5 border rounded-lg text-sm"
+                />
+                {[
+                  { id: "all", label: "全部" },
+                  { id: "new", label: "未读" },
+                  { id: "read", label: "已读" },
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => setFeedbackFilter(f.id as "all" | "new" | "read")}
+                    className={`px-3 py-1.5 rounded text-sm ${
+                      feedbackFilter === f.id
+                        ? "bg-red-600 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
               </div>
 
               {feedbackLoading ? (
@@ -1266,9 +1356,13 @@ export default function AdminPage() {
                   <Inbox className="h-12 w-12" />
                   <p>暂无用户反馈</p>
                 </div>
+              ) : filteredFeedback.length === 0 ? (
+                <div className="py-12 text-center text-gray-400">
+                  无匹配结果
+                </div>
               ) : (
                 <div className="space-y-4">
-                  {feedback.map((item) => (
+                  {filteredFeedback.map((item) => (
                     <div
                       key={item.id}
                       className={`flex flex-col gap-4 rounded-lg border p-4 sm:flex-row ${
