@@ -75,6 +75,99 @@ function ItemCard({
   );
 }
 
+const MESSAGE_SECTION_LABELS: Record<string, string> = {
+  nav: "导航",
+  mobileNav: "移动端导航",
+  hero: "首页横幅",
+  announcements: "公告",
+  about: "关于会馆",
+  news: "新闻",
+  history: "历史传承",
+  conference: "恳亲大会",
+  activities: "会馆活动",
+  gallery: "影相库",
+  contact: "联系我们",
+  footer: "页脚",
+  board: "理事会",
+  structure: "组织架构",
+  member: "会员",
+  common: "通用",
+};
+
+/** 不可变地按路径写入嵌套值（保留数组结构） */
+function setNested(obj: any, path: string[], value: any): any {
+  if (path.length === 0) return value;
+  const [head, ...rest] = path;
+  if (Array.isArray(obj)) {
+    const copy = obj.slice();
+    copy[Number(head)] = setNested(copy[Number(head)], rest, value);
+    return copy;
+  }
+  const cur = obj && typeof obj === "object" ? obj : {};
+  return { ...cur, [head]: setNested(cur[head], rest, value) };
+}
+
+/** 递归渲染 zh / en 双语字段；叶子为输入框，对象/数组继续下钻 */
+function MessageFields({
+  zh,
+  en,
+  path,
+  onChange,
+}: {
+  zh: any;
+  en: any;
+  path: string[];
+  onChange: (path: string[], locale: "zh" | "en", value: string) => void;
+}) {
+  const keys = Array.from(
+    new Set([...Object.keys(zh || {}), ...Object.keys(en || {})]),
+  );
+  return (
+    <div className="space-y-2">
+      {keys.map((k) => {
+        const zv = zh ? zh[k] : undefined;
+        const ev = en ? en[k] : undefined;
+        const zObj = zv !== null && typeof zv === "object";
+        const eObj = ev !== null && typeof ev === "object";
+        const childPath = [...path, k];
+        if (!zObj && !eObj) {
+          return (
+            <div
+              key={k}
+              className="grid grid-cols-[130px_1fr_1fr] gap-2 items-start"
+            >
+              <div className="pt-2 text-xs text-gray-500 break-all">{k}</div>
+              <textarea
+                value={zv == null ? "" : String(zv)}
+                onChange={(e) => onChange(childPath, "zh", e.target.value)}
+                rows={1}
+                className="w-full px-2 py-1.5 border rounded text-sm resize-y"
+              />
+              <textarea
+                value={ev == null ? "" : String(ev)}
+                onChange={(e) => onChange(childPath, "en", e.target.value)}
+                rows={1}
+                className="w-full px-2 py-1.5 border rounded text-sm resize-y"
+              />
+            </div>
+          );
+        }
+        return (
+          <div key={k} className="border-l-2 border-gray-100 pl-3 py-1">
+            <div className="mb-1 text-sm font-medium text-gray-600">{k}</div>
+            <MessageFields
+              zh={zObj ? zv : {}}
+              en={eObj ? ev : {}}
+              path={childPath}
+              onChange={onChange}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -85,6 +178,10 @@ export default function AdminPage() {
   const [feedback, setFeedback] = useState<any[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [preview, setPreview] = useState<any | null>(null);
+  const [messages, setMessages] = useState<any>(null);
+  const [messagesSection, setMessagesSection] = useState<string>("");
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [messagesSaving, setMessagesSaving] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -106,9 +203,29 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchMessages = useCallback(async () => {
+    setMessagesLoading(true);
+    try {
+      const res = await fetch("/api/messages");
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data);
+        setMessagesSection((s) => s || Object.keys(data.zh || {})[0] || "");
+      }
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    } finally {
+      setMessagesLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === "feedback") fetchFeedback();
   }, [activeTab, fetchFeedback]);
+
+  useEffect(() => {
+    if (activeTab === "messages" && !messages) fetchMessages();
+  }, [activeTab, messages, fetchMessages]);
 
   const deleteFeedback = async (id: string) => {
     if (!confirm("确定删除这条反馈吗？")) return;
@@ -137,6 +254,33 @@ export default function AdminPage() {
       );
     } catch (error) {
       console.error("Failed to mark read:", error);
+    }
+  };
+
+  const onMsgChange = useCallback(
+    (path: string[], locale: "zh" | "en", value: string) => {
+      setMessages((prev: any) => ({
+        ...prev,
+        [locale]: setNested(prev[locale], path, value),
+      }));
+    },
+    [],
+  );
+
+  const saveMessages = async () => {
+    setMessagesSaving(true);
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(messages),
+      });
+      setMessage(res.ok ? "双语内容已保存！" : "保存失败，请重试");
+    } catch {
+      setMessage("保存失败，请重试");
+    } finally {
+      setMessagesSaving(false);
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
@@ -312,7 +456,7 @@ export default function AdminPage() {
             >
               <LogOut className="w-4 h-4" /> 退出
             </button>
-            {activeTab !== "feedback" && (
+            {activeTab !== "feedback" && activeTab !== "messages" && (
               <button
                 onClick={saveContent}
                 disabled={saving}
@@ -345,6 +489,7 @@ export default function AdminPage() {
               { id: "history", label: "历史传承", icon: "📜" },
               { id: "activities", label: "会馆活动", icon: "🎭" },
               { id: "conference", label: "恳亲大会", icon: "🌍" },
+              { id: "messages", label: "双语内容", icon: "🌐" },
               { id: "feedback", label: "用户反馈", icon: "💬" },
             ].map((tab) => (
               <button
@@ -889,6 +1034,63 @@ export default function AdminPage() {
                   className="w-full px-3 py-2 border rounded-lg"
                 />
               </div>
+            </div>
+          )}
+
+          {activeTab === "messages" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold">双语内容（i18n）</h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    编辑 zh / en 站点文案，覆盖新闻、影相库、理事会、联系等页面。
+                  </p>
+                </div>
+                <button
+                  onClick={saveMessages}
+                  disabled={messagesSaving || !messages}
+                  className="flex-shrink-0 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  {messagesSaving ? "保存中..." : "保存双语内容"}
+                </button>
+              </div>
+
+              {messagesLoading || !messages ? (
+                <div className="py-12 text-center text-gray-400">加载中...</div>
+              ) : (
+                <div className="flex gap-4">
+                  <div className="w-36 flex-shrink-0 space-y-1">
+                    {Object.keys(messages.zh || {}).map((sec) => (
+                      <button
+                        key={sec}
+                        onClick={() => setMessagesSection(sec)}
+                        className={`w-full text-left px-3 py-2 rounded text-sm ${
+                          messagesSection === sec
+                            ? "bg-red-50 text-red-600"
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {MESSAGE_SECTION_LABELS[sec] || sec}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="grid grid-cols-[130px_1fr_1fr] gap-2 mb-2 text-xs font-medium text-gray-400">
+                      <div>字段</div>
+                      <div>中文</div>
+                      <div>English</div>
+                    </div>
+                    {messagesSection && (
+                      <MessageFields
+                        zh={messages.zh?.[messagesSection] ?? {}}
+                        en={messages.en?.[messagesSection] ?? {}}
+                        path={[messagesSection]}
+                        onChange={onMsgChange}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
