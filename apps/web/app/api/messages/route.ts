@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
 import {
   getAllMessages,
+  getMessages,
   saveMessages,
   LOCALES,
   type Locale,
 } from "@/lib/messages";
+import { snapshot } from "@/lib/backups";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,6 +30,7 @@ export async function POST(request: Request) {
     const saved: Locale[] = [];
     for (const locale of LOCALES) {
       if (body && body[locale] !== undefined) {
+        snapshot(`messages-${locale}`, getMessages(locale));
         if (!saveMessages(locale, body[locale])) {
           return NextResponse.json(
             { error: `保存 ${locale} 失败` },

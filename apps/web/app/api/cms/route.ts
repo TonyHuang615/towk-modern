@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { isAuthed } from "@/lib/admin-auth";
+import { snapshot } from "@/lib/backups";
 
 const dataFilePath = path.join(process.cwd(), "data", "content.json");
 
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const currentData = readData();
+    snapshot("content", currentData);
     const newData = { ...currentData, ...body };
     writeData(newData);
     return NextResponse.json({ success: true, data: newData });

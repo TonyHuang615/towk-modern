@@ -38,3 +38,6 @@ next-env.d.ts
 # user feedback (runtime data)
 /public/uploads/feedback/
 /data/feedback.json
+
+# admin content backups (runtime data)
+/data/backups/

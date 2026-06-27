@@ -182,6 +182,9 @@ export default function AdminPage() {
   const [messagesSection, setMessagesSection] = useState<string>("");
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesSaving, setMessagesSaving] = useState(false);
+  const [backups, setBackups] = useState<{ id: string; time: string }[]>([]);
+  const [backupType, setBackupType] = useState<string>("content");
+  const [backupsLoading, setBackupsLoading] = useState(false);
   const [dirty, setDirty] = useState(false);
   const savedContentRef = useRef<string>("");
   const savedMessagesRef = useRef<string>("");
@@ -224,6 +227,21 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchBackups = useCallback(async (type: string) => {
+    setBackupsLoading(true);
+    try {
+      const res = await fetch(`/api/backups?type=${type}`);
+      if (res.ok) {
+        const data = await res.json();
+        setBackups(data.backups || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch backups:", error);
+    } finally {
+      setBackupsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === "feedback") fetchFeedback();
   }, [activeTab, fetchFeedback]);
@@ -231,6 +249,10 @@ export default function AdminPage() {
   useEffect(() => {
     if (activeTab === "messages" && !messages) fetchMessages();
   }, [activeTab, messages, fetchMessages]);
+
+  useEffect(() => {
+    if (activeTab === "backups") fetchBackups(backupType);
+  }, [activeTab, backupType, fetchBackups]);
 
   // 追踪未保存改动
   useEffect(() => {
@@ -313,6 +335,32 @@ export default function AdminPage() {
       setMessage("保存失败，请重试");
     } finally {
       setMessagesSaving(false);
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
+  const rollback = async (id: string) => {
+    if (!confirm("确定回滚到该版本？当前内容会先自动备份。")) return;
+    try {
+      const res = await fetch("/api/backups", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: backupType, id }),
+      });
+      if (res.ok) {
+        setMessage("已回滚到所选版本！");
+        if (backupType === "content") {
+          fetchContent();
+        } else {
+          setMessages(null);
+        }
+        fetchBackups(backupType);
+      } else {
+        setMessage("回滚失败，请重试");
+      }
+    } catch {
+      setMessage("回滚失败，请重试");
+    } finally {
       setTimeout(() => setMessage(""), 3000);
     }
   };
@@ -498,7 +546,9 @@ export default function AdminPage() {
             >
               <LogOut className="w-4 h-4" /> 退出
             </button>
-            {activeTab !== "feedback" && activeTab !== "messages" && (
+            {activeTab !== "feedback" &&
+              activeTab !== "messages" &&
+              activeTab !== "backups" && (
               <button
                 onClick={saveContent}
                 disabled={saving}
@@ -532,6 +582,7 @@ export default function AdminPage() {
               { id: "activities", label: "会馆活动", icon: "🎭" },
               { id: "conference", label: "恳亲大会", icon: "🌍" },
               { id: "messages", label: "双语内容", icon: "🌐" },
+              { id: "backups", label: "备份回滚", icon: "🗂️" },
               { id: "feedback", label: "用户反馈", icon: "💬" },
             ].map((tab) => (
               <button
@@ -1131,6 +1182,63 @@ export default function AdminPage() {
                       />
                     )}
                   </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "backups" && (
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-xl font-bold">备份与回滚</h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  每次保存前自动快照旧版本（每类保留最近 30
+                  份）。可回滚到任意历史版本，回滚前会再次自动备份，便于撤销。
+                </p>
+              </div>
+              <div className="flex gap-2">
+                {[
+                  { id: "content", label: "网站内容" },
+                  { id: "messages-zh", label: "中文文案" },
+                  { id: "messages-en", label: "英文文案" },
+                ].map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setBackupType(t.id)}
+                    className={`px-3 py-1.5 rounded text-sm ${
+                      backupType === t.id
+                        ? "bg-red-600 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              {backupsLoading ? (
+                <div className="py-12 text-center text-gray-400">加载中...</div>
+              ) : backups.length === 0 ? (
+                <div className="py-12 text-center text-gray-400">
+                  暂无备份（保存一次内容后即生成）
+                </div>
+              ) : (
+                <div className="divide-y border rounded-lg">
+                  {backups.map((b) => (
+                    <div
+                      key={b.id}
+                      className="flex items-center justify-between px-4 py-3"
+                    >
+                      <span className="text-sm text-gray-700">
+                        {new Date(b.time).toLocaleString("zh-CN")}
+                      </span>
+                      <button
+                        onClick={() => rollback(b.id)}
+                        className="px-3 py-1.5 text-sm border border-red-200 text-red-600 rounded hover:bg-red-50"
+                      >
+                        回滚到此版本
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
