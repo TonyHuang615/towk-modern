@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: "联络我们",
-  description:
-    "联系新加坡东安会馆，获取地址、电话及开放时间等信息。欢迎来访或在线留言。",
-  openGraph: {
-    title: "联络我们 | 新加坡东安会馆",
-    description:
-      "联系新加坡东安会馆，获取地址、电话及开放时间等信息。",
-  },
-};
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return pageMetadata(params.locale, "contact");
+}
 
-export default function ContactLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

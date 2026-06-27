@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: "历届董事会",
-  description:
-    "新加坡东安会馆历届董事会领导名单，感谢历任会长及董事对会馆的奉献与付出。",
-  openGraph: {
-    title: "历届董事会 | 新加坡东安会馆",
-    description:
-      "新加坡东安会馆历届董事会领导名单，感谢历任会长及董事对会馆的奉献与付出。",
-  },
-};
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return pageMetadata(params.locale, "board");
+}
 
-export default function BoardLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

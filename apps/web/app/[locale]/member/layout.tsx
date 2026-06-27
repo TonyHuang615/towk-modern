@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: "会员中心",
-  description: "新加坡东安会馆会员个人中心",
-};
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return pageMetadata(params.locale, "member");
+}
 
-export default function MemberLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

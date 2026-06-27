@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: "影相库",
-  description:
-    "新加坡东安会馆活动照片与历史影像，记录会馆百年风采。",
-  openGraph: {
-    title: "影相库 | 新加坡东安会馆",
-    description:
-      "新加坡东安会馆活动照片与历史影像，记录会馆百年风采。",
-  },
-};
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return pageMetadata(params.locale, "gallery");
+}
 
-export default function GalleryLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

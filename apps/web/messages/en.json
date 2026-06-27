@@ -434,5 +434,48 @@
         "excerpt": "Leadership of each board term"
       }
     }
+  },
+  "meta": {
+    "siteName": "Tung On Wui Kun",
+    "about": {
+      "title": "About Us",
+      "description": "Founded in 1876, Tung On Wui Kun is one of Singapore's oldest Chinese clan associations. Learn about our history, values and organisation."
+    },
+    "board": {
+      "title": "Past Boards",
+      "description": "Leaders of Tung On Wui Kun's successive boards — with gratitude to every president and director for their dedication."
+    },
+    "structure": {
+      "title": "Organisation",
+      "description": "Tung On Wui Kun's organisational structure — from top leadership and the executive to each specialist committee."
+    },
+    "activities": {
+      "title": "Activities",
+      "description": "Upcoming and past activities of Tung On Wui Kun, including cultural celebrations, community service and member gatherings."
+    },
+    "conference": {
+      "title": "World Tung On Convention",
+      "description": "The World Tung On Convention is a global gathering of Dongguan and Bao'an kin, held 11 times since its founding in 1992."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Contact Tung On Wui Kun for our address, phone and opening hours. Visit us or leave a message online."
+    },
+    "gallery": {
+      "title": "Gallery",
+      "description": "Photos and historical images of Tung On Wui Kun's activities, capturing a century of heritage."
+    },
+    "history": {
+      "title": "Our History",
+      "description": "Historical milestones of Tung On Wui Kun since its founding in 1876, witnessing generations of endeavour."
+    },
+    "member": {
+      "title": "Member Centre",
+      "description": "Tung On Wui Kun member personal centre."
+    },
+    "news": {
+      "title": "News",
+      "description": "The latest news and announcements from Tung On Wui Kun — stay updated on the association and community."
+    }
   }
 }
