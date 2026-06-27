@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { allNews } from "../../lib/newsData";
-import { activities as activitiesData } from "../../lib/activitiesData";
+import { getLocalizedNews } from "../../lib/newsData";
+import { getLocalizedActivities } from "../../lib/activitiesData";
 
 interface SearchResult {
   type: "news" | "activity" | "page";
@@ -36,6 +36,12 @@ export default function SearchModal({
   const [results, setResults] = useState<SearchResult[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const t = useTranslations("search");
+  const locale = useLocale();
+  const allNews = useMemo(() => getLocalizedNews(locale), [locale]);
+  const activitiesData = useMemo(
+    () => getLocalizedActivities(locale),
+    [locale],
+  );
   const staticPages = useMemo<SearchResult[]>(
     () =>
       staticPageDefs.map((p) => ({
@@ -106,7 +112,7 @@ export default function SearchModal({
     }
 
     setResults(matched.slice(0, 8));
-  }, [query, staticPages]);
+  }, [query, staticPages, allNews, activitiesData]);
 
   // Close on Escape
   useEffect(() => {

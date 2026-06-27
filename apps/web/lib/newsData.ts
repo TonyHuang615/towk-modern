@@ -1,25 +1,52 @@
+// 新闻数据：短字段（分类/标题/摘要）双语；长正文 content 暂为中文，待补英文。
+type Loc = { zh: string; en: string };
+
+interface RawNews {
+  id: number;
+  slug: string;
+  date: string;
+  image: string;
+  category: Loc;
+  title: Loc;
+  excerpt: Loc;
+  content: string;
+}
+
 export interface NewsArticle {
   id: number;
   slug: string;
   date: string;
   category: string;
+  categoryKey: string; // 稳定分类标识，用于筛选（与语言无关）
   title: string;
   excerpt: string;
   image: string;
   content: string;
 }
 
-export const allNews: NewsArticle[] = [
+const CATEGORY_KEYS: Record<string, string> = {
+  会馆公告: "announcement",
+  文化活动: "cultural",
+  青年活动: "youth",
+  社群服务: "community",
+};
+
+const rawNews: RawNews[] = [
   {
     id: 1,
     slug: "spring-banquet-2026",
     date: "2026-03-15",
-    category: "会馆公告",
-    title: "新加坡东安会馆2026年春茗晚宴圆满举行",
-    excerpt:
-      "2026年春茗晚宴于本月圆满举行，逾三百名乡亲出席，共叙乡情，展望新一年的发展蓝图。",
     image:
       "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=900&q=80",
+    category: { zh: "会馆公告", en: "Announcement" },
+    title: {
+      zh: "新加坡东安会馆2026年春茗晚宴圆满举行",
+      en: "Tung On Wui Kun's 2026 Spring Banquet Held Successfully",
+    },
+    excerpt: {
+      zh: "2026年春茗晚宴于本月圆满举行，逾三百名乡亲出席，共叙乡情，展望新一年的发展蓝图。",
+      en: "The 2026 Spring Banquet was held this month with over 300 members attending to reconnect and look ahead to the new year.",
+    },
     content: `
 2026年春茗晚宴于本月15日在新加坡圆满举行，共有逾三百名乡亲出席，共叙乡情，展望新一年的发展蓝图。
 
@@ -34,12 +61,17 @@ export const allNews: NewsArticle[] = [
     id: 2,
     slug: "cantonese-opera-cny-2026",
     date: "2026-02-28",
-    category: "文化活动",
-    title: "粤剧组新春贺岁演出获得热烈反响",
-    excerpt:
-      "会馆粤剧组于农历新年期间在牛车水文化广场呈献精彩粤剧折子戏，吸引大批观众，广受好评。",
     image:
       "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=900&q=80",
+    category: { zh: "文化活动", en: "Cultural" },
+    title: {
+      zh: "粤剧组新春贺岁演出获得热烈反响",
+      en: "Cantonese Opera Group's Lunar New Year Performance Warmly Received",
+    },
+    excerpt: {
+      zh: "会馆粤剧组于农历新年期间在牛车水文化广场呈献精彩粤剧折子戏，吸引大批观众，广受好评。",
+      en: "During the Lunar New Year, the Cantonese Opera Group staged excerpts at Chinatown's cultural square, drawing large and appreciative crowds.",
+    },
     content: `
 东安会馆粤剧组于农历新年期间在牛车水文化广场呈献精彩粤剧折子戏，吸引大批观众驻足欣赏，广受好评。
 
@@ -54,12 +86,17 @@ export const allNews: NewsArticle[] = [
     id: 3,
     slug: "youth-dongguan-visit-2026",
     date: "2026-01-20",
-    category: "青年活动",
-    title: "青年团赴广东东莞交流考察活动顺利完成",
-    excerpt:
-      "会馆青年团一行二十人赴祖籍地广东东莞进行文化交流考察，深入了解家乡发展。",
     image:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=80",
+    category: { zh: "青年活动", en: "Youth" },
+    title: {
+      zh: "青年团赴广东东莞交流考察活动顺利完成",
+      en: "Youth Wing Completes Exchange Visit to Dongguan, Guangdong",
+    },
+    excerpt: {
+      zh: "会馆青年团一行二十人赴祖籍地广东东莞进行文化交流考察，深入了解家乡发展。",
+      en: "A 20-member youth delegation visited their ancestral home of Dongguan, Guangdong for a cultural exchange to learn about its development.",
+    },
     content: `
 东安会馆青年团一行二十人于今年一月赴祖籍地广东东莞进行为期五天的文化交流考察活动，圆满完成各项行程。
 
@@ -74,12 +111,17 @@ export const allNews: NewsArticle[] = [
     id: 4,
     slug: "board-installation-2025",
     date: "2025-12-08",
-    category: "会馆公告",
-    title: "东安会馆新届董事会就职典礼隆重举行",
-    excerpt:
-      "新届董事会就职典礼于上月隆重举行，新届董事会将带领会馆迈向新的里程碑。",
     image:
       "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=80",
+    category: { zh: "会馆公告", en: "Announcement" },
+    title: {
+      zh: "东安会馆新届董事会就职典礼隆重举行",
+      en: "Tung On Wui Kun's New Board Sworn In at Grand Ceremony",
+    },
+    excerpt: {
+      zh: "新届董事会就职典礼于上月隆重举行，新届董事会将带领会馆迈向新的里程碑。",
+      en: "The new board's installation ceremony was held last month; the incoming board will lead the association to new milestones.",
+    },
     content: `
 东安会馆新届董事会就职典礼于2025年12月8日隆重举行，多位社会贤达及各友好社团代表出席观礼，见证这一重要时刻。
 
@@ -94,12 +136,17 @@ export const allNews: NewsArticle[] = [
     id: 5,
     slug: "senior-care-program-2025",
     date: "2025-11-15",
-    category: "社群服务",
-    title: "会馆长者关怀计划正式启动",
-    excerpt:
-      "东安会馆长者关怀计划正式启动，将定期组织活动关怀年长乡亲，促进世代交流。",
     image:
       "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=80",
+    category: { zh: "社群服务", en: "Community" },
+    title: {
+      zh: "会馆长者关怀计划正式启动",
+      en: "Association Launches Senior Care Programme",
+    },
+    excerpt: {
+      zh: "东安会馆长者关怀计划正式启动，将定期组织活动关怀年长乡亲，促进世代交流。",
+      en: "Tung On Wui Kun's senior care programme has launched, organising regular activities for elderly members and fostering intergenerational ties.",
+    },
     content: `
 东安会馆长者关怀计划于2025年11月正式启动，旨在关怀会馆内的年长乡亲，促进各世代之间的交流与联系。
 
@@ -114,12 +161,17 @@ export const allNews: NewsArticle[] = [
     id: 6,
     slug: "mooncake-festival-2025",
     date: "2025-10-01",
-    category: "文化活动",
-    title: "东安会馆庆祝中秋联欢晚会成功举办",
-    excerpt:
-      "中秋节联欢晚会吸引逾两百名乡亲出席，现场文艺表演精彩纷呈，气氛融洽。",
     image:
       "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=900&q=80",
+    category: { zh: "文化活动", en: "Cultural" },
+    title: {
+      zh: "东安会馆庆祝中秋联欢晚会成功举办",
+      en: "Tung On Wui Kun's Mid-Autumn Gala Held Successfully",
+    },
+    excerpt: {
+      zh: "中秋节联欢晚会吸引逾两百名乡亲出席，现场文艺表演精彩纷呈，气氛融洽。",
+      en: "The Mid-Autumn gala drew over 200 members with a wonderful array of performances in a warm, convivial atmosphere.",
+    },
     content: `
 东安会馆中秋联欢晚会于2025年10月1日圆满举行，逾两百名乡亲出席，共庆佳节。
 
@@ -132,14 +184,34 @@ export const allNews: NewsArticle[] = [
   },
 ];
 
-export function getArticleBySlug(slug: string): NewsArticle | undefined {
-  return allNews.find((a) => a.slug === slug);
+function pick(loc: Loc, locale: string): string {
+  return locale === "en" ? loc.en : loc.zh;
 }
 
-export function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("zh-CN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+export function getLocalizedNews(locale: string): NewsArticle[] {
+  return rawNews.map((n) => ({
+    id: n.id,
+    slug: n.slug,
+    date: n.date,
+    image: n.image,
+    category: pick(n.category, locale),
+    categoryKey: CATEGORY_KEYS[n.category.zh] || "",
+    title: pick(n.title, locale),
+    excerpt: pick(n.excerpt, locale),
+    content: n.content,
+  }));
+}
+
+export function getArticleBySlug(
+  slug: string,
+  locale: string,
+): NewsArticle | undefined {
+  return getLocalizedNews(locale).find((a) => a.slug === slug);
+}
+
+export function formatDate(dateStr: string, locale: string = "zh") {
+  return new Date(dateStr).toLocaleDateString(
+    locale === "en" ? "en-GB" : "zh-CN",
+    { year: "numeric", month: "long", day: "numeric" },
+  );
 }

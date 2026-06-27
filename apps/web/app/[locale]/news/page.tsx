@@ -5,25 +5,28 @@ import Footer from "../../components/Footer";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Search } from "lucide-react";
 import { useState } from "react";
-import { allNews, formatDate } from "../../../lib/newsData";
-import { useTranslations } from "next-intl";
+import { getLocalizedNews, formatDate } from "../../../lib/newsData";
+import { useTranslations, useLocale } from "next-intl";
 
 const categoryMap = [
-  { key: "all", dataValue: "" },
-  { key: "catAnnouncement", dataValue: "会馆公告" },
-  { key: "catCulture", dataValue: "文化活动" },
-  { key: "catYouth", dataValue: "青年活动" },
-  { key: "catService", dataValue: "社群服务" },
+  { key: "all", categoryKey: "" },
+  { key: "catAnnouncement", categoryKey: "announcement" },
+  { key: "catCulture", categoryKey: "cultural" },
+  { key: "catYouth", categoryKey: "youth" },
+  { key: "catService", categoryKey: "community" },
 ];
 
 export default function NewsPage() {
   const t = useTranslations("news");
+  const locale = useLocale();
+  const allNews = getLocalizedNews(locale);
   const [activeCategoryKey, setActiveCategoryKey] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = allNews.filter((item) => {
     const catEntry = categoryMap.find((c) => c.key === activeCategoryKey);
-    const matchCat = activeCategoryKey === "all" || item.category === catEntry?.dataValue;
+    const matchCat =
+      activeCategoryKey === "all" || item.categoryKey === catEntry?.categoryKey;
     const matchSearch =
       !searchQuery ||
       item.title.includes(searchQuery) ||
@@ -74,7 +77,7 @@ export default function NewsPage() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategoryKey(cat.key)}
-                  data-testid={`filter-${cat.key === "all" ? "all" : cat.dataValue || cat.key}`}
+                  data-testid={`filter-${cat.key === "all" ? "all" : cat.categoryKey || cat.key}`}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     activeCategoryKey === cat.key
                       ? "bg-primary text-white"
@@ -110,7 +113,7 @@ export default function NewsPage() {
                     </span>
                     <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
-                      {formatDate(article.date)}
+                      {formatDate(article.date, locale)}
                     </span>
                   </div>
                   <h2 className="text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2">

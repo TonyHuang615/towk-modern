@@ -7,12 +7,13 @@ import { Calendar, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
 import { getArticleBySlug, formatDate } from "../../../../lib/newsData";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import ShareButtons from "../../../components/ShareButtons";
 
 export default function NewsArticlePage() {
   const { slug } = useParams<{ slug: string }>();
-  const article = getArticleBySlug(slug);
+  const locale = useLocale();
+  const article = getArticleBySlug(slug, locale);
   const t = useTranslations("news");
 
   if (!article) {
@@ -61,7 +62,7 @@ export default function NewsArticlePage() {
               </span>
               <span className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                {formatDate(article.date)}
+                {formatDate(article.date, locale)}
               </span>
             </div>
 

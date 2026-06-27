@@ -7,11 +7,12 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { getActivityBySlug } from "../../../../lib/activitiesData";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function ActivityDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const activity = getActivityBySlug(slug);
+  const locale = useLocale();
+  const activity = getActivityBySlug(slug, locale);
   const t = useTranslations("activities");
 
   if (!activity) {

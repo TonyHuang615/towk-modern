@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
-import { allNews } from "../lib/newsData";
-import { activities } from "../lib/activitiesData";
+import { getLocalizedNews } from "../lib/newsData";
+import { getLocalizedActivities } from "../lib/activitiesData";
 
 const BASE_URL = "https://towk.sg";
 
@@ -18,14 +18,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/contact`, priority: 0.7, changeFrequency: "yearly" as const },
   ];
 
-  const newsPages = allNews.map((article) => ({
+  const newsPages = getLocalizedNews("zh").map((article) => ({
     url: `${BASE_URL}/news/${article.slug}`,
     lastModified: new Date(article.date),
     priority: 0.7,
     changeFrequency: "yearly" as const,
   }));
 
-  const activityPages = activities.map((activity) => ({
+  const activityPages = getLocalizedActivities("zh").map((activity) => ({
     url: `${BASE_URL}/activities/${activity.slug}`,
     priority: 0.7,
     changeFrequency: "monthly" as const,
