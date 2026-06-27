@@ -189,6 +189,11 @@ export default function AdminPage() {
   const [backups, setBackups] = useState<{ id: string; time: string }[]>([]);
   const [backupType, setBackupType] = useState<string>("content");
   const [backupsLoading, setBackupsLoading] = useState(false);
+  const [media, setMedia] = useState<
+    { name: string; url: string; size: number; mtime: number }[]
+  >([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaUploading, setMediaUploading] = useState(false);
   const [dirty, setDirty] = useState(false);
   const savedContentRef = useRef<string>("");
   const savedMessagesRef = useRef<string>("");
@@ -246,6 +251,21 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchMedia = useCallback(async () => {
+    setMediaLoading(true);
+    try {
+      const res = await fetch("/api/media");
+      if (res.ok) {
+        const data = await res.json();
+        setMedia(data.files || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch media:", error);
+    } finally {
+      setMediaLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === "feedback") fetchFeedback();
   }, [activeTab, fetchFeedback]);
@@ -257,6 +277,10 @@ export default function AdminPage() {
   useEffect(() => {
     if (activeTab === "backups") fetchBackups(backupType);
   }, [activeTab, backupType, fetchBackups]);
+
+  useEffect(() => {
+    if (activeTab === "media") fetchMedia();
+  }, [activeTab, fetchMedia]);
 
   // 追踪未保存改动
   useEffect(() => {
@@ -406,6 +430,49 @@ export default function AdminPage() {
     a.download = `feedback-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  const uploadMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setMediaUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (res.ok) {
+        setMessage("上传成功！");
+        fetchMedia();
+      } else {
+        setMessage("上传失败");
+      }
+    } catch {
+      setMessage("上传失败");
+    } finally {
+      setMediaUploading(false);
+      setTimeout(() => setMessage(""), 3000);
+      e.target.value = "";
+    }
+  };
+
+  const deleteMedia = async (name: string) => {
+    if (!confirm("确定删除该图片？引用它的页面会失效。")) return;
+    try {
+      const res = await fetch(`/api/media?name=${encodeURIComponent(name)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) setMedia((prev) => prev.filter((m) => m.name !== name));
+    } catch (error) {
+      console.error("Failed to delete media:", error);
+    }
+  };
+
+  const copyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage("链接已复制");
+      setTimeout(() => setMessage(""), 2000);
+    } catch {}
   };
 
   const checkAuth = async () => {
@@ -599,7 +666,8 @@ export default function AdminPage() {
             </button>
             {activeTab !== "feedback" &&
               activeTab !== "messages" &&
-              activeTab !== "backups" && (
+              activeTab !== "backups" &&
+              activeTab !== "media" && (
               <button
                 onClick={saveContent}
                 disabled={saving}
@@ -634,6 +702,7 @@ export default function AdminPage() {
               { id: "conference", label: "恳亲大会", icon: "🌍" },
               { id: "messages", label: "双语内容", icon: "🌐" },
               { id: "backups", label: "备份回滚", icon: "🗂️" },
+              { id: "media", label: "媒体库", icon: "📁" },
               { id: "feedback", label: "用户反馈", icon: "💬" },
             ].map((tab) => (
               <button
@@ -1288,6 +1357,80 @@ export default function AdminPage() {
                       >
                         回滚到此版本
                       </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "media" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold">媒体库</h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    管理已上传图片，复制链接粘贴到各处的「图片」输入框，或删除不再使用的图片。
+                  </p>
+                </div>
+                <label className="flex flex-shrink-0 items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-700">
+                  <Upload className="w-4 h-4" />
+                  <span>{mediaUploading ? "上传中..." : "上传图片"}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={uploadMedia}
+                    disabled={mediaUploading}
+                  />
+                </label>
+              </div>
+              {mediaLoading ? (
+                <div className="py-12 text-center text-gray-400">加载中...</div>
+              ) : media.length === 0 ? (
+                <div className="py-12 text-center text-gray-400">
+                  暂无图片，点右上角上传。
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  {media.map((m) => (
+                    <div
+                      key={m.name}
+                      className="border rounded-lg overflow-hidden"
+                    >
+                      <div className="aspect-video bg-gray-100">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={m.url}
+                          alt={m.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="p-2 space-y-1">
+                        <p
+                          className="truncate text-xs text-gray-600"
+                          title={m.name}
+                        >
+                          {m.name}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {(m.size / 1024).toFixed(0)} KB
+                        </p>
+                        <div className="flex gap-3 pt-1">
+                          <button
+                            onClick={() => copyUrl(m.url)}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            复制链接
+                          </button>
+                          <button
+                            onClick={() => deleteMedia(m.name)}
+                            className="text-xs text-red-600 hover:underline"
+                          >
+                            删除
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
