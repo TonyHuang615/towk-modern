@@ -301,7 +301,28 @@
     "subtitle": "感谢历届董事会领导班子对会馆的奉献与付出",
     "boardSuffix": "董事会",
     "president": "会长",
-    "note": "如需查询更早期的董事会名单，请联系会馆办公室。"
+    "note": "如需查询更早期的董事会名单，请联系会馆办公室。",
+    "termLabel": "第{no}届董事会",
+    "positions": {
+      "honoraryPresidentForLife": "永远名誉会长",
+      "honoraryPresident": "名誉会长",
+      "honoraryChairman": "名誉主席",
+      "president": "会长",
+      "vicePresident": "副会长",
+      "trustee": "信托人",
+      "generalAffairs": "总务",
+      "deputyGeneralAffairs": "副总务",
+      "treasurer": "财政",
+      "deputyTreasurer": "副财政",
+      "liaison": "交际组正副主任",
+      "cantoneseOpera": "粤剧组正副主任",
+      "women": "妇女组正副主任",
+      "youth": "青年团",
+      "auditor": "查账",
+      "businessAdvisor": "商务顾问",
+      "medicalAdvisor": "医药顾问",
+      "legalAdvisor": "法律顾问"
+    }
   },
   "structure": {
     "sectionLabel": "Organization",

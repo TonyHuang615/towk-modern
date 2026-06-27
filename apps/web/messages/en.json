@@ -301,7 +301,28 @@
     "subtitle": "Thank you to each term's leadership for their dedication and contribution",
     "boardSuffix": "Board",
     "president": "President",
-    "note": "For earlier board records, please contact the association office."
+    "note": "For earlier board records, please contact the association office.",
+    "termLabel": "{no}th Board",
+    "positions": {
+      "honoraryPresidentForLife": "Honorary President for Life",
+      "honoraryPresident": "Honorary President",
+      "honoraryChairman": "Honorary Chairman",
+      "president": "President",
+      "vicePresident": "Vice President",
+      "trustee": "Trustee",
+      "generalAffairs": "General Affairs",
+      "deputyGeneralAffairs": "Deputy General Affairs",
+      "treasurer": "Treasurer",
+      "deputyTreasurer": "Deputy Treasurer",
+      "liaison": "Liaison Group Heads",
+      "cantoneseOpera": "Cantonese Opera Group Heads",
+      "women": "Women's Group Heads",
+      "youth": "Youth Wing",
+      "auditor": "Auditor",
+      "businessAdvisor": "Business Advisor",
+      "medicalAdvisor": "Medical Advisor",
+      "legalAdvisor": "Legal Advisor"
+    }
   },
   "structure": {
     "sectionLabel": "Organization",
