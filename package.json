@@ -2,6 +2,7 @@
   "name": "towk-modern",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "npm@10.8.2",
   "description": "新加坡东安会馆网站现代化改造项目",
   "workspaces": [
     "apps/*",
