@@ -47,6 +47,123 @@
   --ring: #d64b5f;
 }
 
+/* ─── 演示模式：可切换的前端设计风格 ─────────────────────────── */
+/* classic = 默认 :root（朱红鎏金 · 传统）。以下为其余 4 套。 */
+/* 平滑过渡 */
+:root {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+/* 宣纸书卷：暖奶白纸底、朱红+鎏金+酱红印、衬线标题、大圆角（取自 mockup） */
+html[data-design="paper"] {
+  --primary: #c0392b;
+  --primary-hover: #9e2c20;
+  --primary-foreground: #fbf8f2;
+  --accent: #d4a017;
+  --accent-foreground: #211d18;
+  --link: #9e2c20;
+  --background: #fbf3e6;
+  --foreground: #211d18;
+  --card: #fbf8f2;
+  --card-foreground: #211d18;
+  --muted: #f5f2ec;
+  --muted-foreground: #6f675c;
+  --border: #e6e0d6;
+  --ring: #c0392b;
+  --radius: 1rem;
+}
+html[data-design="paper"] body {
+  font-family:
+    var(--font-inter), var(--font-noto-sans-sc), system-ui, sans-serif;
+}
+html[data-design="paper"] h1,
+html[data-design="paper"] h2,
+html[data-design="paper"] h3 {
+  font-family: var(--font-playfair), var(--font-noto-serif-sc), Georgia, serif;
+}
+
+/* 暖陶编辑：象牙白底、暖陶土色点睛、衬线标题、克制留白（取自 design.md） */
+html[data-design="editorial"] {
+  --primary: #c2613f;
+  --primary-hover: #a84f30;
+  --primary-foreground: #faf9f5;
+  --accent: #c2613f;
+  --accent-foreground: #faf9f5;
+  --link: #a84f30;
+  --background: #faf9f5;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --muted: #f0ede6;
+  --muted-foreground: #6b6b6b;
+  --border: #e6e2d8;
+  --ring: #c2613f;
+  --radius: 0.375rem;
+}
+html[data-design="editorial"] body {
+  font-family:
+    var(--font-inter), var(--font-noto-sans-sc), system-ui, sans-serif;
+}
+html[data-design="editorial"] h1,
+html[data-design="editorial"] h2,
+html[data-design="editorial"] h3,
+html[data-design="editorial"] .font-display {
+  font-family: var(--font-playfair), var(--font-noto-serif-sc), Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* 活力社群：明快色彩、圆润卡片、无衬线 */
+html[data-design="vibrant"] {
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-foreground: #ffffff;
+  --accent: #14b8a6;
+  --accent-foreground: #ffffff;
+  --link: #0d9488;
+  --background: #fffaf5;
+  --foreground: #1f2937;
+  --card: #ffffff;
+  --card-foreground: #1f2937;
+  --muted: #fff1e6;
+  --muted-foreground: #8a6d5e;
+  --border: #ffe0c7;
+  --ring: #f97316;
+  --radius: 1rem;
+}
+html[data-design="vibrant"] body,
+html[data-design="vibrant"] h1,
+html[data-design="vibrant"] h2,
+html[data-design="vibrant"] h3 {
+  font-family:
+    var(--font-noto-sans-sc), var(--font-inter), system-ui, sans-serif;
+}
+
+/* 庄重典藏：深墨蓝底、金色点缀、博物馆感（深色） */
+html[data-design="stately"] {
+  --primary: #d4af37;
+  --primary-hover: #c19b2e;
+  --primary-foreground: #14142a;
+  --accent: #c0392b;
+  --accent-foreground: #ffffff;
+  --link: #e2c878;
+  --background: #14142a;
+  --foreground: #ece8df;
+  --card: #1e1e3c;
+  --card-foreground: #ece8df;
+  --muted: #26264a;
+  --muted-foreground: #a9a6c0;
+  --border: #33335c;
+  --ring: #d4af37;
+  --radius: 0.375rem;
+}
+html[data-design="stately"] h1,
+html[data-design="stately"] h2,
+html[data-design="stately"] h3 {
+  letter-spacing: 0.03em;
+}
+
 /* ─── Base Reset ──────────────────────────────────────────── */
 * {
   margin: 0;

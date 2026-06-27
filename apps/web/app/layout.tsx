@@ -62,6 +62,13 @@ export default function RootLayout({
       className={`scroll-smooth ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable} ${playfairDisplay.variable}`}
     >
       <body className="antialiased font-sans">
+        {/* 演示模式：在首屏渲染前套用已选设计，避免闪烁 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var d=localStorage.getItem('towk-design');if(d)document.documentElement.dataset.design=d}catch(e){}",
+          }}
+        />
         {children}
         <Analytics />
       </body>
