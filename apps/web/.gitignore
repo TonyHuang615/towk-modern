@@ -41,3 +41,6 @@ next-env.d.ts
 
 # admin content backups (runtime data)
 /data/backups/
+
+# admin account (password hash, runtime data)
+/data/admin.json

@@ -194,6 +194,11 @@ export default function AdminPage() {
   >([]);
   const [mediaLoading, setMediaLoading] = useState(false);
   const [mediaUploading, setMediaUploading] = useState(false);
+  const [usingDefaultPw, setUsingDefaultPw] = useState(false);
+  const [pwCurrent, setPwCurrent] = useState("");
+  const [pwNew, setPwNew] = useState("");
+  const [pwConfirm, setPwConfirm] = useState("");
+  const [pwSaving, setPwSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const savedContentRef = useRef<string>("");
   const savedMessagesRef = useRef<string>("");
@@ -475,6 +480,42 @@ export default function AdminPage() {
     } catch {}
   };
 
+  const changePassword = async () => {
+    if (pwNew.length < 8) {
+      setMessage("新密码至少 8 位");
+      setTimeout(() => setMessage(""), 3000);
+      return;
+    }
+    if (pwNew !== pwConfirm) {
+      setMessage("两次输入的新密码不一致");
+      setTimeout(() => setMessage(""), 3000);
+      return;
+    }
+    setPwSaving(true);
+    try {
+      const res = await fetch("/api/admin/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: pwCurrent, newPassword: pwNew }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setMessage("密码已修改！");
+        setPwCurrent("");
+        setPwNew("");
+        setPwConfirm("");
+        setUsingDefaultPw(false);
+      } else {
+        setMessage(data.error || "修改失败");
+      }
+    } catch {
+      setMessage("修改失败");
+    } finally {
+      setPwSaving(false);
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
   const checkAuth = async () => {
     try {
       const res = await fetch("/api/auth/check");
@@ -482,6 +523,8 @@ export default function AdminPage() {
         router.push("/login");
         return;
       }
+      const authData = await res.json().catch(() => ({}));
+      setUsingDefaultPw(!!authData.usingDefaultPassword);
       fetchContent();
       fetchFeedback();
     } catch {
@@ -667,7 +710,8 @@ export default function AdminPage() {
             {activeTab !== "feedback" &&
               activeTab !== "messages" &&
               activeTab !== "backups" &&
-              activeTab !== "media" && (
+              activeTab !== "media" &&
+              activeTab !== "account" && (
               <button
                 onClick={saveContent}
                 disabled={saving}
@@ -704,6 +748,7 @@ export default function AdminPage() {
               { id: "backups", label: "备份回滚", icon: "🗂️" },
               { id: "media", label: "媒体库", icon: "📁" },
               { id: "feedback", label: "用户反馈", icon: "💬" },
+              { id: "account", label: "账号设置", icon: "⚙️" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -1435,6 +1480,63 @@ export default function AdminPage() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === "account" && (
+            <div className="max-w-md space-y-4">
+              <h2 className="text-xl font-bold">账号设置</h2>
+              {usingDefaultPw && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                  ⚠️ 当前仍在使用默认密码，请尽快修改以保障安全。
+                </div>
+              )}
+              <p className="text-sm text-gray-500">
+                修改管理员登录密码。新密码至少 8 位；保存后立即生效。
+              </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  当前密码
+                </label>
+                <input
+                  type="password"
+                  value={pwCurrent}
+                  onChange={(e) => setPwCurrent(e.target.value)}
+                  autoComplete="current-password"
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  新密码
+                </label>
+                <input
+                  type="password"
+                  value={pwNew}
+                  onChange={(e) => setPwNew(e.target.value)}
+                  autoComplete="new-password"
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  确认新密码
+                </label>
+                <input
+                  type="password"
+                  value={pwConfirm}
+                  onChange={(e) => setPwConfirm(e.target.value)}
+                  autoComplete="new-password"
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+              <button
+                onClick={changePassword}
+                disabled={pwSaving || !pwCurrent || !pwNew}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+              >
+                {pwSaving ? "保存中..." : "修改密码"}
+              </button>
             </div>
           )}
 
