@@ -4,6 +4,7 @@ import {
   Noto_Serif_SC,
   Noto_Sans_SC,
   Playfair_Display,
+  Source_Serif_4,
 } from "next/font/google";
 import "./globals.css";
 import Analytics from "./components/Analytics";
@@ -11,6 +12,14 @@ import Analytics from "./components/Analytics";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-source-serif",
   display: "swap",
 });
 
@@ -59,7 +68,7 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`scroll-smooth ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable} ${playfairDisplay.variable}`}
+      className={`scroll-smooth ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable} ${playfairDisplay.variable} ${sourceSerif.variable}`}
     >
       <body className="antialiased font-sans">
         {/* 演示模式：在首屏渲染前套用已选设计，避免闪烁 */}

@@ -1,39 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, X, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
-import {
-  DESIGNS,
-  DEFAULT_DESIGN,
-  DESIGN_STORAGE_KEY,
-} from "../../lib/designs";
+import { DESIGNS } from "../../lib/designs";
+import { useDesign } from "./DesignContext";
 
 export default function DesignSwitcher() {
   const pathname = usePathname();
+  const { design: active, setDesign } = useDesign();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(DEFAULT_DESIGN);
   const [hovered, setHovered] = useState<string | null>(null);
-
-  // 初始读取当前生效的设计（由 <head> 内联脚本或 localStorage 设定）
-  useEffect(() => {
-    let current = document.documentElement.dataset.design;
-    if (!current) {
-      try {
-        current = localStorage.getItem(DESIGN_STORAGE_KEY) || undefined;
-      } catch {}
-    }
-    setActive(current || DEFAULT_DESIGN);
-  }, []);
-
-  const apply = (id: string) => {
-    document.documentElement.dataset.design = id;
-    try {
-      localStorage.setItem(DESIGN_STORAGE_KEY, id);
-    } catch {}
-    setActive(id);
-  };
 
   // 后台 / 登录页不显示
   if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
@@ -109,7 +87,7 @@ export default function DesignSwitcher() {
                   return (
                     <button
                       key={d.id}
-                      onClick={() => apply(d.id)}
+                      onClick={() => setDesign(d.id)}
                       onMouseEnter={() => setHovered(d.id)}
                       className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
                         isActive
