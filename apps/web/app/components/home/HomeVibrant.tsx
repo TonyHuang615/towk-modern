@@ -42,20 +42,20 @@ export default function HomeVibrant({ content }: { content: any }) {
   const tConf = useTranslations("conference");
 
   // ── Hero ──────────────────────────────────────────────────
+  // Images come from content.json (admin-editable); all text is bilingual i18n.
   const heroSlide = content?.hero?.slides?.[0] ?? {};
   const heroImage: string = heroSlide.image || HERO_FALLBACK;
-  const heroTitle: string = heroSlide.title || tHero("slide1Title");
-  const heroSubtitle: string = heroSlide.subtitle || tHero("slide1Subtitle");
+  const heroTitle: string = tHero("slide1Title");
+  const heroSubtitle: string = tHero("slide1Subtitle");
   const siteName = tAbout("defaultTitle");
 
   // ── About + stats ─────────────────────────────────────────
-  const aboutContent: string = content?.about?.content || tAbout("defaultContent");
-  const stats: Array<{ value: string; label: string }> =
-    content?.about?.stats || [
-      { value: tAbout("stat1Value"), label: tAbout("stat1Label") },
-      { value: tAbout("stat2Value"), label: tAbout("stat2Label") },
-      { value: tAbout("stat3Value"), label: tAbout("stat3Label") },
-    ];
+  const aboutContent: string = tAbout("defaultContent");
+  const stats: Array<{ value: string; label: string }> = [
+    { value: tAbout("stat1Value"), label: tAbout("stat1Label") },
+    { value: tAbout("stat2Value"), label: tAbout("stat2Label") },
+    { value: tAbout("stat3Value"), label: tAbout("stat3Label") },
+  ];
 
   // ── News ──────────────────────────────────────────────────
   const news = getLocalizedNews(locale);
@@ -66,19 +66,15 @@ export default function HomeVibrant({ content }: { content: any }) {
   const activities = getLocalizedActivities(locale).slice(0, 4);
 
   // ── History ───────────────────────────────────────────────
-  const milestones: Array<{ year: string; title: string; description: string }> =
-    content?.history?.milestones || [
-      { year: "1876", title: tHist("compMilestone1Title"), description: tHist("compMilestone1Desc") },
-      { year: "1923", title: tHist("compMilestone2Title"), description: tHist("compMilestone2Desc") },
-      { year: "1943", title: tHist("compMilestone3Title"), description: tHist("compMilestone3Desc") },
-      { year: "1992", title: tHist("compMilestone4Title"), description: tHist("compMilestone4Desc") },
-      { year: "2003", title: tHist("compMilestone5Title"), description: tHist("compMilestone5Desc") },
-    ];
-  const historyTop = milestones.slice(0, 4);
+  const historyYears = ["1876", "1923", "1943", "1946"] as const;
+  const historyTop = historyYears.map((year) => ({
+    year,
+    title: tHist(`milestone${year}Title`),
+  }));
 
   // ── Conference ────────────────────────────────────────────
-  const confTitle: string = content?.conference?.title || tConf("title");
-  const confDesc: string = content?.conference?.description || tConf("description");
+  const confTitle: string = tConf("title");
+  const confDesc: string = tConf("description");
 
   const statTone = (i: number) =>
     i === 0
@@ -301,7 +297,7 @@ export default function HomeVibrant({ content }: { content: any }) {
                 {tHist("sectionLabel")}
               </span>
               <h2 className="mt-3 text-2xl font-bold leading-tight">
-                {content?.history?.title || tHist("title")}
+                {tHist("title")}
               </h2>
               <ul className="mt-5 space-y-4 border-l border-border pl-5">
                 {historyTop.map((m) => (
@@ -360,7 +356,7 @@ export default function HomeVibrant({ content }: { content: any }) {
                   {tActs("sectionLabel")}
                 </span>
                 <h2 className="mt-2 text-xl font-bold leading-tight sm:text-2xl">
-                  {content?.activities?.title || tActs("title")}
+                  {tActs("title")}
                 </h2>
                 <p className="mt-1 max-w-2xl text-sm text-primary-foreground/85 line-clamp-2">
                   {tActs("subtitle")}

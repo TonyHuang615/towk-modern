@@ -44,59 +44,45 @@ export default function HomeEditorial({ content }: { content: any }) {
   const tConf = useTranslations("conference");
   const tAct = useTranslations("activities");
 
-  const slide = content?.hero?.slides?.[0];
-  const heroEyebrow = slide?.subtitle || tHero("slide1Subtitle");
-  const heroTitle = slide?.title || tHero("slide1Title");
-  const heroLede = slide?.description || tHero("slide1Desc");
+  // 所有显示文案取自双语 i18n messages；仅图片取自 content.json
+  const heroEyebrow = tHero("slide1Subtitle");
+  const heroTitle = tHero("slide1Title");
+  const heroLede = tHero("slide1Desc");
   const heroImage =
-    slide?.image ||
+    content?.hero?.slides?.[0]?.image ||
     "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80";
 
-  const aboutTitle = content?.about?.title || tAbout("defaultTitle");
-  const aboutSubtitle = content?.about?.subtitle || tAbout("defaultSubtitle");
-  const aboutContent = content?.about?.content || tAbout("defaultContent");
-  const aboutStats: Array<{ value: string; label: string }> =
-    content?.about?.stats || [
-      { value: tAbout("stat1Value"), label: tAbout("stat1Label") },
-      { value: tAbout("stat2Value"), label: tAbout("stat2Label") },
-      { value: tAbout("stat3Value"), label: tAbout("stat3Label") },
-    ];
+  const aboutTitle = tAbout("defaultTitle");
+  const aboutSubtitle = tAbout("defaultSubtitle");
+  const aboutContent = tAbout("defaultContent");
+  const aboutStats: Array<{ value: string; label: string }> = [
+    { value: tAbout("stat1Value"), label: tAbout("stat1Label") },
+    { value: tAbout("stat2Value"), label: tAbout("stat2Label") },
+    { value: tAbout("stat3Value"), label: tAbout("stat3Label") },
+  ];
 
+  const milestoneYears = [
+    "1876",
+    "1923",
+    "1943",
+    "1946",
+    "1972",
+    "1992",
+    "2003",
+    "2019",
+  ] as const;
   const milestones: Array<{
     year: string;
     title: string;
     description: string;
-  }> = content?.history?.milestones || [
-    {
-      year: "1876",
-      title: tHistory("compMilestone1Title"),
-      description: tHistory("compMilestone1Desc"),
-    },
-    {
-      year: "1923",
-      title: tHistory("compMilestone2Title"),
-      description: tHistory("compMilestone2Desc"),
-    },
-    {
-      year: "1943",
-      title: tHistory("compMilestone3Title"),
-      description: tHistory("compMilestone3Desc"),
-    },
-    {
-      year: "1992",
-      title: tHistory("compMilestone4Title"),
-      description: tHistory("compMilestone4Desc"),
-    },
-    {
-      year: "2003",
-      title: tHistory("compMilestone5Title"),
-      description: tHistory("compMilestone5Desc"),
-    },
-  ];
+  }> = milestoneYears.map((year) => ({
+    year,
+    title: tHistory(`milestone${year}Title`),
+    description: tHistory(`milestone${year}Desc`),
+  }));
 
-  const confTitle = content?.conference?.title || tConf("title");
-  const confDescription =
-    content?.conference?.description || tConf("description");
+  const confTitle = tConf("title");
+  const confDescription = tConf("description");
 
   const news: NewsArticle[] = getLocalizedNews(locale).slice(0, 5);
   const activities: Activity[] = getLocalizedActivities(locale);

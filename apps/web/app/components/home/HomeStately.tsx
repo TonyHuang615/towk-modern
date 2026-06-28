@@ -73,80 +73,57 @@ export default function HomeStately({ content }: { content: any }) {
   const tConference = useTranslations("conference");
   const tActivities = useTranslations("activities");
 
-  /* ── Hero ─────────────────────────────────────────────── */
+  /* ── Hero (text from i18n; images from content.json) ──── */
   const slide0 = content?.hero?.slides?.[0];
-  const siteTitle = content?.about?.title || tAbout("defaultTitle");
-  const siteSubtitle = content?.about?.subtitle || tAbout("defaultSubtitle");
-  const heroDesc = slide0?.description || tHero("slide1Desc");
-  const heroCaption = slide0?.title || tHero("slide1Title");
+  const siteTitle = tAbout("defaultTitle");
+  const siteSubtitle = tAbout("defaultSubtitle");
+  const heroDesc = tHero("slide1Desc");
+  const heroCaption = tHero("slide1Title");
   const heroImage =
     slide0?.image ||
     "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80";
 
   /* ── About + stats ────────────────────────────────────── */
-  const aboutContent = content?.about?.content || tAbout("defaultContent");
-  const stats: Array<{ value: string; label: string }> = content?.about
-    ?.stats || [
+  const aboutContent = tAbout("defaultContent");
+  const stats: Array<{ value: string; label: string }> = [
     { value: tAbout("stat1Value"), label: tAbout("stat1Label") },
     { value: tAbout("stat2Value"), label: tAbout("stat2Label") },
     { value: tAbout("stat3Value"), label: tAbout("stat3Label") },
   ];
 
   /* ── History chronicle ────────────────────────────────── */
+  const milestoneYears = ["1876", "1923", "1943", "1992", "2003"];
   const milestones: Array<{
     year: string;
     title: string;
     description: string;
-  }> = content?.history?.milestones || [
-    {
-      year: "1876",
-      title: tHistory("compMilestone1Title"),
-      description: tHistory("compMilestone1Desc"),
-    },
-    {
-      year: "1923",
-      title: tHistory("compMilestone2Title"),
-      description: tHistory("compMilestone2Desc"),
-    },
-    {
-      year: "1943",
-      title: tHistory("compMilestone3Title"),
-      description: tHistory("compMilestone3Desc"),
-    },
-    {
-      year: "1992",
-      title: tHistory("compMilestone4Title"),
-      description: tHistory("compMilestone4Desc"),
-    },
-    {
-      year: "2003",
-      title: tHistory("compMilestone5Title"),
-      description: tHistory("compMilestone5Desc"),
-    },
-  ];
+  }> = milestoneYears.map((year) => ({
+    year,
+    title: tHistory(`milestone${year}Title`),
+    description: tHistory(`milestone${year}Desc`),
+  }));
 
   /* ── Conference ───────────────────────────────────────── */
   const confIcons = [Globe, Users, Calendar];
-  const confFeatures: Array<{ title: string; description: string }> =
-    content?.conference?.features || [
-      {
-        title: tConference("feature1Title"),
-        description: tConference("feature1Desc"),
-      },
-      {
-        title: tConference("feature2Title"),
-        description: tConference("feature2Desc"),
-      },
-      {
-        title: tConference("feature3Title"),
-        description: tConference("feature3Desc"),
-      },
-    ];
+  const confFeatures: Array<{ title: string; description: string }> = [
+    {
+      title: tConference("feature1Title"),
+      description: tConference("feature1Desc"),
+    },
+    {
+      title: tConference("feature2Title"),
+      description: tConference("feature2Desc"),
+    },
+    {
+      title: tConference("feature3Title"),
+      description: tConference("feature3Desc"),
+    },
+  ];
   const pastConferences: Array<{
     year: string;
     location: string;
     theme: string;
-  }> = content?.conference?.pastConferences || [
+  }> = [
     {
       year: "2019",
       location: tConference("locSingapore"),
@@ -195,7 +172,7 @@ export default function HomeStately({ content }: { content: any }) {
                 {tHero("slide1Subtitle")}
               </p>
               <p className="mt-5 text-xs tracking-[0.4em] text-muted-foreground">
-                {"创立于 · 1876"}
+                {locale === "en" ? "Established · 1876" : "创立于 · 1876"}
               </p>
 
               <h1 className="mt-8 text-4xl font-bold leading-tight tracking-[0.06em] sm:text-6xl lg:text-7xl">
@@ -247,7 +224,7 @@ export default function HomeStately({ content }: { content: any }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
           <figcaption className="absolute inset-x-0 bottom-0 p-6 text-center sm:p-10">
             <span className="text-[0.65rem] uppercase tracking-[0.4em] text-accent">
-              {"典藏 · Archive"}
+              {locale === "en" ? "Collection · Archive" : "典藏 · Archive"}
             </span>
             <p className="mx-auto mt-3 max-w-2xl text-lg font-bold tracking-[0.08em] text-white sm:text-2xl">
               {heroCaption}
@@ -326,7 +303,7 @@ export default function HomeStately({ content }: { content: any }) {
           <ExhibitHeader
             numeral={ROMAN[1]}
             eyebrow={tHistory("sectionLabel")}
-            title={content?.history?.title || tHistory("title")}
+            title={tHistory("title")}
             lede={tHistory("subtitle")}
           />
 
@@ -367,8 +344,8 @@ export default function HomeStately({ content }: { content: any }) {
           <ExhibitHeader
             numeral={ROMAN[2]}
             eyebrow={tConference("sectionLabel")}
-            title={content?.conference?.title || tConference("title")}
-            lede={content?.conference?.description || tConference("description")}
+            title={tConference("title")}
+            lede={tConference("description")}
           />
 
           <div className="mt-16 grid gap-6 md:grid-cols-3">
@@ -434,7 +411,7 @@ export default function HomeStately({ content }: { content: any }) {
           <ExhibitHeader
             numeral={ROMAN[3]}
             eyebrow={tActivities("sectionLabel")}
-            title={content?.activities?.title || tActivities("title")}
+            title={tActivities("title")}
             lede={tActivities("subtitle")}
           />
 
