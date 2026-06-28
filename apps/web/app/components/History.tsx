@@ -13,36 +13,24 @@ interface HistoryProps {
 export default function History({ data }: HistoryProps) {
   const t = useTranslations("history");
 
-  const defaultMilestones = [
-    {
-      year: "1876",
-      title: t("compMilestone1Title"),
-      description: t("compMilestone1Desc"),
-    },
-    {
-      year: "1923",
-      title: t("compMilestone2Title"),
-      description: t("compMilestone2Desc"),
-    },
-    {
-      year: "1943",
-      title: t("compMilestone3Title"),
-      description: t("compMilestone3Desc"),
-    },
-    {
-      year: "1992",
-      title: t("compMilestone4Title"),
-      description: t("compMilestone4Desc"),
-    },
-    {
-      year: "2003",
-      title: t("compMilestone5Title"),
-      description: t("compMilestone5Desc"),
-    },
+  const milestoneYears = [
+    "1876",
+    "1923",
+    "1943",
+    "1946",
+    "1972",
+    "1992",
+    "2003",
+    "2019",
   ];
 
-  const title = data?.title || t("title");
-  const milestones = data?.milestones || defaultMilestones;
+  const milestones = milestoneYears.map((year) => ({
+    year,
+    title: t(`milestone${year}Title`),
+    description: t(`milestone${year}Desc`),
+  }));
+
+  const title = t("title");
 
   return (
     <section id="history" className="py-12 md:py-24 lg:py-32">

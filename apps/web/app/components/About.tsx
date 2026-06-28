@@ -14,20 +14,18 @@ interface AboutProps {
   };
 }
 
-export default function About({ data }: AboutProps) {
+export default function About(_props: AboutProps) {
   const t = useTranslations("about");
 
-  const defaultStats = [
+  const stats = [
     { value: t("stat1Value"), label: t("stat1Label") },
     { value: t("stat2Value"), label: t("stat2Label") },
     { value: t("stat3Value"), label: t("stat3Label") },
   ];
 
-  const title = data?.title || t("defaultTitle");
-  const subtitle = data?.subtitle || t("defaultSubtitle");
-  const content =
-    data?.content || t("defaultContent");
-  const stats = data?.stats || defaultStats;
+  const title = t("defaultTitle");
+  const subtitle = t("defaultSubtitle");
+  const content = t("defaultContent");
 
   return (
     <section id="about" className="py-12 md:py-24 lg:py-32">

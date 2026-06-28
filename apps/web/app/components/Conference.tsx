@@ -15,10 +15,10 @@ interface ConferenceProps {
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Globe, Users, Calendar };
 
-export default function Conference({ data }: ConferenceProps) {
+export default function Conference(_props: ConferenceProps) {
   const t = useTranslations("conference");
 
-  const defaultFeatures = [
+  const features = [
     { icon: "Globe", title: t("feature1Title"), description: t("feature1Desc") },
     { icon: "Users", title: t("feature2Title"), description: t("feature2Desc") },
     {
@@ -28,16 +28,14 @@ export default function Conference({ data }: ConferenceProps) {
     },
   ];
 
-  const defaultPastConferences = [
+  const pastConferences = [
     { year: "2019", location: t("locSingapore"), theme: t("conf11") },
     { year: "2017", location: t("locHongKong"), theme: t("conf10") },
     { year: "2015", location: t("locDongguan"), theme: t("conf9") },
   ];
 
-  const title = data?.title || t("title");
-  const description = data?.description || t("description");
-  const features = data?.features || defaultFeatures;
-  const pastConferences = data?.pastConferences || defaultPastConferences;
+  const title = t("title");
+  const description = t("description");
 
   return (
     <section id="conference" className="py-12 md:py-24 lg:py-32 bg-foreground/5">

@@ -22,34 +22,21 @@ interface HeroProps {
 export default function Hero({ data }: HeroProps) {
   const t = useTranslations("hero");
 
-  const defaultSlides: Slide[] = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80",
-      title: t("slide1Title"),
-      subtitle: t("slide1Subtitle"),
-      description: t("slide1Desc"),
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=1600&q=80",
-      title: t("slide2Title"),
-      subtitle: t("slide2Subtitle"),
-      description: t("slide2Desc"),
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=1600&q=80",
-      title: t("slide3Title"),
-      subtitle: t("slide3Subtitle"),
-      description: t("slide3Desc"),
-    },
+  const defaultImages = [
+    "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=1600&q=80",
+    "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=1600&q=80",
+    "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=1600&q=80",
   ];
 
-  const slides = data?.slides || defaultSlides;
+  // Text always comes from bilingual i18n messages; only the image is sourced
+  // from the (Chinese-only) `data` prop so /en renders English correctly.
+  const slides: Slide[] = [0, 1, 2].map((i) => ({
+    id: i + 1,
+    image: data?.slides?.[i]?.image || defaultImages[i],
+    title: t(`slide${i + 1}Title`),
+    subtitle: t(`slide${i + 1}Subtitle`),
+    description: t(`slide${i + 1}Desc`),
+  }));
   const [current, setCurrent] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);

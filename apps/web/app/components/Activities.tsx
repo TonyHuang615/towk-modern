@@ -22,39 +22,25 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { M
 export default function Activities({ data }: ActivitiesProps) {
   const t = useTranslations("activities");
 
-  const defaultActivities = [
-    {
-      icon: "Music",
-      title: t("act1Title"),
-      description: t("act1Desc"),
-      image:
-        "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
-    },
-    {
-      icon: "Briefcase",
-      title: t("act2Title"),
-      description: t("act2Desc"),
-      image:
-        "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
-    },
-    {
-      icon: "Users",
-      title: t("act3Title"),
-      description: t("act3Desc"),
-      image:
-        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
-    },
-    {
-      icon: "Sparkles",
-      title: t("act4Title"),
-      description: t("act4Desc"),
-      image:
-        "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
-    },
+  const defaultImages = [
+    "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
+    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
+    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
   ];
 
-  const title = data?.title || t("title");
-  const items = data?.items || defaultActivities;
+  const activityText = [
+    { icon: "Music", title: t("act1Title"), description: t("act1Desc") },
+    { icon: "Briefcase", title: t("act2Title"), description: t("act2Desc") },
+    { icon: "Users", title: t("act3Title"), description: t("act3Desc") },
+    { icon: "Sparkles", title: t("act4Title"), description: t("act4Desc") },
+  ];
+
+  const title = t("title");
+  const items = activityText.map((activity, i) => ({
+    ...activity,
+    image: data?.items?.[i]?.image || defaultImages[i],
+  }));
 
   return (
     <section id="activities" className="py-12 md:py-24 lg:py-32">

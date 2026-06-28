@@ -12,13 +12,13 @@ import HomeStately from "./HomeStately";
 // 自带头/尾的完整页面设计（不套用共享导航/页脚）
 const SELF_CONTAINED: Record<string, React.ComponentType<{ content: any }>> = {
   paper: HomePaper,
+  editorial: HomeEditorial,
+  vibrant: HomeVibrant,
 };
 
 // 仅渲染主体的设计，由本组件套上共享的 Navigation + Footer
 const BODIES: Record<string, React.ComponentType<{ content: any }>> = {
   classic: HomeClassic,
-  editorial: HomeEditorial,
-  vibrant: HomeVibrant,
   stately: HomeStately,
 };
 

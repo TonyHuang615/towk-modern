@@ -11,8 +11,13 @@ import {
   Briefcase,
   Users,
   Sparkles,
+  Menu,
+  X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { getLocalizedNews, formatDate } from "../../../lib/newsData";
 import { getLocalizedActivities } from "../../../lib/activitiesData";
@@ -34,6 +39,25 @@ const fade = (delay = 0) => ({
 
 export default function HomeVibrant({ content }: { content: any }) {
   const locale = useLocale();
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isEn = locale === "en";
+
+  // Build the link to the same page in the other locale (mirrors HomePaper).
+  const otherHref = pathname.startsWith("/en")
+    ? pathname.replace(/^\/en/, "") || "/"
+    : "/en" + (pathname === "/" ? "" : pathname);
+
+  // Bilingual primary navigation.
+  const nav = [
+    { label: isEn ? "About" : "关于会馆", href: "/about" },
+    { label: isEn ? "Convention" : "世界恳亲大会", href: "/conference" },
+    { label: isEn ? "Activities" : "会馆活动", href: "/activities" },
+    { label: isEn ? "Gallery" : "影相库", href: "/gallery" },
+    { label: isEn ? "News" : "最新动态", href: "/news" },
+    { label: isEn ? "Contact" : "联系我们", href: "/contact" },
+  ];
+
   const tHero = useTranslations("hero");
   const tAbout = useTranslations("about");
   const tNews = useTranslations("news");
@@ -88,6 +112,119 @@ export default function HomeVibrant({ content }: { content: any }) {
 
   return (
     <div className="bg-background">
+      {/* ── Header · vibrant = rounded, friendly, pill CTA ───────── */}
+      <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
+              东安
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="text-base font-bold text-foreground">
+                东安会馆
+              </span>
+              <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                Tung On Wui Kun
+              </span>
+            </span>
+          </Link>
+
+          <nav className="hidden items-center gap-1 lg:flex">
+            {nav.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href={otherHref}
+              className="hidden items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              {isEn ? (
+                <>
+                  中<span className="text-border">/</span>
+                  <b className="text-foreground">EN</b>
+                </>
+              ) : (
+                <>
+                  <b className="text-foreground">中</b>
+                  <span className="text-border">/</span>EN
+                </>
+              )}
+            </Link>
+            <Link
+              href="/member"
+              className="hidden rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:-translate-y-0.5 sm:inline-flex"
+            >
+              {isEn ? "Join" : "会员注册"}
+            </Link>
+            <button
+              type="button"
+              aria-label={isEn ? "Menu" : "菜单"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((o) => !o)}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted lg:hidden"
+            >
+              {menuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="border-t border-border bg-background lg:hidden">
+            <nav className="mx-auto flex max-w-[1400px] flex-col px-4 py-3 sm:px-6">
+              {nav.map((n) => (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-xl px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                >
+                  {n.label}
+                </Link>
+              ))}
+              <div className="mt-2 flex items-center gap-3 px-3 pt-3">
+                <Link
+                  href={otherHref}
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground"
+                >
+                  {isEn ? (
+                    <>
+                      中<span className="text-border">/</span>
+                      <b className="text-foreground">EN</b>
+                    </>
+                  ) : (
+                    <>
+                      <b className="text-foreground">中</b>
+                      <span className="text-border">/</span>EN
+                    </>
+                  )}
+                </Link>
+                <Link
+                  href="/member"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex flex-1 items-center justify-center rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  {isEn ? "Join" : "会员注册"}
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
+      </header>
+
       {/* signature motif: oversized soft color blobs behind the bento */}
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
@@ -369,6 +506,114 @@ export default function HomeVibrant({ content }: { content: any }) {
           </div>
         </div>
       </div>
+
+      {/* ── Footer · vibrant = soft, rounded, friendly ───────────── */}
+      <footer className="border-t border-border bg-muted/40">
+        <div className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <Link href="/" className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
+                  东安
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span className="text-base font-bold text-foreground">
+                    东安会馆
+                  </span>
+                  <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                    Tung On Wui Kun
+                  </span>
+                </span>
+              </Link>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+                {isEn
+                  ? "A Singapore Chinese clan association of kin from Dongguan and Bao'an, Guangdong — founded in 1876."
+                  : "源自广东东莞、宝安两县的新加坡华人宗乡会馆，创立于 1876 年，承传莞宝乡情逾百载。"}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
+                {isEn ? "Association" : "会馆"}
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <li>
+                  <Link href="/about" className="transition-colors hover:text-primary">
+                    {isEn ? "About" : "关于会馆"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/conference" className="transition-colors hover:text-primary">
+                    {isEn ? "Convention" : "世界恳亲大会"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/gallery" className="transition-colors hover:text-primary">
+                    {isEn ? "Gallery" : "影相库"}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
+                {isEn ? "Take part" : "参与"}
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <li>
+                  <Link href="/member" className="transition-colors hover:text-primary">
+                    {isEn ? "Membership" : "会员注册"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/activities" className="transition-colors hover:text-primary">
+                    {isEn ? "Activities" : "会馆活动"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/news" className="transition-colors hover:text-primary">
+                    {isEn ? "News" : "最新动态"}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
+                {isEn ? "Contact" : "联系"}
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <li>{isEn ? "Singapore" : "新加坡 · 会馆地址"}</li>
+                <li>+65 XXXX XXXX</li>
+                <li>
+                  <Link href="/contact" className="transition-colors hover:text-primary">
+                    info@towk.sg
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-muted-foreground">
+              {isEn
+                ? "© 2026 Tung On Wui Kun · Singapore"
+                : "© 2026 新加坡东安会馆 Tung On Wui Kun"}
+            </p>
+            <div className="flex items-center gap-5 text-xs text-muted-foreground">
+              <Link href="/" className="transition-colors hover:text-primary">
+                中文
+              </Link>
+              <Link href="/en" className="transition-colors hover:text-primary">
+                English
+              </Link>
+              <Link href="/contact" className="transition-colors hover:text-primary">
+                {isEn ? "Contact" : "联系"}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
