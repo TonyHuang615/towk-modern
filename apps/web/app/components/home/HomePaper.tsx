@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getLocalizedNews } from "../../../lib/newsData";
 
 // 宣纸书卷 — 忠实复刻 mockup（Notion 设计语言 + 东安会馆红金 + 印章）。
@@ -23,32 +23,43 @@ export default function HomePaper({ content }: { content: any }) {
   }, []);
 
   const t = locale === "en";
+  // 文案取自双语 i18n messages；图片取自 content.json（可后台编辑）
+  const tHero = useTranslations("hero");
+  const tAbout = useTranslations("about");
+  const tConf = useTranslations("conference");
+  const tAct = useTranslations("activities");
+
   const otherHref = pathname.startsWith("/en")
     ? pathname.replace(/^\/en/, "") || "/"
     : "/en" + (pathname === "/" ? "" : pathname);
 
-  const hero = content?.hero?.slides?.[0] || {};
-  const hero2 = content?.hero?.slides?.[1] || hero;
-  const about = content?.about || {};
-  const conf = content?.conference || {};
-  const items = (content?.activities?.items || []).slice(0, 3);
-  const past = (conf.pastConferences || []) as any[];
+  const heroImg = content?.hero?.slides?.[0]?.image;
+  const reunionImg = content?.hero?.slides?.[1]?.image || heroImg;
+  const actImages: string[] = (content?.activities?.items || []).map(
+    (i: any) => i?.image,
+  );
   const news = getLocalizedNews(locale).slice(0, 3);
 
   const stats = [
     { num: "1876", lab: t ? "Founded" : "创立之年" },
-    ...((about.stats || []).slice(0, 3) as any[]).map((s) => ({
-      num: s.value,
-      lab: s.label,
-    })),
+    { num: tAbout("stat1Value"), lab: tAbout("stat1Label") },
+    { num: tAbout("stat2Value"), lab: tAbout("stat2Label") },
+    { num: tAbout("stat3Value"), lab: tAbout("stat3Label") },
   ];
 
-  const aboutParas: string[] = String(about.content || "")
-    .split(/\n+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const pull = aboutParas[0] || about.content || "";
-  const rest = aboutParas.slice(1);
+  const chips = [
+    tConf("locSingapore"),
+    tConf("locHongKong"),
+    tConf("locDongguan"),
+    tConf("locMalaysia"),
+    tConf("locKuching"),
+  ];
+
+  const acts = [0, 1, 2].map((i) => ({
+    title: tAct(`act${i + 1}Title`),
+    desc: tAct(`act${i + 1}Desc`),
+    image: actImages[i],
+  }));
 
   const nav = [
     { label: t ? "About" : "关于会馆", href: "/about" },
@@ -132,9 +143,9 @@ export default function HomePaper({ content }: { content: any }) {
               <p className="eyebrow">
                 {t ? "Singapore Clan Association · Est. 1876" : "新加坡宗乡会馆 · 自 1876"}
               </p>
-              <h1>{hero.title || about.title || "东安会馆"}</h1>
-              <p className="sub-en">{hero.subtitle || about.subtitle}</p>
-              <p className="lede">{hero.description || pull}</p>
+              <h1>{tHero("slide1Title")}</h1>
+              <p className="sub-en">{tHero("slide1Subtitle")}</p>
+              <p className="lede">{tHero("slide1Desc")}</p>
               <div className="hero-actions">
                 <Link className="btn btn-primary" href="/member">
                   {t ? "Become a member" : "成为会员"} <span className="arrow">→</span>
@@ -153,10 +164,10 @@ export default function HomePaper({ content }: { content: any }) {
             <div className="hero-visual">
               <div className="frame">
                 <div className="photo">
-                  {hero.image && (
+                  {heroImg && (
                     <Image
-                      src={hero.image}
-                      alt={hero.title || "东安会馆"}
+                      src={heroImg}
+                      alt="东安会馆"
                       fill
                       sizes="(max-width:980px) 90vw, 460px"
                       style={{ objectFit: "cover" }}
@@ -190,14 +201,12 @@ export default function HomePaper({ content }: { content: any }) {
           <div className="wrap about-grid">
             <div>
               <p className="eyebrow">{t ? "About" : "关于会馆"}</p>
-              <h2>{about.title || "百五十载\n莞宝乡情"}</h2>
-              <p className="kicker-cn">{about.subtitle || "About Tung On Wui Kun"}</p>
+              <h2>{tAbout("defaultTitle")}</h2>
+              <p className="kicker-cn">{tAbout("defaultSubtitle")}</p>
             </div>
             <div>
-              <p className="pull">{pull}</p>
-              {rest.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              <p className="pull">{tAbout("defaultContent")}</p>
+              <p>{tAbout("story")}</p>
             </div>
           </div>
         </section>
@@ -208,19 +217,14 @@ export default function HomePaper({ content }: { content: any }) {
             <div className="wrap reunion-grid">
               <div>
                 <p className="eyebrow">{t ? "Flagship Event" : "旗舰盛事"}</p>
-                <h2>{conf.title || "世界东安恳亲大会"}</h2>
-                <p className="r-lede">{conf.description}</p>
+                <h2>{tConf("title")}</h2>
+                <p className="r-lede">{tConf("description")}</p>
                 <div className="places">
-                  {(past.length
-                    ? past.map((p) => p.location)
-                    : ["新加坡", "香港", "东莞", "马来西亚", "澳洲"]
-                  )
-                    .filter(Boolean)
-                    .map((c: string, i: number) => (
-                      <span className="chip" key={i}>
-                        {c}
-                      </span>
-                    ))}
+                  {chips.map((c, i) => (
+                    <span className="chip" key={i}>
+                      {c}
+                    </span>
+                  ))}
                 </div>
                 <div className="r-actions">
                   <Link className="btn btn-gold" href="/conference">
@@ -234,10 +238,10 @@ export default function HomePaper({ content }: { content: any }) {
               </div>
               <div>
                 <div className="photo-dark">
-                  {hero2.image && (
+                  {reunionImg && (
                     <Image
-                      src={hero2.image}
-                      alt={conf.title || "恳亲大会"}
+                      src={reunionImg}
+                      alt="恳亲大会"
                       fill
                       sizes="(max-width:980px) 90vw, 460px"
                       style={{ objectFit: "cover", opacity: 0.55 }}
@@ -268,7 +272,7 @@ export default function HomePaper({ content }: { content: any }) {
               </p>
             </div>
             <div className="cards">
-              {items.map((it: any, i: number) => (
+              {acts.map((it, i) => (
                 <article className="card" key={i}>
                   <div className="card-photo">
                     {it.image && (
@@ -286,7 +290,7 @@ export default function HomePaper({ content }: { content: any }) {
                   </div>
                   <div className="card-body">
                     <h3>{it.title}</h3>
-                    <p>{it.description}</p>
+                    <p>{it.desc}</p>
                     <Link className="more" href="/activities">
                       {t ? "Learn more" : "了解更多"} <span className="arrow">→</span>
                     </Link>
