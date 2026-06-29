@@ -4,11 +4,27 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, X, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import { DESIGNS } from "../../lib/designs";
 import { useDesign } from "./DesignContext";
 
+const STRINGS = {
+  zh: {
+    label: "设计演示",
+    close: "关闭",
+    subtitle: "同一套内容，切换不同前端设计风格 · 选择后浏览全站均保持",
+  },
+  en: {
+    label: "Design Demo",
+    close: "Close",
+    subtitle:
+      "Same content, different frontend designs · your choice persists across the whole site",
+  },
+} as const;
+
 export default function DesignSwitcher() {
   const pathname = usePathname();
+  const locale = useLocale();
   const { design: active, setDesign } = useDesign();
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -17,6 +33,9 @@ export default function DesignSwitcher() {
   if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
     return null;
   }
+
+  const isEn = locale === "en";
+  const t = isEn ? STRINGS.en : STRINGS.zh;
 
   const shown =
     DESIGNS.find((d) => d.id === (hovered ?? active)) ?? DESIGNS[0];
@@ -33,11 +52,11 @@ export default function DesignSwitcher() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setOpen(true)}
-            aria-label="设计演示"
+            aria-label={t.label}
             className="fixed bottom-24 left-4 z-[9970] flex items-center gap-2 rounded-full bg-foreground px-4 py-3 text-background shadow-lg lg:bottom-6 lg:left-6"
           >
             <Palette className="h-5 w-5" />
-            <span className="hidden text-sm font-medium sm:inline">设计演示</span>
+            <span className="hidden text-sm font-medium sm:inline">{t.label}</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -63,11 +82,11 @@ export default function DesignSwitcher() {
               <div className="flex items-center justify-between border-b border-border px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Palette className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-semibold">设计演示</span>
+                  <span className="text-sm font-semibold">{t.label}</span>
                 </div>
                 <button
                   onClick={() => setOpen(false)}
-                  aria-label="关闭"
+                  aria-label={t.close}
                   className="rounded-full p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
@@ -75,7 +94,7 @@ export default function DesignSwitcher() {
               </div>
 
               <p className="px-4 pt-3 text-xs text-muted-foreground">
-                同一套内容，切换不同前端设计风格 · 选择后浏览全站均保持
+                {t.subtitle}
               </p>
 
               <div
@@ -106,10 +125,10 @@ export default function DesignSwitcher() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-medium">
-                          {d.name}
+                          {isEn ? d.nameEn : d.name}
                         </span>
                         <span className="block truncate text-xs text-muted-foreground">
-                          {d.nameEn}
+                          {isEn ? d.name : d.nameEn}
                         </span>
                       </span>
                       {isActive && (
@@ -123,10 +142,11 @@ export default function DesignSwitcher() {
               {/* hover / 选中风格的设计说明 */}
               <div className="border-t border-border bg-muted/40 px-4 py-3">
                 <p className="mb-1 text-xs font-semibold text-foreground">
-                  {shown.name} · {shown.nameEn}
+                  {isEn ? shown.nameEn : shown.name} ·{" "}
+                  {isEn ? shown.name : shown.nameEn}
                 </p>
                 <p className="text-xs leading-relaxed text-muted-foreground">
-                  {shown.description}
+                  {isEn ? shown.descriptionEn : shown.description}
                 </p>
               </div>
             </motion.div>
