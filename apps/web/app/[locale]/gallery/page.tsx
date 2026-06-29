@@ -1,7 +1,6 @@
 "use client";
 
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import DesignShell from "../../components/DesignShell";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
 import { useState } from "react";
@@ -76,8 +75,7 @@ export default function GalleryPage() {
       : albums.filter((a) => a.categoryKey === activeCategory);
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -183,7 +181,6 @@ export default function GalleryPage() {
         )}
       </AnimatePresence>
 
-      <Footer />
-    </main>
+    </DesignShell>
   );
 }

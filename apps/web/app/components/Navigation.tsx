@@ -13,9 +13,10 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 const SearchModal = dynamic(() => import("./SearchModal"), { ssr: false });
 
-export default function Navigation() {
+export default function Navigation({ solid = false }: { solid?: boolean } = {}) {
   const [isDark, setIsDark] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const isScrolled = solid || scrolled;
   const pathname = usePathname();
   const t = useTranslations("nav");
   const { data: session } = useSession();
@@ -34,7 +35,7 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

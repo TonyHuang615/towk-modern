@@ -5,8 +5,7 @@ import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
+import DesignShell from "../../../components/DesignShell";
 
 export default function MemberLoginPage() {
   const t = useTranslations("member");
@@ -39,8 +38,7 @@ export default function MemberLoginPage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <section className="pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="max-w-md mx-auto px-6">
@@ -148,7 +146,6 @@ export default function MemberLoginPage() {
         </div>
       </section>
 
-      <Footer />
-    </main>
+    </DesignShell>
   );
 }

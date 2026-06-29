@@ -1,7 +1,6 @@
 "use client";
 
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import DesignShell from "../../components/DesignShell";
 import { motion } from "framer-motion";
 import { Globe, Users, Calendar, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -41,8 +40,7 @@ export default function ConferencePage() {
   ];
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-accent/10 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -174,7 +172,6 @@ export default function ConferencePage() {
         </div>
       </section>
 
-      <Footer data={content.site} />
-    </main>
+    </DesignShell>
   );
 }

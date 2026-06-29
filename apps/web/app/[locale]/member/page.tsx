@@ -13,8 +13,7 @@ import {
   Edit3,
   CheckCircle,
 } from "lucide-react";
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import DesignShell from "../../components/DesignShell";
 
 export default function MemberProfilePage() {
   const { data: session, status } = useSession();
@@ -22,20 +21,17 @@ export default function MemberProfilePage() {
 
   if (status === "loading") {
     return (
-      <main className="min-h-screen">
-        <Navigation />
+      <DesignShell>
         <div className="pt-32 pb-20 text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
-        <Footer />
-      </main>
+      </DesignShell>
     );
   }
 
   if (!session) {
     return (
-      <main className="min-h-screen">
-        <Navigation />
+      <DesignShell>
         <div className="pt-32 pb-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -51,14 +47,12 @@ export default function MemberProfilePage() {
             </Link>
           </motion.div>
         </div>
-        <Footer />
-      </main>
+      </DesignShell>
     );
   }
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <section className="pt-24 pb-8 md:pt-32 md:pb-12 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -195,7 +189,6 @@ export default function MemberProfilePage() {
         </div>
       </section>
 
-      <Footer />
-    </main>
+    </DesignShell>
   );
 }

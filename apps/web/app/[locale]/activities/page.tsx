@@ -1,7 +1,6 @@
 "use client";
 
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import DesignShell from "../../components/DesignShell";
 import { motion } from "framer-motion";
 import {
   Music,
@@ -62,8 +61,7 @@ export default function ActivitiesPage() {
   const items = activities?.items || defaultActivities;
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <section className="pt-20 pb-8 md:pt-32 md:pb-16 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -129,7 +127,6 @@ export default function ActivitiesPage() {
         </div>
       </section>
 
-      <Footer data={content.site} />
-    </main>
+    </DesignShell>
   );
 }

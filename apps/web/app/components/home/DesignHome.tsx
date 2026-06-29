@@ -1,39 +1,29 @@
 "use client";
 
 import { useDesign } from "../DesignContext";
-import Navigation from "../Navigation";
-import Footer from "../Footer";
+import DesignShell from "../DesignShell";
 import HomeClassic from "./HomeClassic";
 import HomePaper from "./HomePaper";
 import HomeEditorial from "./HomeEditorial";
 import HomeVibrant from "./HomeVibrant";
 import HomeStately from "./HomeStately";
 
-// 自带头/尾的完整页面设计（不套用共享导航/页脚）
-const SELF_CONTAINED: Record<string, React.ComponentType<{ content: any }>> = {
+// 所有设计统一只渲染主体，由 DesignShell 套上各自的页头/页脚（与全站一致）。
+const BODIES: Record<string, React.ComponentType<{ content: any }>> = {
+  classic: HomeClassic,
   paper: HomePaper,
   editorial: HomeEditorial,
   vibrant: HomeVibrant,
-};
-
-// 仅渲染主体的设计，由本组件套上共享的 Navigation + Footer
-const BODIES: Record<string, React.ComponentType<{ content: any }>> = {
-  classic: HomeClassic,
   stately: HomeStately,
 };
 
 export default function DesignHome({ content }: { content: any }) {
   const { design } = useDesign();
-
-  const Self = SELF_CONTAINED[design];
-  if (Self) return <Self content={content} />;
-
   const Body = BODIES[design] || HomeClassic;
+
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
       <Body content={content} />
-      <Footer data={content.site} />
-    </main>
+    </DesignShell>
   );
 }

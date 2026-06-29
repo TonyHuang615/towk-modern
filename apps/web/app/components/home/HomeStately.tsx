@@ -146,7 +146,7 @@ export default function HomeStately({ content }: { content: any }) {
   const news = getLocalizedNews(locale).slice(0, 5);
 
   return (
-    <main className="bg-background text-foreground">
+    <>
       {/* ════════ HERO — double gold-hairline frame ════════ */}
       <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-24">
         {/* faint engraved corner motif lines */}
@@ -505,6 +505,6 @@ export default function HomeStately({ content }: { content: any }) {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

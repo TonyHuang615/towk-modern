@@ -1,7 +1,6 @@
 "use client";
 
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
+import DesignShell from "../../../components/DesignShell";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
@@ -17,20 +16,17 @@ export default function ActivityDetailPage() {
 
   if (!activity) {
     return (
-      <main className="min-h-screen">
-        <Navigation />
+      <DesignShell>
         <div className="pt-32 pb-20 text-center">
           <h1 className="text-3xl font-bold mb-4">{t("notFound")}</h1>
           <Link href="/activities" className="text-primary hover:underline">{t("backToActivities")}</Link>
         </div>
-        <Footer />
-      </main>
+      </DesignShell>
     );
   }
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <DesignShell>
 
       <article className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -137,7 +133,6 @@ export default function ActivityDetailPage() {
         </div>
       </article>
 
-      <Footer />
-    </main>
+    </DesignShell>
   );
 }
