@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useGoogleEnabled } from "./useGoogleEnabled";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
@@ -17,6 +18,7 @@ export default function LoginStately() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const googleEnabled = useGoogleEnabled();
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl: "/member" });
@@ -81,7 +83,9 @@ export default function LoginStately() {
               </div>
             </div>
 
-            {/* Google login */}
+            {/* Google login — only when the provider is configured */}
+            {googleEnabled && (
+            <>
             <button
               onClick={handleGoogleLogin}
               className="mt-9 flex w-full items-center justify-center gap-3 border border-primary/40 py-3 text-sm font-medium uppercase tracking-[0.18em] text-foreground transition-colors hover:bg-primary/10"
@@ -115,6 +119,8 @@ export default function LoginStately() {
               </span>
               <span className="h-px flex-1 bg-primary/30" />
             </div>
+            </>
+            )}
 
             {/* Email form */}
             <form onSubmit={handleEmailLogin} className="space-y-5 text-left">

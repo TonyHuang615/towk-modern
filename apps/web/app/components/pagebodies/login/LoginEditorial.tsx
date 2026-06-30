@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useGoogleEnabled } from "./useGoogleEnabled";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -14,6 +15,7 @@ export default function LoginEditorial() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const googleEnabled = useGoogleEnabled();
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl: "/member" });
@@ -66,7 +68,9 @@ export default function LoginEditorial() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="mt-10"
         >
-          {/* Google login */}
+          {/* Google login — only when the provider is configured */}
+          {googleEnabled && (
+          <>
           <button
             onClick={handleGoogleLogin}
             className="flex w-full items-center justify-center gap-3 border border-foreground/20 py-3 text-sm font-medium uppercase tracking-[0.15em] text-foreground transition-colors hover:bg-foreground/5"
@@ -100,6 +104,8 @@ export default function LoginEditorial() {
             </span>
             <div className="flex-1 border-t border-border" />
           </div>
+          </>
+          )}
 
           {/* Email form — underline inputs */}
           <form onSubmit={handleEmailLogin} className="space-y-7">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useGoogleEnabled } from "./useGoogleEnabled";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ export default function LoginPaper() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const googleEnabled = useGoogleEnabled();
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl: "/member" });
@@ -100,7 +102,9 @@ export default function LoginPaper() {
             }}
           />
           <div style={{ position: "relative" }}>
-            {/* Google login */}
+            {/* Google login — only when the provider is configured */}
+            {googleEnabled && (
+            <>
             <button
               onClick={handleGoogleLogin}
               style={{
@@ -158,6 +162,8 @@ export default function LoginPaper() {
               </span>
               <span style={{ flex: 1, height: 1, background: "var(--gold)" }} />
             </div>
+            </>
+            )}
 
             {/* Email form */}
             <form onSubmit={handleEmailLogin} style={{ display: "grid", gap: 18 }}>

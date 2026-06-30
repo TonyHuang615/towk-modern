@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useGoogleEnabled } from "./useGoogleEnabled";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -14,6 +15,7 @@ export default function LoginVibrant() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const googleEnabled = useGoogleEnabled();
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl: "/member" });
@@ -66,7 +68,9 @@ export default function LoginVibrant() {
           transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="rounded-[2rem] bg-card p-7 text-card-foreground shadow-[0_28px_70px_-32px_rgba(0,0,0,0.45)] sm:p-9"
         >
-          {/* Google login */}
+          {/* Google login — only when the provider is configured */}
+          {googleEnabled && (
+          <>
           <button
             onClick={handleGoogleLogin}
             className="flex w-full items-center justify-center gap-3 rounded-2xl border border-border bg-background px-4 py-3.5 text-sm font-semibold transition-transform duration-200 hover:-translate-y-0.5"
@@ -100,6 +104,8 @@ export default function LoginVibrant() {
             </span>
             <div className="h-px flex-1 bg-border" />
           </div>
+          </>
+          )}
 
           {/* Email form */}
           <form onSubmit={handleEmailLogin} className="space-y-4">

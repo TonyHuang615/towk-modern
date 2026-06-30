@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useGoogleEnabled } from "./useGoogleEnabled";
 
 // 经典 / Classic — Member login。延续默认主题：圆角卡片、品牌圆章、
 // Google + 邮箱密码登录。文案全部双语 i18n。PROP-LESS，自取状态与处理器。
@@ -14,6 +15,7 @@ export default function LoginShared() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const googleEnabled = useGoogleEnabled();
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl: "/member" });
@@ -60,7 +62,9 @@ export default function LoginShared() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="bg-card rounded-2xl p-8 shadow-card"
         >
-          {/* Google Login */}
+          {/* Google Login — only when the provider is configured */}
+          {googleEnabled && (
+          <>
           <button
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-xl hover:bg-foreground/5 transition-colors mb-6"
@@ -92,6 +96,8 @@ export default function LoginShared() {
             <span className="text-xs text-foreground/40 uppercase">{t("orDivider")}</span>
             <div className="flex-1 h-px bg-border" />
           </div>
+          </>
+          )}
 
           {/* Email Login Form */}
           <form onSubmit={handleEmailLogin} className="space-y-4">
