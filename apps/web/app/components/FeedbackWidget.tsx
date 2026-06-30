@@ -246,6 +246,8 @@ export default function FeedbackWidget() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      const sx = window.scrollX;
+      const sy = window.scrollY;
 
       const bodyBg = getComputedStyle(document.body).backgroundColor;
       const background =
@@ -253,28 +255,56 @@ export default function FeedbackWidget() {
           ? bodyBg
           : "#f8f6f0";
 
-      // 截取当前视口（排除所有反馈控件）
-      const shot = await html2canvas(document.body, {
+      // html2canvas 会把整页按当前滚动量整体下移渲染，直接用 x/y 裁剪当前视口会
+      // 截到错误的区域（页面顶部）。改为：先滚到顶 → 渲染整页 → 自行裁剪原视口
+      // → 还原滚动，保证截图与用户所见一致。
+      const prevScrollBehavior =
+        document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      // 预滚动：framer-motion 的 whileInView 内容需进入视口后才显示（once:true，
+      // 显示后保持）。整页渲染前快速滚一遍，避免把未触发的区块截成空白。
+      const docHeight = document.documentElement.scrollHeight;
+      const revealStep = Math.max(Math.round(vh * 0.9), 400);
+      // ~90ms per step so IntersectionObserver (whileInView) actually fires
+      for (let yy = 0; yy <= docHeight; yy += revealStep) {
+        window.scrollTo(0, yy);
+        await new Promise((r) => setTimeout(r, 90));
+      }
+      window.scrollTo(0, 0);
+      await new Promise((r) => setTimeout(r, 120));
+      const full = await html2canvas(document.body, {
         backgroundColor: background,
         useCORS: true,
         allowTaint: false,
         logging: false,
         scale: dpr,
-        width: vw,
-        height: vh,
-        x: window.scrollX,
-        y: window.scrollY,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.clientWidth,
+        windowHeight: document.documentElement.clientHeight,
         ignoreElements: (el) =>
           (el as HTMLElement)?.dataset?.feedbackIgnore === "true",
       });
+      window.scrollTo(sx, sy);
+      document.documentElement.style.scrollBehavior = prevScrollBehavior;
 
-      // 把圈选画布合成到截图上
+      // 裁剪出原视口区域，再把圈选画布叠加上去
       const out = document.createElement("canvas");
-      out.width = shot.width;
-      out.height = shot.height;
+      out.width = Math.round(vw * dpr);
+      out.height = Math.round(vh * dpr);
       const octx = out.getContext("2d");
       if (!octx) throw new Error("no 2d context");
-      octx.drawImage(shot, 0, 0);
+      octx.drawImage(
+        full,
+        sx * dpr,
+        sy * dpr,
+        out.width,
+        out.height,
+        0,
+        0,
+        out.width,
+        out.height,
+      );
       if (canvasRef.current) {
         octx.drawImage(canvasRef.current, 0, 0, out.width, out.height);
       }
