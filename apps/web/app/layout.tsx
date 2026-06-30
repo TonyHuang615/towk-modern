@@ -6,8 +6,10 @@ import {
   Playfair_Display,
   Source_Serif_4,
 } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import Analytics from "./components/Analytics";
+import { DESIGN_STORAGE_KEY, DEFAULT_DESIGN } from "../lib/designs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -65,17 +67,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // SSR the chosen design from the cookie so the design theme (CSS variables
+  // keyed on html[data-design]) is correct from first paint, independent of
+  // localStorage. The inline script below reconciles with localStorage.
+  const design = cookies().get(DESIGN_STORAGE_KEY)?.value || DEFAULT_DESIGN;
   return (
     <html
       lang="zh-CN"
+      data-design={design}
       className={`scroll-smooth ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable} ${playfairDisplay.variable} ${sourceSerif.variable}`}
     >
       <body className="antialiased font-sans">
-        {/* 演示模式：在首屏渲染前套用已选设计，避免闪烁 */}
+        {/* 演示模式：在首屏渲染前套用已选设计，避免闪烁（localStorage 优先，回退 cookie） */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var d=localStorage.getItem('towk-design');if(d)document.documentElement.dataset.design=d}catch(e){}",
+              "try{var m=document.cookie.match(/(?:^|; )towk-design=([^;]+)/);var d=localStorage.getItem('towk-design')||(m&&m[1]);if(d)document.documentElement.dataset.design=d}catch(e){}",
           }}
         />
         {children}

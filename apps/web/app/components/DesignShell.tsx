@@ -33,7 +33,7 @@ export default function DesignShell({
   const { Header, Footer, wrap } = c;
 
   return (
-    <div className={wrap}>
+    <div className={wrap} data-design={design}>
       <Header />
       <main className="min-h-screen">{children}</main>
       <Footer />

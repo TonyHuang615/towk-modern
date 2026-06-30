@@ -27,6 +27,7 @@ export function StatelyHeader() {
   const nav = [
     { label: t("home"), href: "/" },
     { label: t("about"), href: "/about" },
+    { label: t("history"), href: "/history" },
     { label: t("news"), href: "/news" },
     { label: t("gallery"), href: "/gallery" },
     { label: t("conference"), href: "/conference" },

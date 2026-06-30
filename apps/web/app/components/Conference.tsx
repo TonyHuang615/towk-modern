@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Globe, Users, Calendar, ArrowRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 interface ConferenceProps {
   data?: {
@@ -17,6 +18,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { G
 
 export default function Conference(_props: ConferenceProps) {
   const t = useTranslations("conference");
+  const locale = useLocale();
+  const lp = (href: string) => (locale === "en" ? "/en" + href : href);
 
   const features = [
     { icon: "Globe", title: t("feature1Title"), description: t("feature1Desc") },
@@ -114,13 +117,13 @@ export default function Conference(_props: ConferenceProps) {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <a
-              href="#"
+            <Link
+              href={lp("/conference")}
               className="inline-flex items-center gap-2 text-primary hover:text-primary-dark transition-colors"
             >
               {t("viewAllConferences")}
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

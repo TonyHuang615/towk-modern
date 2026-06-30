@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
   getLocalizedNews,
@@ -334,12 +335,12 @@ export default function HomeEditorial({ content }: { content: any }) {
             <span className="font-display text-xl tracking-tight text-foreground">
               {tConf("nextConferenceInfo")}
             </span>
-            <a
-              href="#"
+            <Link
+              href={locale === "en" ? "/en/news" : "/news"}
               className="mt-4 text-sm font-medium text-primary underline decoration-primary/40 decoration-1 underline-offset-[6px] transition-colors hover:decoration-primary"
             >
               {tConf("getUpdates")}
-            </a>
+            </Link>
           </div>
         </motion.div>
       </section>

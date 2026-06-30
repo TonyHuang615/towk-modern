@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sun, Settings, User, Search, Menu, X } from "lucide-react";
+import { Moon, Sun, User, Search, Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const SearchModal = dynamic(() => import("./SearchModal"), { ssr: false });
@@ -18,6 +18,10 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
   const [scrolled, setScrolled] = useState(false);
   const isScrolled = solid || scrolled;
   const pathname = usePathname();
+  const locale = useLocale();
+  const en = locale === "en";
+  const lp = (href: string) =>
+    en ? (href === "/" ? "/en" : "/en" + href) : href;
   const t = useTranslations("nav");
   const { data: session } = useSession();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -26,6 +30,7 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
   const navItems = [
     { name: t("home"), href: "/" },
     { name: t("about"), href: "/about" },
+    { name: t("history"), href: "/history" },
     { name: t("news"), href: "/news" },
     { name: t("gallery"), href: "/gallery" },
     { name: t("conference"), href: "/conference" },
@@ -52,8 +57,9 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
   const toggleTheme = () => setIsDark(!isDark);
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
+    const target = lp(href);
+    if (href === "/") return pathname === target;
+    return pathname.startsWith(target);
   };
 
   return (
@@ -71,7 +77,7 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 lg:gap-3">
+          <Link href={lp("/")} className="flex items-center gap-2 lg:gap-3">
             <div className="w-8 h-8 lg:w-10 lg:h-10 bg-primary rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm lg:text-lg">
                 {t("logoChar")}
@@ -96,7 +102,7 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
             {navItems.map((item) => (
               <Link
                 key={item.name}
-                href={item.href}
+                href={lp(item.href)}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isActive(item.href)
                     ? "text-accent"
@@ -124,7 +130,7 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
             </button>
 
             <Link
-              href="/member"
+              href={lp("/member")}
               className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 ${
                 isScrolled
                   ? "text-foreground/60"
@@ -136,18 +142,6 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
               ) : (
                 <User className="w-4 h-4 lg:w-5 lg:h-5" />
               )}
-            </Link>
-
-            <Link
-              href="/admin"
-              className={`p-2 rounded-full hover:bg-foreground/10 transition-colors duration-200 hidden lg:block ${
-                isScrolled
-                  ? "text-foreground/60"
-                  : "text-white/70"
-              }`}
-              aria-label={t("admin")}
-            >
-              <Settings className="w-4 h-4 lg:w-5 lg:h-5" />
             </Link>
 
             <button
@@ -212,7 +206,7 @@ export default function Navigation({ solid = false }: { solid?: boolean } = {}) 
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={lp(item.href)}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                   isActive(item.href)

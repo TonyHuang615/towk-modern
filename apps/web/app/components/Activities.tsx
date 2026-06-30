@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { Music, Users, Briefcase, Sparkles, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 interface ActivitiesProps {
   data?: {
@@ -21,6 +22,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { M
 
 export default function Activities({ data }: ActivitiesProps) {
   const t = useTranslations("activities");
+  const locale = useLocale();
+  const lp = (href: string) => (locale === "en" ? "/en" + href : href);
 
   const defaultImages = [
     "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
@@ -96,12 +99,12 @@ export default function Activities({ data }: ActivitiesProps) {
                   <p className="text-white/70 mb-3 md:mb-4 text-sm md:text-base line-clamp-2">
                     {activity.description}
                   </p>
-                  <a
-                    href="#"
+                  <Link
+                    href={lp("/activities")}
                     className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:gap-3 transition-all"
                   >
                     {t("learnMore")} <ArrowRight className="w-4 h-4 text-accent" />
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
             );

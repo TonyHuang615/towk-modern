@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Phone } from "lucide-react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 interface FooterProps {
   data?: {
@@ -15,6 +16,10 @@ interface FooterProps {
 export default function Footer({ data }: FooterProps) {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
+  const locale = useLocale();
+  const en = locale === "en";
+  const lp = (href: string) =>
+    en ? (href === "/" ? "/en" : "/en" + href) : href;
 
   const contactInfo = [
     { icon: MapPin, label: t("address"), value: "21 Bukit Pasoh Road, Singapore 089835" },
@@ -72,12 +77,12 @@ export default function Footer({ data }: FooterProps) {
             <ul className="space-y-2 md:space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
+                  <Link
+                    href={lp(link.href)}
                     className="text-background/70 hover:text-primary transition-colors duration-200 text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -112,12 +117,12 @@ export default function Footer({ data }: FooterProps) {
         <div className="py-6 border-t border-background/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-background/60">
           <p>© 2026 {siteTitle}. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-background transition-colors">
-              {t("privacy")}
-            </a>
-            <a href="#" className="hover:text-background transition-colors">
-              {t("terms")}
-            </a>
+            <Link href={lp("/about")} className="hover:text-background transition-colors">
+              {tNav("about")}
+            </Link>
+            <Link href={lp("/contact")} className="hover:text-background transition-colors">
+              {tNav("contact")}
+            </Link>
           </div>
         </div>
       </div>
