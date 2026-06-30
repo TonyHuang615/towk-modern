@@ -44,3 +44,6 @@ next-env.d.ts
 
 # admin account (password hash, runtime data)
 /data/admin.json
+
+# member accounts (password hashes, runtime data)
+/data/members.json

@@ -170,7 +170,7 @@ export default function LoginStately() {
 
             <p className="mt-7 text-center text-sm tracking-[0.04em] text-muted-foreground">
               {t("noAccount")}{" "}
-              <Link href="/member/login" className="text-accent underline-offset-4 hover:underline">
+              <Link href="/member/register" className="text-accent underline-offset-4 hover:underline">
                 {t("register")}
               </Link>
             </p>

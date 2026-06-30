@@ -143,7 +143,7 @@ export default function LoginShared() {
 
           <p className="mt-6 text-center text-sm text-foreground/60">
             {t("noAccount")}{" "}
-            <Link href="/member/login" className="text-primary font-medium hover:underline">
+            <Link href="/member/register" className="text-primary font-medium hover:underline">
               {t("register")}
             </Link>
           </p>

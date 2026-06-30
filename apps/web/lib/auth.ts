@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { verifyMember } from "./member-account";
 
 const providers: NextAuthOptions["providers"] = [];
 
@@ -21,15 +22,14 @@ providers.push(
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // For demo: accept any email/password with basic validation
-        // In production, verify against a database
+        // Verify against the real member store (data/members.json, scrypt).
         if (!credentials?.email || !credentials?.password) return null;
-        if (credentials.password.length < 6) return null;
-
+        const member = verifyMember(credentials.email, credentials.password);
+        if (!member) return null;
         return {
-          id: credentials.email,
-          email: credentials.email,
-          name: credentials.email.split("@")[0],
+          id: member.email,
+          email: member.email,
+          name: member.name,
         };
       },
   }),

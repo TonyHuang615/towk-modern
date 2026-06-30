@@ -153,7 +153,7 @@ export default function LoginEditorial() {
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
             {t("noAccount")}{" "}
-            <Link href="/member/login" className="text-foreground underline underline-offset-4 hover:text-primary">
+            <Link href="/member/register" className="text-foreground underline underline-offset-4 hover:text-primary">
               {t("register")}
             </Link>
           </p>

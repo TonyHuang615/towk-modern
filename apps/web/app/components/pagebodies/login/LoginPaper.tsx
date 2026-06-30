@@ -227,7 +227,7 @@ export default function LoginPaper() {
             >
               {t("noAccount")}{" "}
               <Link
-                href="/member/login"
+                href="/member/register"
                 style={{ color: "var(--vermilion-deep)", fontWeight: 600 }}
               >
                 {t("register")}
